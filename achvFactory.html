@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>achvFactory</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: gray;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+
+        canvas {
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <script>
+        // settings
+        let unlocked = true;
+        let num = '00';
+        let width = 64;
+        let height = 64;
+        let font = 'monospace';
+        let fontSize = 48;
+        // 64x64
+        let canvas = document.querySelector('canvas');
+        canvas.width = width.toString();
+        canvas.height = height.toString();
+        let ctx = canvas.getContext('2d');
+        // set transparency
+        if (unlocked) { ctx.globalAlpha = 1.0; }
+        else { ctx.globalAlpha = 0.75; }
+        // bg
+        ctx.fillStyle = 'whitesmoke';
+        ctx.fillRect(0, 0, width, height);
+        // top triag
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(16, 0);
+        ctx.lineTo(0, 16);
+        ctx.closePath();
+        if (unlocked) { ctx.fillStyle = '#323232'; }
+        else { ctx.fillStyle = '#646464'; }
+        ctx.fill();
+        // bot triag
+        ctx.beginPath();
+        ctx.moveTo(width, height);
+        ctx.lineTo(width - 16, height);
+        ctx.lineTo(width, height - 16);
+        ctx.closePath();
+        if (unlocked) { ctx.fillStyle = '#323232'; }
+        else { ctx.fillStyle = '#646464'; }
+        ctx.fill();
+        // num
+        if (unlocked) { ctx.fillStyle = '#323232'; }
+        else { ctx.fillStyle = '#646464'; }
+        ctx.font = fontSize.toString() + 'px ' + font;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(num, width / 2, height / 2 + 4);
+        // download
+        let link = document.createElement('a');
+        link.setAttribute('href', canvas.toDataURL('image/jpeg'));
+        if (unlocked) {
+            link.setAttribute('download', num + 'c.jpg');
+        }
+        else {
+            link.setAttribute('download', num + 'g.jpg');
+        }
+        link.click();
+    </script>
+</body>
+</html>
