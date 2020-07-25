@@ -1,0 +1,50 @@
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: gray;
+        }
+
+        #wrap {
+            margin: auto;
+            width: fit-content;
+        }
+
+        #content {
+            display: table-cell;
+            vertical-align: middle;
+            height: 100vh;
+        }
+
+        canvas {
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div id="content">
+            <img id="base" src="customStore_showcase_orig.png">
+            <canvas id="achvCanvas" width="256" height="256"></canvas>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('load', function () {
+            var base = document.getElementById('base');
+            var cnv = document.getElementById('achvCanvas');
+            cnv.width = base.offsetWidth;
+            cnv.height = base.offsetHeight;
+            var ctx = cnv.getContext('2d');
+            ctx.drawImage(base, 0, 0, base.width, base.height, 0, 0, base.width, base.height);
+            ctx.globalCompositeOperation = "destination-out";
+            gradient = ctx.createLinearGradient(0, 0, base.width, base.height / 2);
+            gradient.addColorStop(0, 'transparent');
+            gradient.addColorStop(1, '#fff');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, base.width, base.height);
+        }, false);
+    </script>
+</body>
+</html>
