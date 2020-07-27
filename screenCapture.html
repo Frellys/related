@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>screenCapture</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: gray;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <button id="start">Start Recording</button>
+    <button id="stop" disabled>Stop Recording</button>
+    <video id="video" autoplay></video>
+    <script>
+        // variables
+        let start = document.getElementById('start');
+        let stop = document.getElementById('stop');
+        let video = document.getElementById('video');
+        let recorder;
+        let stream = null;
+        async function startCapture() {
+            //let stream = null;
+            //stream = await navigator.mediaDevices.getDisplayMedia({
+            //    video: true,
+            //    audio: false
+            //});
+            //return stream;
+            let opts = {
+                video: true,
+                audio: false
+            };
+            stream = null;
+            let test = null;
+            test = await navigator.mediaDevices.getDisplayMedia(opts, function (s) {
+                //var pc = new RTCPeerConnection();
+                //pc.addStream(s);
+                //stream = new RTCPeerConnection();
+                //stream.addStream(s);
+                //stream = new MediaStream(s);
+                //console.log(typeof stream);
+                //console.log(1);
+            });
+            stream = new MediaStream(test);
+            //return stream;
+        }
+        function stopCapture() {
+            let tracks = video.srcObject.getTracks();
+            tracks.forEach(track => track.stop());
+            video.srcObject = null;
+        }
+        // set listeners
+        start.addEventListener('click', function () {
+            startCapture();
+            console.log(2);
+            recorder = new MediaRecorder(stream, {
+                mimeType: 'video/x-matroska;codecs=avc1'
+            });
+            //recorder = new MediaRecorder(stream);
+            let chunks = [];
+            recorder.start();
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = e => {
+                //chunks.push(e.data);
+                const completeBlob = new Blob(chunks, { type: chunks[0].type });
+                //const completeBlob = new Blob(chunks, { type: 'application/mp4' });
+                let url = URL.createObjectURL(completeBlob);
+                video.type = 'video/mkv';
+                video.src = url;
+                //video.load();
+                let tempLink = document.createElement('a');
+                tempLink.style.display = 'none';
+                document.body.appendChild(tempLink);
+                tempLink.href = url;
+                tempLink.download = 'test' + '.mkv';
+                tempLink.click();
+                // lega
+                //stream.getVideoTracks().forEach(function (track) { track.stop(); });
+                //window.URL.revokeObjectURL(url);
+                //stream.getVideoTracks()[0].stop();
+            }
+        }, false);
+        stop.addEventListener('click', function () {
+            stopCapture();
+            // set styles
+            stop.setAttribute('disabled', true);
+            start.removeAttribute('disabled');
+        }, false);
+                                        //start.addEventListener('click', async function () {
+                                        //    steam = await navigator.mediaDevices.getDisplayMedia({
+                                        //        video: true,
+                                        //        audio: false
+                                        //    });
+                                        //    recorder = new MediaRecorder(stream, {
+                                        //        mimeType: 'video/x-matroska;codecs=avc1'
+                                        //    });
+                                        //    //recorder = new MediaRecorder(stream);
+                                        //    let chunks = [];
+                                        //    recorder.start();
+                                        //    recorder.ondataavailable = e => chunks.push(e.data);
+                                        //    recorder.onstop = e => {
+                                        //        //chunks.push(e.data);
+                                        //        const completeBlob = new Blob(chunks, { type: chunks[0].type });
+                                        //        //const completeBlob = new Blob(chunks, { type: 'application/mp4' });
+                                        //        let url = URL.createObjectURL(completeBlob);
+                                        //        video.type = 'video/mkv';
+                                        //        video.src = url;
+                                        //        //video.load();
+                                        //        let tempLink = document.createElement('a');
+                                        //        tempLink.style.display = 'none';
+                                        //        document.body.appendChild(tempLink);
+                                        //        tempLink.href = url;
+                                        //        tempLink.download = 'test' + '.mkv';
+                                        //        tempLink.click();
+                                        //        // lega
+                                        //        //stream.getVideoTracks().forEach(function (track) { track.stop(); });
+                                        //        //window.URL.revokeObjectURL(url);
+                                        //        //stream.getVideoTracks()[0].stop();
+                                        //    }
+                                        //}, false);
+                                        //stop.addEventListener('click', () => {
+                                        //    stop.setAttribute('disabled', true);
+                                        //    start.removeAttribute('disabled');
+                                        //    recorder.stop();
+                                        //    stream.getVideoTracks().forEach(function (track) { track.stop(); });
+                                        //    //stream = null;
+                                        //    //stream.getVideoTracks()[0].stop();
+                                        //});
+    </script>
+</body>
+</html>
