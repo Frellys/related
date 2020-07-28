@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>toBraille</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+            font-family: monospace;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: gray;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+
+        #wrap {
+            margin: 0 auto;
+            width: 100vmin;
+            height: 90vh;
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+            grid-row-gap: 1vh;
+        }
+
+            #wrap > div {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start
+            }
+
+                #wrap > div > div {
+                    background-color: rgba(50, 50, 50, 0.25);
+                    align-self: stretch;
+                    background-color: ghostwhite;
+                    border: none;
+                    border-bottom: 1px solid rgba(50, 50, 50, 0.5);
+                }
+
+                    #wrap > div > div > label {
+                        display: inline-block;
+                        margin: 0.5vmin 0 0.5vmin 1vmin;
+                        font: 400 2vmin monospace;
+                        color: #323232;
+                    }
+
+                #wrap > div > textarea {
+                    flex: 1;
+                    align-self: stretch;
+                    resize: none;
+                    word-break: normal;
+                    border: none;
+                    /*background-color: silver;*/
+                    /*background-color: rgba(245, 245, 245, 0.75);*/
+                    background-color: gainsboro;
+                    padding: 1vmin;
+                    font: 400 1.75vmin monospace;
+                    color: #323232;
+                }
+
+                    #wrap > div > textarea:focus {
+                        outline: none;
+                    }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div id="inputArea">
+            <div id="inputHeader">
+                <label>original&nbsp;text:&nbsp;settings = { size: <input id="fontSize" name="fontSize" type="number" min="1" max="100" value="8" style="width: 4em; font-family: monospace;">px }</label>
+            </div>
+            <textarea></textarea>
+        </div>
+        <div id="outputArea">
+            <div id="outputHeader">
+                <label>to Braille</label>
+            </div>
+            <textarea readonly></textarea>
+        </div>
+    </div>
+    <script>
+        document.querySelector('#wrap > div#inputArea > div > label > input#fontSize').addEventListener('input', function () {
+            this.value = parseInt(this.value);
+        }, false);
+        document.querySelector('#wrap > div#inputArea > textarea').addEventListener('input', function (e) {
+            let text = this.value;
+            document.querySelector('#wrap > div#outputArea > textarea').value = text;
+        }, false);
+    </script>
+</body>
+</html>
