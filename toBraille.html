@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>toBraille</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+            font-family: monospace;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: gray;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+
+        #wrap {
+            margin: 0 auto;
+            width: 100vmin;
+            height: 90vh;
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+            grid-row-gap: 1vh;
+        }
+
+            #wrap > div {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start
+            }
+
+                #wrap > div > div {
+                    height: 20%;
+                    background-color: rgba(50, 50, 50, 0.25);
+                    align-self: stretch;
+                    border: none;
+                    background-color: ghostwhite;
+                    border-bottom: 1px solid rgba(50, 50, 50, 0.5);
+                }
+
+                #wrap > div > textarea {
+                    height: 80%;
+                    align-self: stretch;
+                    resize: none;
+                    word-break: normal;
+                    border: none;
+                    background-color: ghostwhite;
+                    padding: 1vmin;
+                }
+
+                    #wrap > div > textarea:focus {
+                        outline: none;
+                    }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div>
+            <div>
+                <label>from:&nbsp;</label>
+            </div>
+            <textarea></textarea>
+        </div>
+        <div>
+            <div>
+                <label>to:&nbsp;</label>
+            </div>
+            <textarea readonly></textarea>
+        </div>
+    </div>
+    <script>
+    </script>
+</body>
+</html>
