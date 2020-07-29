@@ -126,11 +126,11 @@
             let text = this.value.toString().toLowerCase();
             let br = '';
             for (let i = 0; i < text.length; i++) {
-                br += al[text[i]];
+                br += alphabet[text[i]];
             }
             document.querySelector('#wrap > div#outputArea > textarea').value = br;
         }, false);
-        let al = {
+        let alphabet = {
             '0': '⠴',
             '1': '⠂',
             '2': '⠆',
