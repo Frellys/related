@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>labyrinth2_intro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #323232;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <script>
+        // settings
+        let core = {
+            width: document.body.clientWidth,
+            height: document.body.clientHeight,
+            fps: 50,
+            state: {
+                fadeIn: {
+                    cnd: false,
+                    dur: 200,
+                    opacity: 0.0
+                },
+                expand: {
+                    cnd: false,
+                    dur: 200,
+                    width: 0
+                }
+            }
+        };
+        // set frame shift
+        core.state.fadeIn.shift = 123;
+        console.log(core);
+        // set canvas
+        let cnv = document.querySelector('canvas');
+        cnv.width = core.width;
+        cnv.height = core.height;
+        var ctx = cnv.getContext('2d');
+        // render
+        let render = setInterval(function () {
+            // draw bg
+            ctx.fillStyle = '#323232';
+            ctx.fillRect(0, 0, core.width, core.height);
+            if (core.state.fadeIn.cnd == false) {
+                // draw text
+                ctx.font = '120px monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = 'rgba(245, 222, 179, 1.0)';
+                ctx.fillText('some text 1', core.width / 2, core.height / 2);
+            }
+        }, 1000 / core.fps);
+    </script>
+</body>
+</html>
