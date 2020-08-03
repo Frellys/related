@@ -28,16 +28,40 @@
         let core = {
             width: document.body.clientWidth,
             height: document.body.clientHeight,
-            fps: 50
+            fps: 50,
+            pad: 2,
+            tile: {
+                size: Math.min(document.body.clientWidth, document.body.clientHeight) / 20,
+                height: Math.min(document.body.clientWidth, document.body.clientHeight) / 20 * (Math.sqrt(3) / 2)
+            },
+            mouse: {
+                x: 0,
+                y: 0
+            }
         };
+        let tiles = [{}, {}, {}, {}];
         // set canvas
         let cnv = document.querySelector('canvas');
         cnv.width = core.width;
         cnv.height = core.height;
         var ctx = cnv.getContext('2d');
+        // set variables
+        let cntWidth = tiles.length * (core.tile.size * 2 + core.pad);
+        let cntHeight = core.tile.height * 2 + core.pad;
         // render
         let render = setInterval(function () {
+            // draw bg
+            ctx.fillStyle = 'whitesmoke';
+            ctx.fillRect(0, 0, core.width, core.height);
+            // draw container
+            ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
+            ctx.fillRect(core.width / 2 - cntWidth / 2, 0, cntWidth, cntHeight);
         }, 1000 / core.fps);
+        // mousemove listener
+        window.addEventListener('mousemove', function (e) {
+            core.mouse.x = e.x;
+            core.mouse.y = e.y;
+        }, false);
     </script>
 </body>
 </html>
