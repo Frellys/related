@@ -39,15 +39,30 @@
                 y: 0
             }
         };
-        let tiles = [{}, {}, {}, {}];
         // set canvas
         let cnv = document.querySelector('canvas');
         cnv.width = core.width;
         cnv.height = core.height;
         var ctx = cnv.getContext('2d');
+        // container tiles
+        let tiles = [{}, {}, {}, {}];
         // set variables
-        let cntWidth = tiles.length * (core.tile.size * 2 + core.pad);
-        let cntHeight = core.tile.height * 2 + core.pad;
+        // tiles.length * (core.tile.size * 2 + core.pad)
+        let cntWidth = tiles.length % 2 == 0 ?
+            tiles.length / 2 * (core.tile.size * 3 + core.pad) :
+            (tiles.length - 1) / 2 * (core.tile.size * 3 + core.pad) + core.tile.size;
+        let cntHeight = core.tile.height * 3 + core.pad;
+        tiles[0].x = core.width / 2 - (cntWidth / 2) + core.tile.size;
+        tiles[0].y = core.tile.height;
+        for (let t = 1; t < tiles.length; t++) {
+            tiles[t].x = tiles[t - 1].x + core.tile.size * 1.5;
+            if (t % 2 == 0) {
+                tiles[t].y = core.tile.height;
+            }
+            else {
+                tiles[t].y = core.tile.height * 2;
+            }
+        }
         // render
         let render = setInterval(function () {
             // draw bg
@@ -56,6 +71,22 @@
             // draw container
             ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
             ctx.fillRect(core.width / 2 - cntWidth / 2, 0, cntWidth, cntHeight);
+            // draw tiles
+            for (let t = 0; t < tiles.length; t++) {
+                let tx = tiles[t].x;
+                let ty = tiles[t].y;
+                ctx.beginPath();
+                ctx.moveTo(tx - core.tile.size / 2, ty - core.tile.height);
+                ctx.lineTo(tx + core.tile.size / 2, ty - core.tile.height);
+                ctx.lineTo(tx + core.tile.size, ty);
+                ctx.lineTo(tx + core.tile.size / 2, ty + core.tile.height);
+                ctx.lineTo(tx - core.tile.size / 2, ty + core.tile.height);
+                ctx.lineTo(tx - core.tile.size, ty);
+                ctx.closePath();
+                ctx.strokeStyle = '#323232';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
         }, 1000 / core.fps);
         // mousemove listener
         window.addEventListener('mousemove', function (e) {
