@@ -22,7 +22,22 @@
     </style>
 </head>
 <body>
+    <canvas></canvas>
     <script>
+        // settings
+        let core = {
+            width: document.body.clientWidth,
+            height: document.body.clientHeight,
+            fps: 50
+        };
+        // set canvas
+        let cnv = document.querySelector('canvas');
+        cnv.width = core.width;
+        cnv.height = core.height;
+        var ctx = cnv.getContext('2d');
+        // render
+        let render = setInterval(function () {
+        }, 1000 / core.fps);
     </script>
 </body>
 </html>
