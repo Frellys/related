@@ -1,3 +1,4 @@
+// ctx - canvas.getContext('2d');
 // tx - tile pos x
 // ty - tile pos y
 // ts - tile side size
