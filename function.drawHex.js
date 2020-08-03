@@ -1,3 +1,7 @@
+// tx - tile pos x
+// ty - tile pos y
+// ts - tile side size
+// th - ts * (Math.sqrt(3) / 2)
 function drawHex(tx, ty, ts, th) {
     ctx.beginPath();
     ctx.moveTo(tx - ts / 2, ty - th);
