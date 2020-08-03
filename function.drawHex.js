@@ -1,0 +1,13 @@
+function drawHex(tx, ty, ts, th) {
+    ctx.beginPath();
+    ctx.moveTo(tx - ts / 2, ty - th);
+    ctx.lineTo(tx + ts / 2, ty - th);
+    ctx.lineTo(tx + ts, ty);
+    ctx.lineTo(tx + ts / 2, ty + th);
+    ctx.lineTo(tx - ts / 2, ty + th);
+    ctx.lineTo(tx - ts, ty);
+    ctx.closePath();
+    ctx.strokeStyle = '#323232';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+}
