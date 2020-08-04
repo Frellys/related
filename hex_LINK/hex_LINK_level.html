@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>title</title>
@@ -29,10 +29,13 @@
             width: document.body.clientWidth,
             height: document.body.clientHeight,
             fps: 50,
-            pad: 2,
             tile: {
-                size: Math.min(document.body.clientWidth, document.body.clientHeight) / 20,
-                height: Math.min(document.body.clientWidth, document.body.clientHeight) / 20 * (Math.sqrt(3) / 2)
+                size: Math.min(document.body.clientWidth, document.body.clientHeight) / 25,
+                height: Math.min(document.body.clientWidth, document.body.clientHeight) / 25 * (Math.sqrt(3) / 2)
+            },
+            container: {
+                offsetTop: 10,
+                padding: 10
             },
             mouse: {
                 x: 0,
@@ -45,13 +48,15 @@
         cnv.height = core.height;
         var ctx = cnv.getContext('2d');
         // container tiles
-        let tiles = [{}, {}, {}, {}];
+        let tiles = [{}, {}, {}, {}, {}, {}, {}];
         // set variables
-        // tiles.length * (core.tile.size * 2 + core.pad)
         let cntWidth = tiles.length % 2 == 0 ?
-            tiles.length / 2 * (core.tile.size * 3 + core.pad) :
-            (tiles.length - 1) / 2 * (core.tile.size * 3 + core.pad) + core.tile.size;
-        let cntHeight = core.tile.height * 3 + core.pad;
+            tiles.length / 2 * (core.tile.size * 3) + core.tile.size / 2 :
+            (tiles.length - 1) / 2 * (core.tile.size * 3) + core.tile.size * 2;
+        let cntHeight = tiles.length > 1 ?
+            core.tile.height * 3 :
+            core.tile.height * 2;
+        // set tiles pos
         tiles[0].x = core.width / 2 - (cntWidth / 2) + core.tile.size;
         tiles[0].y = core.tile.height;
         for (let t = 1; t < tiles.length; t++) {
@@ -63,6 +68,10 @@
                 tiles[t].y = core.tile.height * 2;
             }
         }
+        // pad container
+        cntWidth += core.container.padding * 2;
+        cntHeight += core.container.padding * 2;
+        tiles.forEach(function (t) { t.y += core.container.padding + core.container.offsetTop; });
         // render
         let render = setInterval(function () {
             // draw bg
@@ -70,7 +79,7 @@
             ctx.fillRect(0, 0, core.width, core.height);
             // draw container
             ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
-            ctx.fillRect(core.width / 2 - cntWidth / 2, 0, cntWidth, cntHeight);
+            ctx.fillRect(core.width / 2 - cntWidth / 2, core.container.offsetTop, cntWidth, cntHeight);
             // draw tiles
             for (let t = 0; t < tiles.length; t++) {
                 let tx = tiles[t].x;
@@ -84,7 +93,7 @@
                 ctx.lineTo(tx - core.tile.size, ty);
                 ctx.closePath();
                 ctx.strokeStyle = '#323232';
-                ctx.lineWidth = 1;
+                ctx.lineWidth = 2;
                 ctx.stroke();
             }
         }, 1000 / core.fps);
