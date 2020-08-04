@@ -31,13 +31,18 @@
             fps: 50,
             tile: {
                 size: Math.min(document.body.clientWidth, document.body.clientHeight) / 25,
-                height: Math.min(document.body.clientWidth, document.body.clientHeight) / 25 * (Math.sqrt(3) / 2)
+                height: Math.min(document.body.clientWidth, document.body.clientHeight) / 25 * (Math.sqrt(3) / 2),
+                selected: false
             },
             container: {
                 offsetTop: 10,
                 padding: 10
             },
             mouse: {
+                x: 0,
+                y: 0
+            },
+            click: {
                 x: 0,
                 y: 0
             }
@@ -56,7 +61,7 @@
         let cntHeight = tiles.length > 1 ?
             core.tile.height * 3 :
             core.tile.height * 2;
-        // set tiles pos
+        // set tiles
         tiles[0].x = core.width / 2 - (cntWidth / 2) + core.tile.size;
         tiles[0].y = core.tile.height;
         for (let t = 1; t < tiles.length; t++) {
@@ -68,6 +73,9 @@
                 tiles[t].y = core.tile.height * 2;
             }
         }
+        // set tiles selection
+        tiles.forEach(function (t) { t.selected = false; });
+        tiles[0].selected = true;
         // pad container
         cntWidth += core.container.padding * 2;
         cntHeight += core.container.padding * 2;
@@ -82,6 +90,8 @@
             ctx.fillRect(core.width / 2 - cntWidth / 2, core.container.offsetTop, cntWidth, cntHeight);
             // draw tiles
             for (let t = 0; t < tiles.length; t++) {
+                //let tx = tiles[t].selected ? core.mouse.x : tiles[t].x;
+                //let ty = tiles[t].selected ? core.mouse.y : tiles[t].y;
                 let tx = tiles[t].x;
                 let ty = tiles[t].y;
                 ctx.beginPath();
@@ -101,6 +111,16 @@
         window.addEventListener('mousemove', function (e) {
             core.mouse.x = e.x;
             core.mouse.y = e.y;
+        }, false);
+        // mousedown listener
+        window.addEventListener('mousedown', function (e) {
+            core.click.pressed = true;
+            core.click.x = e.x;
+            core.click.y = e.y;
+        }, false);
+        window.addEventListener('mouseup', function () {
+            core.click.pressed = false;
+            core.tile.selected = false;
         }, false);
     </script>
 </body>
