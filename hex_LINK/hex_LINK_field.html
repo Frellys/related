@@ -24,6 +24,16 @@
 <body>
     <canvas></canvas>
     <script>
+        // settings
+        let core = {
+            width: document.body.clientWidth,
+            height: document.body.clientHeight
+        };
+        // set canvas
+        let cnv = document.querySelector('canvas');
+        cnv.width = core.width;
+        cnv.height = core.height;
+        var ctx = cnv.getContext('2d');
     </script>
 </body>
 </html>
