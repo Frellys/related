@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>title</title>
+    <title>hex_LINK_level</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -74,7 +74,7 @@
             }
         }
         // set tiles selection
-        tiles.forEach(function (t) { t.selected = false; });
+        tiles.forEach(function (t) { t.selected = false; t.color = 'transparent'; });
         // pad container
         cntWidth += core.container.padding * 2;
         cntHeight += core.container.padding * 2;
@@ -104,6 +104,8 @@
                     tiles[t].selected = true;
                 }
                 if (tiles[t].selected == false) {
+                    ctx.fillStyle = tiles[t].color;
+                    ctx.fill();
                     ctx.strokeStyle = '#323232';
                     ctx.lineWidth = 2;
                     ctx.stroke();
@@ -122,6 +124,9 @@
                     ctx.lineTo(tx - core.tile.size / 2, ty + core.tile.height);
                     ctx.lineTo(tx - core.tile.size, ty);
                     ctx.closePath();
+                    //ctx.fillStyle = tiles[t].color;
+                    ctx.fillStyle = 'red';
+                    ctx.fill();
                     ctx.strokeStyle = '#323232';
                     ctx.lineWidth = 2;
                     ctx.stroke();
@@ -139,6 +144,7 @@
             core.click.x = e.x;
             core.click.y = e.y;
         }, false);
+        // moueup listener
         window.addEventListener('mouseup', function () {
             core.click.pressed = false;
             core.tile.selected = false;
