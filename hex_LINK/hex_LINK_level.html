@@ -75,7 +75,6 @@
         }
         // set tiles selection
         tiles.forEach(function (t) { t.selected = false; });
-        tiles[0].selected = true;
         // pad container
         cntWidth += core.container.padding * 2;
         cntHeight += core.container.padding * 2;
@@ -88,10 +87,8 @@
             // draw container
             ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
             ctx.fillRect(core.width / 2 - cntWidth / 2, core.container.offsetTop, cntWidth, cntHeight);
-            // draw tiles
+            // draw unselected tiles
             for (let t = 0; t < tiles.length; t++) {
-                //let tx = tiles[t].selected ? core.mouse.x : tiles[t].x;
-                //let ty = tiles[t].selected ? core.mouse.y : tiles[t].y;
                 let tx = tiles[t].x;
                 let ty = tiles[t].y;
                 ctx.beginPath();
@@ -102,9 +99,33 @@
                 ctx.lineTo(tx - core.tile.size / 2, ty + core.tile.height);
                 ctx.lineTo(tx - core.tile.size, ty);
                 ctx.closePath();
-                ctx.strokeStyle = '#323232';
-                ctx.lineWidth = 2;
-                ctx.stroke();
+                if (core.click.pressed && ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
+                    core.click.pressed = false;
+                    tiles[t].selected = true;
+                }
+                if (tiles[t].selected == false) {
+                    ctx.strokeStyle = '#323232';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            }
+            // draw selected tile
+            for (let t = 0; t < tiles.length; t++) {
+                if (tiles[t].selected) {
+                    let tx = core.mouse.x;
+                    let ty = core.mouse.y;
+                    ctx.beginPath();
+                    ctx.moveTo(tx - core.tile.size / 2, ty - core.tile.height);
+                    ctx.lineTo(tx + core.tile.size / 2, ty - core.tile.height);
+                    ctx.lineTo(tx + core.tile.size, ty);
+                    ctx.lineTo(tx + core.tile.size / 2, ty + core.tile.height);
+                    ctx.lineTo(tx - core.tile.size / 2, ty + core.tile.height);
+                    ctx.lineTo(tx - core.tile.size, ty);
+                    ctx.closePath();
+                    ctx.strokeStyle = '#323232';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
             }
         }, 1000 / core.fps);
         // mousemove listener
@@ -121,6 +142,7 @@
         window.addEventListener('mouseup', function () {
             core.click.pressed = false;
             core.tile.selected = false;
+            tiles.forEach(function (t) { t.selected = false; });
         }, false);
     </script>
 </body>
