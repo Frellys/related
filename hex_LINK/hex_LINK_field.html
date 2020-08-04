@@ -37,6 +37,11 @@
             mouse: {
                 x: 0,
                 y: 0
+            },
+            click: {
+                evt: false,
+                x: 0,
+                y: 0
             }
         };
         // field
@@ -321,12 +326,20 @@
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(f.toString(), fx, fy);
+                if (core.click.evt && ctx.isPointInPath(core.click.x, core.click.y)) { alert(f); }
             }
+            core.click.evt = false;
         }, 1000 / core.fps);
         // mousemove listener
         window.addEventListener('mousemove', function (e) {
             core.mouse.x = e.x;
             core.mouse.y = e.y;
+        }, false);
+        // click listener
+        window.addEventListener('click', function (e) {
+            core.click.evt = true;
+            core.click.x = e.x;
+            core.click.y = e.y;
         }, false);
     </script>
 </body>
