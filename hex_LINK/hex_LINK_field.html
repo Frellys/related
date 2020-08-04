@@ -33,6 +33,10 @@
             tile: {
                 size: Math.min(document.body.clientWidth, document.body.clientHeight) / 25,
                 height: Math.min(document.body.clientWidth, document.body.clientHeight) / 25 * (Math.sqrt(3) / 2),
+            },
+            mouse: {
+                x: 0,
+                y: 0
             }
         };
         // field
@@ -208,6 +212,10 @@
                 ctx.lineTo(fx - core.tile.size / 2, fy + core.tile.height);
                 ctx.lineTo(fx - core.tile.size, fy);
                 ctx.closePath();
+                if (ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
+                    ctx.fillStyle = 'wheat';
+                    ctx.fill();
+                }
                 ctx.strokeStyle = '#323232';
                 ctx.lineWidth = 2;
                 ctx.stroke();
@@ -219,6 +227,11 @@
                 ctx.fillText(f.toString(), fx, fy);
             }
         }, 1000 / core.fps);
+        // mousemove listener
+        window.addEventListener('mousemove', function (e) {
+            core.mouse.x = e.x;
+            core.mouse.y = e.y;
+        }, false);
     </script>
 </body>
 </html>
