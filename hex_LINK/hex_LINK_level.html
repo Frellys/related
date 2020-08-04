@@ -54,6 +54,18 @@
         var ctx = cnv.getContext('2d');
         // container tiles
         let tiles = [{}, {}, {}, {}, {}, {}, {}];
+        let field = [
+            {
+                x: core.width / 2,
+                y: core.height / 2,
+                color: 'khaki'
+            },
+            {
+                x: core.width / 2 + core.tile.size * 1.5,
+                y: core.height / 2 + core.tile.height,
+                color: 'transparent'
+            }
+        ];
         // set variables
         let cntWidth = tiles.length % 2 == 0 ?
             tiles.length / 2 * (core.tile.size * 3) + core.tile.size / 2 :
@@ -110,6 +122,24 @@
                     ctx.lineWidth = 2;
                     ctx.stroke();
                 }
+            }
+            // draw field
+            for (let f = 0; f < field.length; f++) {
+                let fx = field[f].x;
+                let fy = field[f].y;
+                ctx.beginPath();
+                ctx.moveTo(fx - core.tile.size / 2, fy - core.tile.height);
+                ctx.lineTo(fx + core.tile.size / 2, fy - core.tile.height);
+                ctx.lineTo(fx + core.tile.size, fy);
+                ctx.lineTo(fx + core.tile.size / 2, fy + core.tile.height);
+                ctx.lineTo(fx - core.tile.size / 2, fy + core.tile.height);
+                ctx.lineTo(fx - core.tile.size, fy);
+                ctx.closePath();
+                ctx.fillStyle = field[f].color;
+                ctx.fill();
+                ctx.strokeStyle = '#323232';
+                ctx.lineWidth = 3;
+                ctx.stroke();
             }
             // draw selected tile
             for (let t = 0; t < tiles.length; t++) {
