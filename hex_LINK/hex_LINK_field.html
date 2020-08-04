@@ -27,13 +27,134 @@
         // settings
         let core = {
             width: document.body.clientWidth,
-            height: document.body.clientHeight
+            height: document.body.clientHeight,
+            fps: 50,
+            pad: 4,
+            tile: {
+                size: Math.min(document.body.clientWidth, document.body.clientHeight) / 25,
+                height: Math.min(document.body.clientWidth, document.body.clientHeight) / 25 * (Math.sqrt(3) / 2),
+            }
+        };
+        // field
+        let field = {
+            0: {
+                x: core.width / 2,
+                y: core.height / 2
+            },
+            1: {
+                x: core.width / 2,
+                y: core.height / 2 - core.tile.height * 2 - core.pad
+            },
+            2: {
+                x: core.width / 2 + core.tile.size * 1.5 + core.pad,
+                y: core.height / 2 - core.tile.height - core.pad / 2
+            },
+            3: {
+                x: core.width / 2 + core.tile.size * 1.5 + core.pad,
+                y: core.height / 2 + core.tile.height + core.pad / 2
+            },
+            4: {
+                x: core.width / 2,
+                y: core.height / 2 + core.tile.height * 2 + core.pad
+            },
+            5: {
+                x: core.width / 2 - core.tile.size * 1.5 - core.pad,
+                y: core.height / 2 + core.tile.height + core.pad / 2
+            },
+            6: {
+                x: core.width / 2 - core.tile.size * 1.5 - core.pad,
+                y: core.height / 2 - core.tile.height - core.pad / 2
+            },
+            7: {
+                x: core.width / 2,
+                y: core.height / 2 - core.tile.height * 4 - core.pad * 2
+            },
+            8: {
+                x: core.width / 2 + core.tile.size * 1.5 + core.pad,
+                y: core.height / 2 - core.tile.height * 3 - core.pad * 3 / 2
+            },
+            9: {
+                x: core.width / 2 + core.tile.size * 3 + core.pad * 2,
+                y: core.height / 2 - core.tile.height * 2 - core.pad
+            },
+            10: {
+                x: core.width / 2 + core.tile.size * 3 + core.pad * 2,
+                y: core.height / 2
+            },
+            11: {
+                x: core.width / 2 + core.tile.size * 3 + core.pad * 2,
+                y: core.height / 2 + core.tile.height * 2 + core.pad
+            },
+            12: {
+                x: core.width / 2 + core.tile.size * 1.5 + core.pad,
+                y: core.height / 2 + core.tile.height * 3 + core.pad * 3 / 2
+            },
+            13: {
+                x: core.width / 2,
+                y: core.height / 2 + core.tile.height * 4 + core.pad * 2
+            },
+            14: {
+                x: core.width / 2 - core.tile.size * 1.5 - core.pad,
+                y: core.height / 2 + core.tile.height * 3 + core.pad * 3 / 2
+            },
+            15: {
+                x: core.width / 2 - core.tile.size * 3 - core.pad * 2,
+                y: core.height / 2 + core.tile.height * 2 + core.pad
+            },
+            16: {
+                x: core.width / 2 - core.tile.size * 3 - core.pad * 2,
+                y: core.height / 2
+            },
+            17: {
+                x: core.width / 2 - core.tile.size * 3 - core.pad * 2,
+                y: core.height / 2 - core.tile.height * 2 - core.pad
+            },
+            18: {
+                x: core.width / 2 - core.tile.size * 1.5 - core.pad,
+                y: core.height / 2 - core.tile.height * 3 - core.pad * 3 / 2
+            },
+            19: {
+                x: core.width / 2,
+                y: core.height / 2 - core.tile.height * 6 - core.pad * 3
+            },
+            20: {
+                x: core.width / 2 + core.tile.size * 1.5 + core.pad,
+                y: core.height / 2 - core.tile.height * 5 - core.pad * 5 / 2
+            },
         };
         // set canvas
         let cnv = document.querySelector('canvas');
         cnv.width = core.width;
         cnv.height = core.height;
         var ctx = cnv.getContext('2d');
+        // render
+        let render = setInterval(function () {
+            // draw bg
+            ctx.fillStyle = 'whitesmoke';
+            ctx.fillRect(0, 0, core.width, core.height);
+            // draw field
+            for (let f = 0; f < Object.keys(field).length; f++) {
+                let fx = field[f].x;
+                let fy = field[f].y;
+                ctx.beginPath();
+                ctx.moveTo(fx - core.tile.size / 2, fy - core.tile.height);
+                ctx.lineTo(fx + core.tile.size / 2, fy - core.tile.height);
+                ctx.lineTo(fx + core.tile.size, fy);
+                ctx.lineTo(fx + core.tile.size / 2, fy + core.tile.height);
+                ctx.lineTo(fx - core.tile.size / 2, fy + core.tile.height);
+                ctx.lineTo(fx - core.tile.size, fy);
+                ctx.closePath();
+                ctx.strokeStyle = '#323232';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                // number
+                ctx.fillStyle = '#323232';
+                ctx.font = core.tile.height + 'px monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(f.toString(), fx, fy);
+            }
+        }, 1000 / core.fps);
     </script>
 </body>
 </html>
