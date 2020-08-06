@@ -58,10 +58,12 @@
     <div id="wrap">
         <div id="model">
             <div>
-                <input type="checkbox"><label>hex</label>
+                <input id="hex" type="checkbox">
+                <label for="hex">hex</label>
             </div>
             <div>
-                <input type="checkbox"><label>rgb</label>
+                <input id="rgb" type="checkbox">
+                <label for="rgb">rgb</label>
             </div>
         </div>
         <div id="base">
@@ -76,6 +78,15 @@
         </div>
     </div>
     <script>
+        // model
+        let hex = document.querySelector('#wrap > #model > div > input#hex');
+        let rgb = document.querySelector('#wrap > #model > div > input#rgb');
+        hex.checked = true;
+        rgb.checked = false;
+        hex.addEventListener('click', switchModel, false);
+        rgb.addEventListener('click', switchModel, false);
+        function switchModel(e) {
+        }
     </script>
 </body>
 </html>
