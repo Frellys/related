@@ -28,8 +28,8 @@
         }
 
             #wrap > #model {
-                margin-bottom: 2vmin;
-                padding-bottom: 2vmin;
+                margin: 0 0 2vmin 0;
+                padding: 0 2vmin 2vmin 2vmin;
                 border-bottom: 1px solid rgba(50, 50, 50, 0.25);
             }
 
@@ -40,16 +40,18 @@
                 }
 
             #wrap > #base {
-                margin-bottom: 2vmin;
-                padding-bottom: 2vmin;
+                margin: 0 0 2vmin 0;
+                padding: 0 2vmin 2vmin 2vmin;
                 border-bottom: 1px solid rgba(50, 50, 50, 0.25);
             }
 
                 #wrap > #base > div > input {
                     outline: none;
                     border: none;
-                    border-bottom: 1px solid #323232;
+                    border-bottom: 1px solid rgba(50, 50, 50, 0.75);
                     padding: 1px 1vmin;
+                    background-color: transparent;
+                    color: #323232;
                     font-family: monospace;
                 }
     </style>
@@ -83,9 +85,25 @@
         let rgb = document.querySelector('#wrap > #model > div > input#rgb');
         hex.checked = true;
         rgb.checked = false;
-        hex.addEventListener('click', switchModel, false);
-        rgb.addEventListener('click', switchModel, false);
+        hex.addEventListener('change', switchModel, false);
+        rgb.addEventListener('change', switchModel, false);
         function switchModel(e) {
+            if (e.target.id == 'hex') {
+                if (hex.checked) {
+                    rgb.checked = false;
+                }
+                else {
+                    rgb.checked = true;
+                }
+            }
+            else {
+                if (rgb.checked) {
+                    hex.checked = false;
+                }
+                else {
+                    hex.checked = true;
+                }
+            }
         }
     </script>
 </body>
