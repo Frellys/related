@@ -26,11 +26,17 @@
             margin: 0 auto;
         }
 
-            #wrap > #model > div {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
+            #wrap > #model {
+                margin-bottom: 1vmin;
+                padding-bottom: 1vmin;
+                border-bottom: 1px solid rgba(50, 50, 50, 0.75);
             }
+
+                #wrap > #model > div {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                }
     </style>
 </head>
 <body>
@@ -42,6 +48,10 @@
             <div>
                 <input type="checkbox"><label>rgb</label>
             </div>
+        </div>
+        <div id="main">
+            <div>from:</div>
+            <div>&nbsp;&nbsp;to:</div>
         </div>
     </div>
     <script>
