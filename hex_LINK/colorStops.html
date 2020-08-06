@@ -6,22 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         html {
-            user-select: none;
+            /*user-select: none;*/
             overflow: hidden;
+            font-family: monospace;
         }
 
         body {
             margin: 0;
             padding: 0;
-            background-color: gray;
+            background-color: whitesmoke;
             display: table-cell;
             height: 100vh;
             width: 100vw;
             vertical-align: middle;
         }
+
+        #wrap {
+            display: table;
+            margin: 0 auto;
+        }
+
+            #wrap > #model > div {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
     </style>
 </head>
 <body>
+    <div id="wrap">
+        <div id="model">
+            <div>
+                <input type="checkbox"><label>hex</label>
+            </div>
+            <div>
+                <input type="checkbox"><label>rgb</label>
+            </div>
+        </div>
+    </div>
     <script>
     </script>
 </body>
