@@ -48,6 +48,22 @@
                         outline: none;
                     }
 
+                        #wrap > #model > div > input#stops {
+                            width: 2em;
+                            border: none;
+                            border-bottom: 1px solid rgba(50, 50, 50, 0.75);
+                            padding: 1px 1vmin;
+                            background-color: transparent;
+                            color: #323232;
+                            font-family: monospace;
+                        }
+
+                            #wrap > #model > div > input#stops::-webkit-inner-spin-button,
+                            #wrap > #model > div > input#stops::-webkit-outer-spin-button {
+                                -webkit-appearance: none;
+                                margin: 0;
+                            }
+
             #wrap > #base {
                 margin: 0 0 2vmin 0;
                 padding: 0 2vmin 2vmin 2vmin;
@@ -88,6 +104,10 @@
                 <input id="rgb" type="checkbox">
                 <label for="rgb">rgb</label>
             </div>
+            <div>
+                <input id="stops" type="number" min="1">
+                <label for="stops">stops</label>
+            </div>
         </div>
         <div id="base">
             <div>
@@ -101,6 +121,7 @@
                 <input id="to">
             </div>
         </div>
+        <div id="palette"></div>
     </div>
     <script>
         // model
@@ -139,7 +160,8 @@
         let from = document.querySelector('#wrap > #base > div > input#from');
         let to = document.querySelector('#wrap > #base > div > input#to');
         from.value = '#000000';
-        to.value = '#ffffff';
+        //to.value = '#ffffff';
+        to.value = '#ffc120';
         drawPreview();
         function drawPreview() {
             document.getElementById('fromPreview').style.backgroundColor = from.value;
