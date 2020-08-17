@@ -87,6 +87,21 @@
                         margin-left: 1em;
                         width: 18ch;
                     }
+
+                #wrap > div.block:last-child > div.row > div.preview {
+                    width: 5em;
+                    margin: 0 1em;
+                }
+
+                #wrap > div.block:last-child > div.row > span.hex {
+                    margin-left: 1em;
+                    width: 7ch;
+                }
+
+                #wrap > div.block:last-child > div.row > span.rgb {
+                    margin-left: 1em;
+                    width: 18ch;
+                }
     </style>
 </head>
 <body>
@@ -178,6 +193,27 @@
         // draw palette
         function drawPalette() {
             let cnt = document.querySelector('#wrap > div.block:last-child');
+            for (let s = 0; s < parseInt(stops.value); s++) {
+                // row
+                let row = document.createElement('div');
+                row.className = 'row';
+                // preview
+                let preview = document.createElement('div');
+                preview.className = 'preview';
+                row.appendChild(preview);
+                // hex
+                let hex = document.createElement('span');
+                hex.className = 'hex';
+                hex.innerHTML = '#000000';
+                row.appendChild(hex);
+                // rgb
+                let rgb = document.createElement('span');
+                rgb.className = 'rgb';
+                rgb.innerHTML = 'rgb(x, x, x)';
+                row.appendChild(rgb);
+                // apply
+                cnt.appendChild(row);
+            }
         }
     </script>
 </body>
