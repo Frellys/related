@@ -200,21 +200,9 @@
             let toR = parseInt(to.value.substring(1, 3), 16);
             let toG = parseInt(to.value.substring(3, 5), 16);
             let toB = parseInt(to.value.substring(5, 7), 16);
-            //let rgR = Math.abs(toR - frR);
-            //let rgG = Math.abs(toG - frG);
-            //let rgB = Math.abs(toB - frB);
-            //let minR = Math.min(frR, toR);
-            //let minG = Math.min(frG, toG);
-            //let minB = Math.min(frB, toB);
-            //let maxR = Math.max(frR, toR);
-            //let maxG = Math.max(frG, toG);
-            //let maxB = Math.max(frB, toB);
             let shiftR = Math.round(Math.abs(frR - toR) / (parseInt(stops.value) + 1));
             let shiftG = Math.round(Math.abs(frG - toG) / (parseInt(stops.value) + 1));
             let shiftB = Math.round(Math.abs(frB - toB) / (parseInt(stops.value) + 1));
-            console.log(shiftR);
-            console.log(shiftG);
-            console.log(shiftB);
             // remove old
             let cnt = document.querySelector('#wrap > div.block:last-child');
             cnt.querySelectorAll('*').forEach(function (el) {
@@ -222,18 +210,9 @@
             });
             for (let s = 1; s < parseInt(stops.value) + 1; s++) {
                 // calc
-                //let curR = minR + Math.round((maxR - minR) / (parseInt(stops.value) + 1) * s);
-                //let curG = minG + Math.round((maxG - minG) / (parseInt(stops.value) + 1) * s);
-                //let curB = minB + Math.round((maxB - minB) / (parseInt(stops.value) + 1) * s);
-                //let curR = frR + shiftR * s;
-                //let curG = frG + shiftG * s;
-                //let curB = frB + shiftB * s;
                 let curR = frR > toR ? frR - shiftR * s : frR + shiftR * s;
                 let curG = frG > toG ? frG - shiftG * s : frG + shiftG * s;
                 let curB = frB > toB ? frB - shiftB * s : frB + shiftB * s;
-                console.log(curR);
-                console.log(curG);
-                console.log(curB);
                 let curRhex = curR.toString(16).toString().length < 2 ? '0' + curR.toString(16) : curR.toString(16);
                 let curGhex = curG.toString(16).toString().length < 2 ? '0' + curG.toString(16) : curG.toString(16);
                 let curBhex = curB.toString(16).toString().length < 2 ? '0' + curB.toString(16) : curB.toString(16);
