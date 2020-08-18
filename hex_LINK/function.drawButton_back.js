@@ -16,33 +16,27 @@ function drawButton_back() {
     // top-right
     ctx.moveTo(
         fx + parseFloat(Math.sin((30 + rt) * (Math.PI / 180)).toFixed(3)) * size,
-        fy - parseFloat(Math.cos((30 + rt) * (Math.PI / 180)).toFixed(3)) * size
-    );
+        fy - parseFloat(Math.cos((30 + rt) * (Math.PI / 180)).toFixed(3)) * size);
     // right
     ctx.lineTo(
         fx + parseFloat(Math.sin((90 + rt) * (Math.PI / 180)).toFixed(3)) * size,
-        fy + parseFloat(Math.cos((90 - rt) * (Math.PI / 180)).toFixed(3)) * size
-    );
+        fy + parseFloat(Math.cos((90 - rt) * (Math.PI / 180)).toFixed(3)) * size);
     // bottom-right
     ctx.lineTo(
         fx + parseFloat(Math.sin((30 - rt) * (Math.PI / 180)).toFixed(3)) * size,
-        fy + parseFloat(Math.cos((30 - rt) * (Math.PI / 180)).toFixed(3)) * size
-    );
+        fy + parseFloat(Math.cos((30 - rt) * (Math.PI / 180)).toFixed(3)) * size);
     // bottom-left
     ctx.lineTo(
         fx + parseFloat(Math.sin((-30 - rt) * (Math.PI / 180)).toFixed(3)) * size,
-        fy + parseFloat(Math.cos((-30 - rt) * (Math.PI / 180)).toFixed(3)) * size
-    );
+        fy + parseFloat(Math.cos((-30 - rt) * (Math.PI / 180)).toFixed(3)) * size);
     // left
     ctx.lineTo(
         fx + parseFloat(Math.sin((-90 + rt) * (Math.PI / 180)).toFixed(3)) * size,
-        fy + parseFloat(Math.cos((-90 - rt) * (Math.PI / 180)).toFixed(3)) * size
-    );
+        fy + parseFloat(Math.cos((-90 - rt) * (Math.PI / 180)).toFixed(3)) * size);
     // top-left
     ctx.lineTo(
         fx + parseFloat(Math.sin((-30 + rt) * (Math.PI / 180)).toFixed(3)) * size,
-        fy - parseFloat(Math.cos((-30 + rt) * (Math.PI / 180)).toFixed(3)) * size
-    );
+        fy - parseFloat(Math.cos((-30 + rt) * (Math.PI / 180)).toFixed(3)) * size);
     // close path
     ctx.closePath();
     // hover
