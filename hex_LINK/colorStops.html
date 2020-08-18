@@ -134,12 +134,18 @@
     <script>
         // defaults
         let stops = document.querySelector('#wrap > div.block > div.row > input#stops');
-        stops.value = 20;
+        stops.value = 50;
+        stops.addEventListener('input', function () {
+            if (checkStops()) {
+                drawPalette();
+            }
+        }, false);
         let fr = document.querySelector('#wrap > div.block > div.row > input#fr');
         let to = document.querySelector('#wrap > div.block > div.row > input#to');
         //fr.value = '#000000';
-        fr.value = '#00ffff';
-        to.value = '#ffc120';
+        //to.value = '#ffc120';
+        fr.value = '#0099ff';
+        to.value = '#ff0000';
         let frRGB = document.querySelector('#wrap > div.block > div.row > span#frRGB');
         let toRGB = document.querySelector('#wrap > div.block > div.row > span#toRGB');
         baseHandle();
@@ -238,6 +244,30 @@
                 // apply
                 cnt.appendChild(row);
             }
+        }
+        // check stops
+        function checkStops() {
+            console.log(stops.value);
+            if (stops.value == '') return false;
+            for (let s = 0; s < stops.value.length; s++) {
+                switch (stops.value[s]) {
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                        break;
+                    default:
+                        return false;
+                        break;
+                }
+            }
+            return true;
         }
     </script>
 </body>
