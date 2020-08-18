@@ -20,6 +20,7 @@
             vertical-align: middle;
         }
     </style>
+    <script src="function.drawButton_back.js"></script>
 </head>
 <body>
     <canvas></canvas>
@@ -163,6 +164,7 @@
                     ctx.stroke();
                 }
             }
+            drawButton_back();
         }, 1000 / core.fps);
         // mousemove listener
         window.addEventListener('mousemove', function (e) {
