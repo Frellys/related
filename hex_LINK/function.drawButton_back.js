@@ -11,10 +11,6 @@ function drawButton_back() {
         rt = window.backBtnRt;
     }
     let size = Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 15;
-    // style
-    let strokeStyle = '#323232';
-    let fillStyle = 'rgba(50, 50, 50, 0.25)';
-    let lineWidth = Math.min(document.body.clientWidth, document.body.clientHeight) / 100 / 2;
     // begin path
     ctx.beginPath();
     // top-right
@@ -54,8 +50,8 @@ function drawButton_back() {
         // paint
         ctx.fillStyle = '#323232';
         ctx.fill();
-        ctx.strokeStyle = strokeStyle;
-        ctx.lineWidth = lineWidth;
+        ctx.strokeStyle = '#323232';
+        ctx.lineWidth = Math.min(document.body.clientWidth, document.body.clientHeight) / 100 / 2;
         ctx.lineJoin = 'round';
         ctx.stroke();
         // draw text
@@ -69,10 +65,10 @@ function drawButton_back() {
     }
     else {
         // paint
-        ctx.fillStyle = fillStyle;
+        ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
         ctx.fill();
-        ctx.strokeStyle = strokeStyle;
-        ctx.lineWidth = lineWidth;
+        ctx.strokeStyle = '#323232';
+        ctx.lineWidth = Math.min(document.body.clientWidth, document.body.clientHeight) / 100 / 2;
         ctx.lineJoin = 'round';
         ctx.stroke();
         // draw text
