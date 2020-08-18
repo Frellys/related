@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: gray;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <script>
+        // Math.sin(30 * (Math.PI / 180)).toFixed(3)
+        // settings
+        let core = {
+            width: document.body.clientWidth,
+            height: document.body.clientHeight,
+            fps: 50,
+            bg: [
+                {
+                    figure: 'hex',
+                    x: 0,
+                    y: 0,
+                    size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 15,
+                    height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 15 * (Math.sqrt(3) / 2),
+                    strokeStyle: '#323232',
+                    fillStyle: 'rgba(50, 50, 50, 0.25)',
+                    lineWidth: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
+                    rotation: 'ckw',
+                    curRotation: 0,
+                    speed: 1
+                },
+                {
+                    figure: 'hex',
+                    x: document.body.clientWidth,
+                    y: document.body.clientHeight,
+                    size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 35,
+                    height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 35 * (Math.sqrt(3) / 2),
+                    strokeStyle: 'rgba(50, 50, 50, 0.5)',
+                    fillStyle: 'transparent',
+                    lineWidth: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
+                    rotation: 'ckw',
+                    curRotation: 0,
+                    speed: 1
+                },
+                {
+                    figure: 'hex',
+                    x: document.body.clientWidth,
+                    y: document.body.clientHeight,
+                    size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 45,
+                    height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 45 * (Math.sqrt(3) / 2),
+                    strokeStyle: 'rgba(50, 50, 50, 0.5)',
+                    fillStyle: 'transparent',
+                    lineWidth: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
+                    rotation: 'ackw',
+                    curRotation: 0,
+                    speed: 1
+                }
+            ]
+        };
+        // set canvas
+        let cnv = document.querySelector('canvas');
+        cnv.width = core.width;
+        cnv.height = core.height;
+        var ctx = cnv.getContext('2d');
+        // render
+        let render = setInterval(function () {
+            // draw bg
+            ctx.fillStyle = 'whitesmoke';
+            ctx.fillRect(0, 0, core.width, core.height);
+            // draw bg figure
+            for (let b = 0; b < core.bg.length; b++) {
+                if (core.bg[b].figure == 'hex') {
+                    let fx = core.bg[b].x;
+                    let fy = core.bg[b].y;
+                    if (core.bg[b].curRotation > 360) core.bg[b].curRotation = 0;
+                    let rt = core.bg[b].curRotation;
+                    // begin path
+                    ctx.beginPath();
+                    // top-right
+                    ctx.moveTo(
+                        fx + parseFloat(Math.sin((30 + rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size,
+                        fy - parseFloat(Math.cos((30 + rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size
+                    );
+                    // right
+                    ctx.lineTo(
+                        fx + parseFloat(Math.sin((90 + rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size,
+                        fy + parseFloat(Math.cos((90 - rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size
+                    );
+                    // bottom-right
+                    ctx.lineTo(
+                        fx + parseFloat(Math.sin((30 - rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size,
+                        fy + parseFloat(Math.cos((30 - rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size
+                    );
+                    // bottom-left
+                    ctx.lineTo(
+                        fx + parseFloat(Math.sin((-30 - rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size,
+                        fy + parseFloat(Math.cos((-30 - rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size
+                    );
+                    // left
+                    ctx.lineTo(
+                        fx + parseFloat(Math.sin((-90 + rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size,
+                        fy + parseFloat(Math.cos((-90 - rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size
+                    );
+                    // top-left
+                    ctx.lineTo(
+                        fx + parseFloat(Math.sin((-30 + rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size,
+                        fy - parseFloat(Math.cos((-30 + rt) * (Math.PI / 180)).toFixed(3)) * core.bg[b].size
+                    );
+                    // close path
+                    ctx.closePath();
+                    // paint
+                    ctx.fillStyle = core.bg[b].fillStyle;
+                    ctx.fill();
+                    ctx.strokeStyle = core.bg[b].strokeStyle;
+                    ctx.lineWidth = core.bg[b].lineWidth;
+                    ctx.lineJoin = 'round';
+                    ctx.stroke();
+                    // update
+                    if (core.bg[b].rotation == 'ckw') core.bg[b].curRotation += 1;
+                    else core.bg[b].curRotation -= 1;
+                }
+            }
+        }, 1000 / core.fps);
+    </script>
+</body>
+</html>
