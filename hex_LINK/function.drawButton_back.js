@@ -58,4 +58,5 @@ function drawButton_back() {
     ctx.stroke();
     // update
     window.backBtnRt += 0.25;
+    //window.backBtnRt += 1000 / core.fps / 40;
 }
