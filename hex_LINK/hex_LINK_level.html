@@ -21,6 +21,7 @@
             vertical-align: middle;
         }
     </style>
+    <script src="function.drawBackground.js"></script>
     <script src="function.drawButton_back.js"></script>
     <script src="function.drawLabel_levels.js"></script>
 </head>
@@ -99,20 +100,7 @@
         let render = setInterval(function () {
             //ctx.clearRect(0, 0, core.width, core.height);
             // draw bg
-            ctx.fillStyle = 'whitesmoke';
-            ctx.fillRect(0, 0, core.width, core.height);
-            //let grd = ctx.createRadialGradient(
-            //    document.body.clientWidth / 2,
-            //    document.body.clientHeight / 2,
-            //    //document.body.clientHeight / 2,
-            //    0,
-            //    document.body.clientWidth / 2,
-            //    document.body.clientHeight / 2,
-            //    document.body.clientWidth);
-            //grd.addColorStop(0, 'whitesmoke');
-            //grd.addColorStop(1, '#969696');
-            //ctx.fillStyle = grd;
-            //ctx.fillRect(0, 0, core.width, core.height);
+            drawBackground();
             // draw container
             ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
             ctx.fillRect(core.width / 2 - cntWidth / 2, core.container.offsetTop, cntWidth, cntHeight);
