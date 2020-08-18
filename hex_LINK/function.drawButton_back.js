@@ -49,14 +49,41 @@ function drawButton_back() {
     );
     // close path
     ctx.closePath();
-    // paint
-    ctx.fillStyle = fillStyle;
-    ctx.fill();
-    ctx.strokeStyle = strokeStyle;
-    ctx.lineWidth = lineWidth;
-    ctx.lineJoin = 'round';
-    ctx.stroke();
+    // hover
+    if (ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
+        // paint
+        ctx.fillStyle = '#323232';
+        ctx.fill();
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = lineWidth;
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+        // draw text
+        ctx.font = size / 2 + 'px monospace';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'whitesmoke';
+        ctx.fillText('<',
+            Math.min(document.body.clientWidth, document.body.clientHeight) / 100 + size / 4,
+            Math.min(document.body.clientWidth, document.body.clientHeight) / 100 + size / 4);
+    }
+    else {
+        // paint
+        ctx.fillStyle = fillStyle;
+        ctx.fill();
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = lineWidth;
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+        // draw text
+        ctx.font = size / 2 + 'px monospace';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#323232';
+        ctx.fillText('<',
+            Math.min(document.body.clientWidth, document.body.clientHeight) / 100 + size / 4,
+            Math.min(document.body.clientWidth, document.body.clientHeight) / 100 + size / 4);
+    }
     // update
     window.backBtnRt += 0.25;
-    //window.backBtnRt += 1000 / core.fps / 40;
 }
