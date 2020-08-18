@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>colorStops</title>
@@ -134,10 +134,11 @@
     <script>
         // defaults
         let stops = document.querySelector('#wrap > div.block > div.row > input#stops');
-        stops.value = 3;
+        stops.value = 20;
         let fr = document.querySelector('#wrap > div.block > div.row > input#fr');
         let to = document.querySelector('#wrap > div.block > div.row > input#to');
-        fr.value = '#000000';
+        //fr.value = '#000000';
+        fr.value = '#00ffff';
         to.value = '#ffc120';
         let frRGB = document.querySelector('#wrap > div.block > div.row > span#frRGB');
         let toRGB = document.querySelector('#wrap > div.block > div.row > span#toRGB');
@@ -202,12 +203,18 @@
             //let rgR = Math.abs(toR - frR);
             //let rgG = Math.abs(toG - frG);
             //let rgB = Math.abs(toB - frB);
-            let minR = Math.min(frR, toR);
-            let minG = Math.min(frG, toG);
-            let minB = Math.min(frB, toB);
-            let maxR = Math.max(frR, toR);
-            let maxG = Math.max(frG, toG);
-            let maxB = Math.max(frB, toB);
+            //let minR = Math.min(frR, toR);
+            //let minG = Math.min(frG, toG);
+            //let minB = Math.min(frB, toB);
+            //let maxR = Math.max(frR, toR);
+            //let maxG = Math.max(frG, toG);
+            //let maxB = Math.max(frB, toB);
+            let shiftR = Math.round(Math.abs(frR - toR) / (parseInt(stops.value) + 1));
+            let shiftG = Math.round(Math.abs(frG - toG) / (parseInt(stops.value) + 1));
+            let shiftB = Math.round(Math.abs(frB - toB) / (parseInt(stops.value) + 1));
+            console.log(shiftR);
+            console.log(shiftG);
+            console.log(shiftB);
             // remove old
             let cnt = document.querySelector('#wrap > div.block:last-child');
             cnt.querySelectorAll('*').forEach(function (el) {
@@ -218,9 +225,15 @@
                 //let curR = minR + Math.round((maxR - minR) / (parseInt(stops.value) + 1) * s);
                 //let curG = minG + Math.round((maxG - minG) / (parseInt(stops.value) + 1) * s);
                 //let curB = minB + Math.round((maxB - minB) / (parseInt(stops.value) + 1) * s);
-                let curR = frR + Math.round(Math.abs(frR - toR) / (parseInt(stops.value) + 1) * s);
-                let curG = frG + Math.round(Math.abs(frG - toG) / (parseInt(stops.value) + 1) * s);
-                let curB = frB + Math.round(Math.abs(frB - toB) / (parseInt(stops.value) + 1) * s);
+                //let curR = frR + shiftR * s;
+                //let curG = frG + shiftG * s;
+                //let curB = frB + shiftB * s;
+                let curR = frR > toR ? frR - shiftR * s : frR + shiftR * s;
+                let curG = frG > toG ? frG - shiftG * s : frG + shiftG * s;
+                let curB = frB > toB ? frB - shiftB * s : frB + shiftB * s;
+                console.log(curR);
+                console.log(curG);
+                console.log(curB);
                 let curRhex = curR.toString(16).toString().length < 2 ? '0' + curR.toString(16) : curR.toString(16);
                 let curGhex = curG.toString(16).toString().length < 2 ? '0' + curG.toString(16) : curG.toString(16);
                 let curBhex = curB.toString(16).toString().length < 2 ? '0' + curB.toString(16) : curB.toString(16);
