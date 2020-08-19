@@ -74,6 +74,12 @@ function drawButton_back() {
             Math.min(document.body.clientWidth, document.body.clientHeight) / 100 + size / 4,
             Math.min(document.body.clientWidth, document.body.clientHeight) / 100 + size / 4);
     }
+    // click
+    if (core.click.pressed && ctx.isPointInPath(core.click.x, core.click.y)) {
+        core.click.pressed = false;
+        window.location.reload();
+        //alert('blums');
+    }
     // update
     window.backBtnRt += 0.25;
 }
