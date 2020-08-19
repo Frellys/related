@@ -8,6 +8,7 @@ function drawBackground() {
         window.bgParticles = [];
         window.bgParticles.push({
             figure: 'square',
+            fade: 'in',
             x: Math.floor(Math.random() * document.body.clientWidth),
             y: Math.floor(Math.random() * document.body.clientHeight),
             size: (Math.floor(Math.random() * 3) + 1) * (Math.min(document.body.clientWidth, document.body.clientHeight) / 100),
@@ -20,12 +21,8 @@ function drawBackground() {
     // draw particles
     window.bgParticles.forEach(function (el, idx) {
         if (el.figure == 'square') {
+
             ctx.fillStyle = el.color.replace('curAlpha', el.minAlpha + el.alphaShift);
-            //ctx.fillRect(
-            //    el.x - el.size / 2,
-            //    el.y - el.size / 2,
-            //    el.x + el.size / 2,
-            //    el.y + el.size / 2);
             ctx.fillRect(
                 el.x,
                 el.y,
