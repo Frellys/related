@@ -102,8 +102,6 @@
         let render = setInterval(function () {
             // draw bg
             drawBackground();
-            // draw mouse tail
-            drawMouseTail();
             // draw container
             ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
             ctx.fillRect(core.width / 2 - cntWidth / 2, core.container.offsetTop, cntWidth, cntHeight);
@@ -170,8 +168,12 @@
                     ctx.stroke();
                 }
             }
+            // draw button back
             drawButton_back();
+            // draw label level
             drawLabel_levels();
+            // draw mouse tail
+            drawMouseTail();
         }, 1000 / core.fps);
         // mousemove listener
         window.addEventListener('mousemove', function (e) {
