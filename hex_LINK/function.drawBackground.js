@@ -21,7 +21,6 @@ function drawBackground() {
     // draw particles
     window.bgParticles.forEach(function (el, idx) {
         if (el.figure == 'square') {
-
             ctx.fillStyle = el.color.replace('curAlpha', el.minAlpha + el.alphaShift);
             ctx.fillRect(
                 el.x,
