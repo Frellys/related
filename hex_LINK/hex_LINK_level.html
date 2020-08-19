@@ -24,6 +24,7 @@
     <script src="function.drawBackground.js"></script>
     <script src="function.drawButton_back.js"></script>
     <script src="function.drawLabel_levels.js"></script>
+    <script src="function.drawMouseTail.js"></script>
 </head>
 <body>
     <canvas></canvas>
@@ -101,6 +102,8 @@
         let render = setInterval(function () {
             // draw bg
             drawBackground();
+            // draw mouse tail
+            drawMouseTail();
             // draw container
             ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
             ctx.fillRect(core.width / 2 - cntWidth / 2, core.container.offsetTop, cntWidth, cntHeight);
