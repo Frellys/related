@@ -6,27 +6,70 @@ function drawBackground() {
     // particles
     if (!window.bgParticles) {
         window.bgParticles = [];
-        window.bgParticles.push({
-            figure: 'square',
-            fade: 'in',
-            x: Math.floor(Math.random() * document.body.clientWidth),
-            y: Math.floor(Math.random() * document.body.clientHeight),
-            size: (Math.floor(Math.random() * 3) + 1) * (Math.min(document.body.clientWidth, document.body.clientHeight) / 100),
-            minAlpha: 0.0,
-            maxAlpha: 0.25,
-            alphaShift: 0.1,
-            color: 'rgba(50, 50, 50, curAlpha)'
-        });
+        for (let a = 0.001; a < 0.0041; a += 0.0001) {
+            window.bgParticles.push({
+                figure: 'square',
+                fadeIn: true,
+                x: Math.floor(Math.random() * document.body.clientWidth),
+                y: Math.floor(Math.random() * document.body.clientHeight),
+                size: (Math.floor(Math.random() * 3) + 1) * (Math.min(document.body.clientWidth, document.body.clientHeight) / 100),
+                curAlpha: 0.0,
+                maxAlpha: 0.25,
+                alphaShift: a,
+                color: 'rgba(50, 50, 50, curAlpha)'
+            });
+            //window.bgParticles.push({
+            //    figure: 'circle',
+            //    fadeIn: true,
+            //    x: Math.floor(Math.random() * document.body.clientWidth),
+            //    y: Math.floor(Math.random() * document.body.clientHeight),
+            //    size: (Math.floor(Math.random() * 3) + 1) * (Math.min(document.body.clientWidth, document.body.clientHeight) / 100),
+            //    curAlpha: 0.0,
+            //    maxAlpha: 0.25,
+            //    alphaShift: a,
+            //    color: 'rgba(50, 50, 50, curAlpha)'
+            //});
+        }
+        //window.bgParticles.push({
+        //    figure: 'square',
+        //    fadeIn: true,
+        //    x: Math.floor(Math.random() * document.body.clientWidth),
+        //    y: Math.floor(Math.random() * document.body.clientHeight),
+        //    size: (Math.floor(Math.random() * 3) + 1) * (Math.min(document.body.clientWidth, document.body.clientHeight) / 100),
+        //    curAlpha: 0.0,
+        //    maxAlpha: 0.25,
+        //    alphaShift: 0.0020,
+        //    color: 'rgba(50, 50, 50, curAlpha)'
+        //});
     }
     // draw particles
     window.bgParticles.forEach(function (el, idx) {
+        if (el.fadeIn) {
+            el.curAlpha += el.alphaShift;
+            if (el.curAlpha >= el.maxAlpha) el.fadeIn = false;
+        }
+        else {
+            el.curAlpha -= el.alphaShift;
+            if (el.curAlpha <= 0) {
+                el.fadeIn = true;
+                el.x = Math.floor(Math.random() * document.body.clientWidth);
+                el.y = Math.floor(Math.random() * document.body.clientHeight);
+                el.size = (Math.floor(Math.random() * 3) + 1) * (Math.min(document.body.clientWidth, document.body.clientHeight) / 100);
+            }
+        }
         if (el.figure == 'square') {
-            ctx.fillStyle = el.color.replace('curAlpha', el.minAlpha + el.alphaShift);
+            ctx.fillStyle = el.color.replace('curAlpha', el.curAlpha);
             ctx.fillRect(
                 el.x,
                 el.y,
                 el.size,
                 el.size);
         }
+        //if (el.figure == 'circle') {
+        //    ctx.beginPath();
+        //    ctx.arc(el.x, el.y, el.size / 2, 0, 2 * Math.PI);
+        //    ctx.fillStyle = el.color.replace('curAlpha', el.curAlpha);
+        //    ctx.fill();
+        //}
     });
 }
