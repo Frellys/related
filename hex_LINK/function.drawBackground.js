@@ -18,29 +18,40 @@ function drawBackground() {
                 alphaShift: a,
                 color: 'rgba(50, 50, 50, curAlpha)'
             });
-            //window.bgParticles.push({
-            //    figure: 'circle',
-            //    fadeIn: true,
-            //    x: Math.floor(Math.random() * document.body.clientWidth),
-            //    y: Math.floor(Math.random() * document.body.clientHeight),
-            //    size: (Math.floor(Math.random() * 3) + 1) * (Math.min(document.body.clientWidth, document.body.clientHeight) / 100),
-            //    curAlpha: 0.0,
-            //    maxAlpha: 0.25,
-            //    alphaShift: a,
-            //    color: 'rgba(50, 50, 50, curAlpha)'
-            //});
+            window.bgParticles.push({
+                figure: 'square',
+                fadeIn: true,
+                x: Math.floor(Math.random() * document.body.clientWidth),
+                y: Math.floor(Math.random() * document.body.clientHeight),
+                size: (Math.floor(Math.random() * 3) + 1) * (Math.min(document.body.clientWidth, document.body.clientHeight) / 100),
+                curAlpha: 0.0,
+                maxAlpha: 0.25,
+                alphaShift: a,
+                color: 'rgba(50, 50, 50, curAlpha)'
+            });
+            window.bgParticles.push({
+                figure: 'square',
+                fadeIn: true,
+                x: Math.floor(Math.random() * document.body.clientWidth),
+                y: Math.floor(Math.random() * document.body.clientHeight),
+                size: (Math.floor(Math.random() * 3) + 1) * (Math.min(document.body.clientWidth, document.body.clientHeight) / 100),
+                curAlpha: 0.0,
+                maxAlpha: 0.25,
+                alphaShift: a,
+                color: 'rgba(50, 50, 50, curAlpha)'
+            });
+            window.bgParticles.push({
+                figure: 'square',
+                fadeIn: true,
+                x: Math.floor(Math.random() * document.body.clientWidth),
+                y: Math.floor(Math.random() * document.body.clientHeight),
+                size: (Math.floor(Math.random() * 3) + 1) * (Math.min(document.body.clientWidth, document.body.clientHeight) / 100),
+                curAlpha: 0.0,
+                maxAlpha: 0.25,
+                alphaShift: a,
+                color: 'rgba(50, 50, 50, curAlpha)'
+            });
         }
-        //window.bgParticles.push({
-        //    figure: 'square',
-        //    fadeIn: true,
-        //    x: Math.floor(Math.random() * document.body.clientWidth),
-        //    y: Math.floor(Math.random() * document.body.clientHeight),
-        //    size: (Math.floor(Math.random() * 3) + 1) * (Math.min(document.body.clientWidth, document.body.clientHeight) / 100),
-        //    curAlpha: 0.0,
-        //    maxAlpha: 0.25,
-        //    alphaShift: 0.0020,
-        //    color: 'rgba(50, 50, 50, curAlpha)'
-        //});
     }
     // draw particles
     window.bgParticles.forEach(function (el, idx) {
@@ -65,11 +76,5 @@ function drawBackground() {
                 el.size,
                 el.size);
         }
-        //if (el.figure == 'circle') {
-        //    ctx.beginPath();
-        //    ctx.arc(el.x, el.y, el.size / 2, 0, 2 * Math.PI);
-        //    ctx.fillStyle = el.color.replace('curAlpha', el.curAlpha);
-        //    ctx.fill();
-        //}
     });
 }
