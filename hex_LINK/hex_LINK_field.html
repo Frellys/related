@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>hex_LINK_field</title>
@@ -326,7 +326,9 @@
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(f.toString(), fx, fy);
-                if (core.click.evt && ctx.isPointInPath(core.click.x, core.click.y)) { alert(f); }
+                if (core.click.evt && ctx.isPointInPath(core.click.x, core.click.y)) {
+                    alert(f);
+                }
             }
             core.click.evt = false;
         }, 1000 / core.fps);

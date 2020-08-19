@@ -78,7 +78,6 @@ function drawButton_back() {
     if (core.click.pressed && ctx.isPointInPath(core.click.x, core.click.y)) {
         core.click.pressed = false;
         window.location.reload();
-        //alert('blums');
     }
     // update
     window.backBtnRt += 0.25;

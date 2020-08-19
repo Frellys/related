@@ -6,8 +6,6 @@ function drawLabel_levels() {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#323232';
     let tw = ctx.measureText('xx/xx').width;
-    //console.log(tw);
-    //tw = 200;
     ctx.fillText('xx/xx',
         document.body.clientWidth / 100 * 75,
         document.body.clientHeight - vmin * 3);
