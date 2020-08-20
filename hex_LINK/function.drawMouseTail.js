@@ -64,7 +64,9 @@ function drawMouseTail() {
             }
         });
         // debug
-        console.log(window.mouseTailcurLen);
+        //console.log('len: ' + window.mouseTailcurLen);
+        //console.log('max: ' + window.mouseTailmaxLen);
+        //console.log('arr: ' + window.mouseTail.length);
     }
     // draw
     if (window.mouseTail.length != 0) {
