@@ -40,24 +40,34 @@ function drawMouseTail() {
         window.mouseTailmaxLen = Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10;
         window.mouseTailcurLen = 0;
         window.addEventListener('mousemove', function (e) {
-            window.mouseTail.push({
+            window.mouseTail.unshift({
                 x: e.x,
                 y: e.y,
                 ts: new Date().getTime()
             });
         }, false);
     }
-    // draw
+    // calc
     if (window.mouseTail.length != 0) {
         // remove old
         window.mouseTail.forEach(function (el) {
             if (new Date().getTime() - el.ts > 25) {
-                window.mouseTail.shift();
+                window.mouseTail.pop();
             }
         });
         // reset curent length
         window.mouseTailcurLen = 0;
-        // create line
+        // check for max length
+        window.mouseTail.forEach(function (el, idx, arr) {
+            if (idx != 0) {
+                window.mouseTailcurLen += Math.sqrt(Math.pow(el.x - arr[idx - 1].x, 2) + Math.pow(el.y - arr[idx - 1].y, 2));
+            }
+        });
+        // debug
+        console.log(window.mouseTailcurLen);
+    }
+    // draw
+    if (window.mouseTail.length != 0) {
         ctx.moveTo(
             window.mouseTail[0].x,
             window.mouseTail[0].y);
