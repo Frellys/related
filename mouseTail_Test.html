@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>mouseTail_Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: gray;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <script>
+        // settings
+        let core = {
+            width: document.body.clientWidth,
+            height: document.body.clientHeight,
+            mouse: {
+                x: undefined,
+                y: undefined,
+                tail: {
+                    points: [],
+                    curLen: 0,
+                    maxLen: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10
+                }
+            }
+        };
+        // set canvas
+        let cnv = document.querySelector('canvas');
+        let dpr = window.devicePixelRatio;
+        cnv.width = core.width * dpr;
+        cnv.height = core.height * dpr;
+        let ctx = cnv.getContext('2d');
+        ctx.scale(dpr, dpr);
+        // render
+        window.requestAnimationFrame(render);
+        function render(ts) {
+            // draw background
+            ctx.clearRect(0, 0, core.width, core.height);
+            ctx.fillStyle = 'whitesmoke';
+            ctx.fillRect(0, 0, core.width, core.height);
+            // log
+            console.log((new Date()).toISOString().split('T')[1].split('.')[0]);
+            // repeat
+            window.requestAnimationFrame(render);
+        }
+        // mousemove listener
+        window.addEventListener('mousemove', function (e) {
+            core.mouse.x = e.x;
+            core.mouse.y = e.y;
+            core.mouse.tail.points.unshift({
+                x: e.x,
+                y: e.y,
+                ts: new Date().getTime()
+            });
+        }, false);
+        // draw mouse tail
+        function drawMouseTail() {
+            if (core.mouse.tail.points.length) {
+                // remove old
+                core.mouse.tail.points.forEach(function (el) {
+                    if (new Date().getTime() - el.ts > 25) {
+                        core.mouse.tail.points.pop();
+                    }
+                });
+                // reset curent length
+                core.mouse.tail.curLen = 0;
+                // check for max length
+                core.mouse.tail.points.forEach(function (el, idx, arr) {
+                    core.mouse.tail.curLen = Math.sqrt(Math.pow(el.x - arr[idx - 1].x, 2) + Math.pow(el.y - arr[idx - 1].y, 2));
+                });
+            }
+        }
+    </script>
+</body>
+</html>

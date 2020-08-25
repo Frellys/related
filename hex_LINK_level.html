@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>hex_LINK_level</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: whitesmoke;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+    <script src="function.drawBackground.js"></script>
+    <script src="function.drawButton_back.js"></script>
+    <script src="function.drawLabel_levels.js"></script>
+    <script src="function.drawMouseTail.js"></script>
+</head>
+<body>
+    <canvas></canvas>
+    <script>
+        // settings
+        let core = {
+            width: document.body.clientWidth,
+            height: document.body.clientHeight,
+            fps: 50,
+            tile: {
+                size: Math.min(document.body.clientWidth, document.body.clientHeight) / 25,
+                height: Math.min(document.body.clientWidth, document.body.clientHeight) / 25 * (Math.sqrt(3) / 2),
+                selected: false
+            },
+            container: {
+                offsetTop: 10,
+                padding: 10
+            },
+            mouse: {
+                x: 0,
+                y: 0
+            },
+            click: {
+                pressed: false,
+                x: 0,
+                y: 0
+            }
+        };
+        // set canvas
+        //let cnv = document.querySelector('canvas');
+        //cnv.width = core.width;
+        //cnv.height = core.height;
+        //let ctx = cnv.getContext('2d');
+        let cnv = document.querySelector('canvas');
+        let dpr = window.devicePixelRatio;
+        cnv.width = core.width * dpr;
+        cnv.height = core.height * dpr;
+        let ctx = cnv.getContext('2d');
+        ctx.scale(dpr, dpr);
+        // container tiles
+        let tiles = [{}, {}, {}, {}, {}, {}, {}];
+        // field
+        let field = [
+            {
+                x: core.width / 2,
+                y: core.height / 2,
+                color: 'khaki'
+            },
+            {
+                x: core.width / 2 + core.tile.size * 1.5,
+                y: core.height / 2 + core.tile.height,
+                color: 'whitesmoke'
+            }
+        ];
+        // set variables
+        let cntWidth = tiles.length % 2 == 0 ?
+            tiles.length / 2 * (core.tile.size * 3) + core.tile.size / 2 :
+            (tiles.length - 1) / 2 * (core.tile.size * 3) + core.tile.size * 2;
+        let cntHeight = tiles.length > 1 ?
+            core.tile.height * 3 :
+            core.tile.height * 2;
+        // set tiles
+        tiles[0].x = core.width / 2 - (cntWidth / 2) + core.tile.size;
+        tiles[0].y = core.tile.height;
+        for (let t = 1; t < tiles.length; t++) {
+            tiles[t].x = tiles[t - 1].x + core.tile.size * 1.5;
+            if (t % 2 == 0) {
+                tiles[t].y = core.tile.height;
+            }
+            else {
+                tiles[t].y = core.tile.height * 2;
+            }
+        }
+        // set tiles selection
+        tiles.forEach(function (t) { t.selected = false; t.color = 'whitesmoke'; });
+        // pad container
+        cntWidth += core.container.padding * 2;
+        cntHeight += core.container.padding * 2;
+        tiles.forEach(function (t) { t.y += core.container.padding + core.container.offsetTop; });
+        // render
+        let render = setInterval(function () {
+            // draw bg
+            drawBackground();
+            // draw container
+            ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
+            ctx.fillRect(core.width / 2 - cntWidth / 2, core.container.offsetTop, cntWidth, cntHeight);
+            // draw unselected tiles
+            for (let t = 0; t < tiles.length; t++) {
+                let tx = tiles[t].x;
+                let ty = tiles[t].y;
+                ctx.beginPath();
+                ctx.moveTo(tx - core.tile.size / 2, ty - core.tile.height);
+                ctx.lineTo(tx + core.tile.size / 2, ty - core.tile.height);
+                ctx.lineTo(tx + core.tile.size, ty);
+                ctx.lineTo(tx + core.tile.size / 2, ty + core.tile.height);
+                ctx.lineTo(tx - core.tile.size / 2, ty + core.tile.height);
+                ctx.lineTo(tx - core.tile.size, ty);
+                ctx.closePath();
+                if (core.click.pressed && ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
+                    core.click.pressed = false;
+                    tiles[t].selected = true;
+                }
+                if (tiles[t].selected == false) {
+                    ctx.fillStyle = tiles[t].color;
+                    ctx.fill();
+                    ctx.strokeStyle = '#323232';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            }
+            // draw field
+            for (let f = 0; f < field.length; f++) {
+                let fx = field[f].x;
+                let fy = field[f].y;
+                ctx.beginPath();
+                ctx.moveTo(fx - core.tile.size / 2, fy - core.tile.height);
+                ctx.lineTo(fx + core.tile.size / 2, fy - core.tile.height);
+                ctx.lineTo(fx + core.tile.size, fy);
+                ctx.lineTo(fx + core.tile.size / 2, fy + core.tile.height);
+                ctx.lineTo(fx - core.tile.size / 2, fy + core.tile.height);
+                ctx.lineTo(fx - core.tile.size, fy);
+                ctx.closePath();
+                ctx.fillStyle = field[f].color;
+                ctx.fill();
+                ctx.strokeStyle = '#323232';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+            // draw selected tile
+            for (let t = 0; t < tiles.length; t++) {
+                if (tiles[t].selected) {
+                    let tx = core.mouse.x;
+                    let ty = core.mouse.y;
+                    ctx.beginPath();
+                    ctx.moveTo(tx - core.tile.size / 2, ty - core.tile.height);
+                    ctx.lineTo(tx + core.tile.size / 2, ty - core.tile.height);
+                    ctx.lineTo(tx + core.tile.size, ty);
+                    ctx.lineTo(tx + core.tile.size / 2, ty + core.tile.height);
+                    ctx.lineTo(tx - core.tile.size / 2, ty + core.tile.height);
+                    ctx.lineTo(tx - core.tile.size, ty);
+                    ctx.closePath();
+                    //ctx.fillStyle = tiles[t].color;
+                    ctx.fillStyle = 'red';
+                    ctx.fill();
+                    ctx.strokeStyle = '#323232';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            }
+            // draw button back
+            drawButton_back();
+            // draw label level
+            drawLabel_levels();
+            // draw mouse tail
+            drawMouseTail();
+        }, 1000 / core.fps);
+        // mousemove listener
+        window.addEventListener('mousemove', function (e) {
+            core.mouse.x = e.x;
+            core.mouse.y = e.y;
+        }, false);
+        // mousedown listener
+        window.addEventListener('mousedown', function (e) {
+            core.click.pressed = true;
+            core.click.x = e.x;
+            core.click.y = e.y;
+        }, false);
+        // moueup listener
+        window.addEventListener('mouseup', function () {
+            core.click.pressed = false;
+            core.tile.selected = false;
+            tiles.forEach(function (t) { t.selected = false; });
+        }, false);
+    </script>
+</body>
+</html>
