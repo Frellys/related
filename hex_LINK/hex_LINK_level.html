@@ -54,10 +54,16 @@
             }
         };
         // set canvas
+        //let cnv = document.querySelector('canvas');
+        //cnv.width = core.width;
+        //cnv.height = core.height;
+        //let ctx = cnv.getContext('2d');
         let cnv = document.querySelector('canvas');
-        cnv.width = core.width;
-        cnv.height = core.height;
+        let dpr = window.devicePixelRatio;
+        cnv.width = core.width * dpr;
+        cnv.height = core.height * dpr;
         let ctx = cnv.getContext('2d');
+        ctx.scale(dpr, dpr);
         // container tiles
         let tiles = [{}, {}, {}, {}, {}, {}, {}];
         // field

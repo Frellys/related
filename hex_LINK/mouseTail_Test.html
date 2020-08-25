@@ -30,30 +30,63 @@
             height: document.body.clientHeight,
             mouse: {
                 x: undefined,
-                y: undefined
+                y: undefined,
+            },
+            tail: {
+                points: [],
+                curLen: 0,
+                maxLen: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10
             }
         };
         // set canvas
         let cnv = document.querySelector('canvas');
-        cnv.width = core.width;
-        cnv.height = core.height;
+        let dpr = window.devicePixelRatio;
+        cnv.width = core.width * dpr;
+        cnv.height = core.height * dpr;
         let ctx = cnv.getContext('2d');
+        ctx.scale(dpr, dpr);
         // render
-        window.requestAnimationFrame(function render(ts) {
+        window.requestAnimationFrame(render);
+        function render(ts) {
             // draw background
             ctx.clearRect(0, 0, core.width, core.height);
             ctx.fillStyle = 'whitesmoke';
             ctx.fillRect(0, 0, core.width, core.height);
+            drawMouseTail();
             // log
-            //console.log('stamp : ' + ts);
+            console.log((new Date()).toISOString().split('T')[1].split('.')[0]);
             // repeat
             window.requestAnimationFrame(render);
-        });
+        }
         // mousemove listener
         window.addEventListener('mousemove', function (e) {
             core.mouse.x = e.x;
             core.mouse.y = e.y;
+            core.tail.points.unshift({
+                x: e.x,
+                y: e.y,
+                ts: new Date().getTime()
+            });
         }, false);
+        // draw mouse tail
+        function drawMouseTail() {
+            if (core.tail.points.length != 0) {
+                // remove old
+                core.tail.points.forEach(function (el) {
+                    if (new Date().getTime() - el.ts > 25) {
+                        core.tail.points.pop();
+                    }
+                });
+                // reset curent length
+                core.tail.curLen = 0;
+                // check for max length
+                core.tail.points.forEach(function (el, idx, arr) {
+                    if (idx = 0) {
+                        core.tail.curLen += Math.sqrt(Math.pow(el.x - arr[idx - 1].x, 2) + Math.pow(el.y - arr[idx - 1].y, 2));
+                    }
+                });
+            }
+        }
     </script>
 </body>
 </html>
