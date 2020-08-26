@@ -46,18 +46,15 @@
         let ctx = cnv.getContext('2d');
         ctx.scale(dpr, dpr);
         // render
-        window.requestAnimationFrame(render);
         function render(ts) {
-            // draw background
-            ctx.clearRect(0, 0, core.width, core.height);
-            ctx.fillStyle = 'whitesmoke';
-            ctx.fillRect(0, 0, core.width, core.height);
+            drawBackground();
             drawMouseTail();
             // log
             console.log((new Date()).toISOString().split('T')[1].split('.')[0]);
             // repeat
             window.requestAnimationFrame(render);
         }
+        window.requestAnimationFrame(render);
         // mousemove listener
         window.addEventListener('mousemove', function (e) {
             core.mouse.x = e.x;
@@ -68,6 +65,12 @@
                 ts: new Date().getTime()
             });
         }, false);
+        // draw background
+        function drawBackground() {
+            ctx.clearRect(0, 0, core.width, core.height);
+            ctx.fillStyle = 'whitesmoke';
+            ctx.fillRect(0, 0, core.width, core.height);
+        }
         // draw mouse tail
         function drawMouseTail() {
             if (core.tail.points.length != 0) {
@@ -85,6 +88,20 @@
                         core.tail.curLen += Math.sqrt(Math.pow(el.x - arr[idx - 1].x, 2) + Math.pow(el.y - arr[idx - 1].y, 2));
                     }
                 });
+            }
+            if (core.tail.points.length != 0) {
+                ctx.beginPath();
+                core.tail.points.forEach(function (el, idx) {
+                    if (idx == 0) {
+                        ctx.moveTo(el.x, el.y);
+                    }
+                    else {
+                        ctx.lineTo(el.x, el.y);
+                    }
+                });
+                ctx.strokeStyle = '#323232';
+                ctx.lineWidth = 2;
+                ctx.stroke();
             }
         }
     </script>
