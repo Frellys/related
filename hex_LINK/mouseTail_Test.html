@@ -26,6 +26,7 @@
     <script>
         // settings
         let core = {
+            vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
             width: document.body.clientWidth,
             height: document.body.clientHeight,
             mouse: {
@@ -35,8 +36,9 @@
             tail: {
                 points: [],
                 curLen: 0,
-                maxLen: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10
-            }
+                maxLen: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 25
+            },
+            fps: []
         };
         // set canvas
         let cnv = document.querySelector('canvas');
@@ -46,15 +48,16 @@
         let ctx = cnv.getContext('2d');
         ctx.scale(dpr, dpr);
         // render
+        window.requestAnimationFrame(render);
         function render(ts) {
             drawBackground();
+            //drawCursor();
             drawMouseTail();
             // log
             console.log((new Date()).toISOString().split('T')[1].split('.')[0]);
             // repeat
             window.requestAnimationFrame(render);
         }
-        window.requestAnimationFrame(render);
         // mousemove listener
         window.addEventListener('mousemove', function (e) {
             core.mouse.x = e.x;
@@ -76,7 +79,7 @@
             if (core.tail.points.length != 0) {
                 // remove old
                 core.tail.points.forEach(function (el) {
-                    if (new Date().getTime() - el.ts > 25) {
+                    if (new Date().getTime() - el.ts > 50) {
                         core.tail.points.pop();
                     }
                 });
@@ -84,24 +87,51 @@
                 core.tail.curLen = 0;
                 // check for max length
                 core.tail.points.forEach(function (el, idx, arr) {
-                    if (idx = 0) {
+                    if (idx != 0) {
                         core.tail.curLen += Math.sqrt(Math.pow(el.x - arr[idx - 1].x, 2) + Math.pow(el.y - arr[idx - 1].y, 2));
                     }
                 });
+                //core.tail.points.forEach(function (el, idx, arr) {
+                //    if (idx != 0) {
+                //        core.tail.curLen += Math.sqrt(Math.pow(el.x - arr[idx - 1].x, 2) + Math.pow(el.y - arr[idx - 1].y, 2));
+                //        if (core.tail.curLen > core.tail.maxLen) {
+                //            while (core.tail.points.length != (idx - 1)) {
+                //                core.tail.points.pop();
+                //            }
+                //        }
+                //    }
+                //});
             }
-            if (core.tail.points.length != 0) {
-                ctx.beginPath();
+            //if (core.tail.points.length != 0) {
+            //    ctx.beginPath();
+            //    core.tail.points.forEach(function (el, idx) {
+            //        if (idx == 0) {
+            //            ctx.moveTo(el.x, el.y);
+            //        }
+            //        else {
+            //            ctx.lineTo(el.x, el.y);
+            //        }
+            //    });
+            //    ctx.strokeStyle = '#323232';
+            //    ctx.lineWidth = core.vmin / 2;
+            //    ctx.lineJoin = 'round';
+            //    ctx.stroke();
+            //}
+            if (core.tail.points.length != 0 && core.tail.curLen > core.vmin / 2) {
                 core.tail.points.forEach(function (el, idx) {
-                    if (idx == 0) {
-                        ctx.moveTo(el.x, el.y);
-                    }
-                    else {
+                    if (idx != 0) {
+                        ctx.beginPath();
+                        ctx.moveTo(
+                            core.tail.points[idx - 1].x,
+                            core.tail.points[idx - 1].y);
                         ctx.lineTo(el.x, el.y);
+                        let curAlpha = 1 / core.tail.points.length * (core.tail.points.length - idx + 1);
+                        //console.log(curAlpha);
+                        ctx.strokeStyle = 'rgba(50, 50, 50, ' + curAlpha + ')';
+                        ctx.lineWidth = core.vmin / 2;
+                        ctx.stroke();
                     }
                 });
-                ctx.strokeStyle = '#323232';
-                ctx.lineWidth = 2;
-                ctx.stroke();
             }
         }
     </script>
