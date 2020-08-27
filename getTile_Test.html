@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>genTile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: whitesmoke;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <script>
+        // settings
+        let core = {
+            vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
+            width: document.body.clientWidth,
+            height: document.body.clientHeight,
+            fps: 50,
+            field: {
+                width: document.body.clientWidth / 100 * 75,
+                height: document.body.clientHeight / 100 * 75,
+                fillStyle: 'rgba(50, 50, 50, 0.5)'
+            },
+            tile: {
+                arr: [],
+                cols: 4,
+                rows: 4,
+                lineWidth: 1,
+                strokeStyle: '#323232'
+            },
+            mouse: {
+                x: undefined,
+                y: undefined
+            }
+        };
+        // set canvas
+        let cnv = document.querySelector('canvas');
+        let dpr = window.devicePixelRatio;
+        cnv.width = core.width * dpr;
+        cnv.height = core.height * dpr;
+        let ctx = cnv.getContext('2d');
+        ctx.scale(dpr, dpr);
+        // create tiles
+        create_tiles();
+        function create_tiles() {
+            core.tile.size = core.field.width / core.tile.cols;
+            for (let r = 0; r < core.tile.rows; r++) {
+                core.tile.arr.push([]);
+                for (let c = 0; c < core.tile.cols; c++) {
+                    core.tile.arr[r].push({
+                        pos: {
+                            x: core.width / 2 - core.field.width / 2 + core.tile.size * c + core.tile.size / 2,
+                            y: core.height / 2 - core.field.height / 2 + core.tile.size * r + core.tile.size / 2
+                        },
+                        hover: false,
+                        select: false
+                    });
+                }
+            }
+        }
+        // render
+        let render = setInterval(function () {
+            draw_background();
+            draw_field();
+            draw_tiles();
+            // log
+            console.log(new Date().getSeconds());
+        }, 1000 / core.fps);
+        // mousemove listener
+        window.addEventListener('mousemove', function (e) {
+            core.mouse.x = e.x;
+            core.mouse.y = e.y;
+        }, false);
+        // draw background
+        function draw_background() {
+            ctx.clearRect(0, 0, core.width, core.height);
+            ctx.fillStyle = 'whitesmoke';
+            ctx.fillRect(0, 0, core.width, core.height);
+        }
+        // draw field
+        function draw_field() {
+            ctx.beginPath();
+            ctx.rect(
+                core.width / 2 - core.field.width / 2,
+                core.height / 2 - core.field.height / 2,
+                core.field.width,
+                core.field.height
+            );
+            ctx.fillStyle = core.field.fillStyle;
+            ctx.fill();
+        }
+        // draw tiles
+        function draw_tiles() {
+            //core.tile.arr[0][0].pos
+            ctx.beginPath();
+            ctx.moveTo(
+                core.tile.arr[0][0].pos.x - core.tile.size / 2,
+                core.tile.arr[0][0].pos.y - core.tile.size / 2
+            );
+            ctx.lineTo(
+                core.tile.arr[0][0].pos.x + core.tile.size / 2,
+                core.tile.arr[0][0].pos.y - core.tile.size / 2
+            );
+            ctx.lineTo(
+                core.tile.arr[0][0].pos.x + core.tile.size / 2,
+                core.tile.arr[0][0].pos.y + core.tile.size / 2
+            );
+            ctx.lineTo(
+                core.tile.arr[0][0].pos.x - core.tile.size / 2,
+                core.tile.arr[0][0].pos.y + core.tile.size / 2
+            );
+            ctx.closePath();
+            ctx.fillStyle = '#323232';
+            ctx.fill();
+        }
+    </script>
+</body>
+</html>
