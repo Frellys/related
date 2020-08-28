@@ -31,11 +31,8 @@
             width: document.body.clientWidth,
             height: document.body.clientHeight,
             fps: 50,
+            selected: undefined,
             mouse: {
-                x: undefined,
-                y: undefined
-            },
-            click: {
                 pressed: false,
                 x: undefined,
                 y: undefined
@@ -51,18 +48,21 @@
         // set tiles
         let tiles = [];
         tiles.push(new Hex({
+            id: 0,
             pos: {
                 x: document.body.clientWidth / 2,
                 y: document.body.clientHeight / 2
             }
         }));
         tiles.push(new Hex({
+            id: 1,
             pos: {
                 x: document.body.clientWidth / 2 + 100,
                 y: document.body.clientHeight / 2
             }
         }));
         tiles.push(new Hex({
+            id: 2,
             pos: {
                 x: document.body.clientWidth / 2 + 100,
                 y: document.body.clientHeight / 2 + 100
@@ -87,15 +87,12 @@
         }, false);
         // mousedown listener
         window.addEventListener('mousedown', function (e) {
-            core.click.pressed = true;
-            core.click.x = e.x;
-            core.click.y = e.y;
+            core.mouse.pressed = true;
         }, false);
         // moueup listener
         window.addEventListener('mouseup', function () {
-            core.click.pressed = false;
-            core.click.x = undefined;
-            core.click.y = undefined;
+            core.mouse.pressed = false;
+            core.selected = undefined;
             tiles.forEach(function (t) { t.selected = false; });
         }, false);
         // draw background
