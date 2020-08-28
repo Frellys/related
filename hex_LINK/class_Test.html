@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>title</title>
@@ -34,6 +34,11 @@
             mouse: {
                 x: undefined,
                 y: undefined
+            },
+            click: {
+                pressed: false,
+                x: undefined,
+                y: undefined
             }
         };
         // set canvas
@@ -43,23 +48,54 @@
         cnv.height = core.height * dpr;
         let ctx = cnv.getContext('2d');
         ctx.scale(dpr, dpr);
-        let tile = new Hex({
-            size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 4,
+        // set tiles
+        let tiles = [];
+        tiles.push(new Hex({
             pos: {
                 x: document.body.clientWidth / 2,
                 y: document.body.clientHeight / 2
             }
-        });
+        }));
+        tiles.push(new Hex({
+            pos: {
+                x: document.body.clientWidth / 2 + 100,
+                y: document.body.clientHeight / 2
+            }
+        }));
+        tiles.push(new Hex({
+            pos: {
+                x: document.body.clientWidth / 2 + 100,
+                y: document.body.clientHeight / 2 + 100
+            }
+        }));
         // render
         let render = setInterval(function () {
             drawBackground();
-            tile.draw();
-            //console.log(new Date().getSeconds());
+            tiles.forEach(function (el) {
+                if (el.selected == false) el.draw();
+            });
+            tiles.forEach(function (el) {
+                if (el.selected == true) el.draw();
+            });
+            // log
+            console.log(new Date().getSeconds());
         }, 1000 / core.fps);
         // mousemove listener
         window.addEventListener('mousemove', function (e) {
             core.mouse.x = e.x;
             core.mouse.y = e.y;
+        }, false);
+        // mousedown listener
+        window.addEventListener('mousedown', function (e) {
+            core.click.pressed = true;
+            core.click.x = e.x;
+            core.click.y = e.y;
+        }, false);
+        // moueup listener
+        window.addEventListener('mouseup', function () {
+            core.click.pressed = false;
+            core.tile.selected = false;
+            tiles.forEach(function (t) { t.selected = false; });
         }, false);
         // draw background
         function drawBackground() {
