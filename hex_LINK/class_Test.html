@@ -94,7 +94,8 @@
         // moueup listener
         window.addEventListener('mouseup', function () {
             core.click.pressed = false;
-            core.tile.selected = false;
+            core.click.x = undefined;
+            core.click.y = undefined;
             tiles.forEach(function (t) { t.selected = false; });
         }, false);
         // draw background
