@@ -43,10 +43,30 @@
         cnv.height = core.height * dpr;
         let ctx = cnv.getContext('2d');
         ctx.scale(dpr, dpr);
+        let tile = new Hex({
+            size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 4,
+            pos: {
+                x: document.body.clientWidth / 2,
+                y: document.body.clientHeight / 2
+            }
+        });
         // render
         let render = setInterval(function () {
-            console.log(new Date().getSeconds());
+            drawBackground();
+            tile.draw();
+            //console.log(new Date().getSeconds());
         }, 1000 / core.fps);
+        // mousemove listener
+        window.addEventListener('mousemove', function (e) {
+            core.mouse.x = e.x;
+            core.mouse.y = e.y;
+        }, false);
+        // draw background
+        function drawBackground() {
+            ctx.clearRect(0, 0, core.width, core.height);
+            ctx.fillStyle = 'whitesmoke';
+            ctx.fillRect(0, 0, core.width, core.height);
+        }
     </script>
 </body>
 </html>
