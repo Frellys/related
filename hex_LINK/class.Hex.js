@@ -1,5 +1,6 @@
 class Hex {
-    constructor(data) {;
+    constructor(data) {
+        ;
         this.size = Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 4;
         this.height = this.size * (Math.sqrt(3) / 2);
         this.id = data.id
@@ -39,14 +40,28 @@ class Hex {
         else {
             this.selected = false;
         }
-        if (core.selected == this) console.log(true);
-        else console.log(false);
         // hover
         if (ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
-            ctx.shadowBlur = 2;
-            ctx.shadowColor = '#323232';
+            if (core.selected) {
+                if (this.selected) {
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                    ctx.shadowBlur = 2;
+                    ctx.shadowColor = '#323232';
+                }
+                else {
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                    ctx.shadowBlur = 0;
+                    ctx.shadowColor = 'transparent';
+                }
+            }
+            else {
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                ctx.shadowBlur = 2;
+                ctx.shadowColor = '#323232';
+            }
         }
         else {
             ctx.shadowOffsetX = 0;

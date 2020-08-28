@@ -71,9 +71,11 @@
         // render
         let render = setInterval(function () {
             drawBackground();
+            // draw unselected
             tiles.forEach(function (el) {
                 if (el.selected == false) el.draw();
             });
+            // draw selected
             tiles.forEach(function (el) {
                 if (el.selected == true) el.draw();
             });
@@ -86,7 +88,7 @@
             core.mouse.y = e.y;
         }, false);
         // mousedown listener
-        window.addEventListener('mousedown', function (e) {
+        window.addEventListener('mousedown', function () {
             core.mouse.pressed = true;
         }, false);
         // moueup listener
