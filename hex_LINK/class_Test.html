@@ -88,8 +88,14 @@
             core.mouse.y = e.y;
         }, false);
         // mousedown listener
-        window.addEventListener('mousedown', function () {
-            core.mouse.pressed = true;
+        window.addEventListener('mousedown', function (e) {
+            //core.mouse.pressed = true;
+            if (core.mouse.pressed == false) {
+                core.mouse.pressed = {
+                    x: e.x,
+                    y: e.y
+                };
+            }
         }, false);
         // moueup listener
         window.addEventListener('mouseup', function () {

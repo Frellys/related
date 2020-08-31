@@ -1,6 +1,5 @@
 class Hex {
     constructor(data) {
-        ;
         this.size = Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 4;
         this.height = this.size * (Math.sqrt(3) / 2);
         this.id = data.id
@@ -24,21 +23,30 @@ class Hex {
         ctx.lineTo(tx - this.size, ty);
         ctx.closePath();
         // select
-        if (core.mouse.pressed && ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
-            if (core.selected == undefined) {
-                core.selected = this.id;
-                this.selected = true;
-                this.offset = {
-                    x: core.mouse.x - this.pos.x,
-                    y: core.mouse.y - this.pos.y
-                };
-            }
-            if (core.selected == this.id) {
-                this.selected = true;
-            }
-        }
-        else {
-            this.selected = false;
+        //if (core.mouse.pressed && ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
+        //    if (core.selected == undefined) {
+        //        core.selected = this.id;
+        //        this.selected = true;
+        //        this.offset = {
+        //            x: core.mouse.x - this.pos.x,
+        //            y: core.mouse.y - this.pos.y
+        //        };
+        //    }
+        //    if (core.selected == this.id) {
+        //        this.selected = true;
+        //    }
+        //}
+        //else {
+        //    this.selected = false;
+        //}
+        if (core.mouse.pressed && ctx.isPointInPath(core.mouse.pressed.x, core.mouse.pressed.y)) {
+            core.mouse.pressed = false;
+            core.selected = this.id;
+            this.selected = true;
+            this.offset = {
+                x: core.mouse.x - this.pos.x,
+                y: core.mouse.y - this.pos.y
+            };
         }
         // hover
         if (ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
