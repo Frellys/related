@@ -68,9 +68,16 @@
                     core.tileOpts.size,
                     core.tileOpts.size
                 );
-                ctx.strokeStyle = 'rgba(50, 50, 50, 0.25)';
-                ctx.lineWidth = 1;
-                ctx.stroke();
+                //ctx.strokeStyle = 'rgba(50, 50, 50, 0.25)';
+                //ctx.lineWidth = 1;
+                //ctx.stroke();
+                if (ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
+                    ctx.fillStyle = 'rgba(50, 50, 50, 0.05)';
+                    ctx.fill();
+                    ctx.strokeStyle = 'rgba(50, 50, 50, 0.25)';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
                 // top-left corner
                 ctx.beginPath();
                 ctx.moveTo(
@@ -96,6 +103,96 @@
                 ctx.lineTo(
                     el.x - core.tileOpts.size / 2,
                     el.y - core.tileOpts.size / 2 + core.vmin
+                );
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                // top-right corner
+                ctx.beginPath();
+                ctx.moveTo(
+                    el.x + core.tileOpts.size / 2,
+                    el.y - core.tileOpts.size / 2
+                );
+                ctx.lineTo(
+                    el.x + core.tileOpts.size / 2 - core.vmin,
+                    el.y - core.tileOpts.size / 2
+                );
+                ctx.lineTo(
+                    el.x + core.tileOpts.size / 2 - core.vmin,
+                    el.y - core.tileOpts.size / 2 + 1
+                );
+                ctx.lineTo(
+                    el.x + core.tileOpts.size / 2 - 1,
+                    el.y - core.tileOpts.size / 2 + 1
+                );
+                ctx.lineTo(
+                    el.x + core.tileOpts.size / 2 - 1,
+                    el.y - core.tileOpts.size / 2 + core.vmin
+                );
+                ctx.lineTo(
+                    el.x + core.tileOpts.size / 2,
+                    el.y - core.tileOpts.size / 2 + core.vmin
+                );
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                // bottom-left corner
+                ctx.beginPath();
+                ctx.moveTo(
+                    el.x - core.tileOpts.size / 2,
+                    el.y + core.tileOpts.size / 2
+                );
+                ctx.lineTo(
+                    el.x - core.tileOpts.size / 2 + core.vmin,
+                    el.y + core.tileOpts.size / 2
+                );
+                ctx.lineTo(
+                    el.x - core.tileOpts.size / 2 + core.vmin,
+                    el.y + core.tileOpts.size / 2 - 1
+                );
+                ctx.lineTo(
+                    el.x - core.tileOpts.size / 2 + 1,
+                    el.y + core.tileOpts.size / 2 - 1
+                );
+                ctx.lineTo(
+                    el.x - core.tileOpts.size / 2 + 1,
+                    el.y + core.tileOpts.size / 2 - core.vmin
+                );
+                ctx.lineTo(
+                    el.x - core.tileOpts.size / 2,
+                    el.y + core.tileOpts.size / 2 - core.vmin
+                );
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                // bottom-right corner
+                ctx.beginPath();
+                ctx.moveTo(
+                    el.x + core.tileOpts.size / 2,
+                    el.y + core.tileOpts.size / 2
+                );
+                ctx.lineTo(
+                    el.x + core.tileOpts.size / 2 - core.vmin,
+                    el.y + core.tileOpts.size / 2
+                );
+                ctx.lineTo(
+                    el.x + core.tileOpts.size / 2 - core.vmin,
+                    el.y + core.tileOpts.size / 2 - 1
+                );
+                ctx.lineTo(
+                    el.x + core.tileOpts.size / 2 - 1,
+                    el.y + core.tileOpts.size / 2 - 1
+                );
+                ctx.lineTo(
+                    el.x + core.tileOpts.size / 2 - 1,
+                    el.y + core.tileOpts.size / 2 - core.vmin
+                );
+                ctx.lineTo(
+                    el.x + core.tileOpts.size / 2,
+                    el.y + core.tileOpts.size / 2 - core.vmin
                 );
                 ctx.closePath();
                 ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
