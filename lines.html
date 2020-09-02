@@ -26,7 +26,7 @@
     <script>
         // settings
         let core = {
-            vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
+            vmin: Math.round(Math.min(document.body.clientWidth, document.body.clientHeight) / 100),
             width: document.body.clientWidth,
             height: document.body.clientHeight,
             fps: 50,
@@ -35,7 +35,7 @@
                 y: undefined
             },
             tileOpts: {
-                size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 7,
+                size: Math.round(Math.min(document.body.clientWidth, document.body.clientHeight) / 100) * 8,
                 rows: 4,
                 cols: 4
             },
@@ -46,10 +46,18 @@
             for (let c = 0; c < core.tileOpts.cols; c++) {
                 core.tiles.push({
                     x: core.width / 2 - (core.tileOpts.rows * core.tileOpts.size / 2) + core.tileOpts.size * r + core.tileOpts.size / 2,
-                    y: core.height / 2 - (core.tileOpts.cols * core.tileOpts.size / 2) + core.tileOpts.size * c + core.tileOpts.size / 2
+                    y: core.height / 2 - (core.tileOpts.cols * core.tileOpts.size / 2) + core.tileOpts.size * c + core.tileOpts.size / 2,
+                    state: undefined
                 });
             }
         }
+        core.tiles[0].state = 'hor';
+        core.tiles[4].state = 'hor';
+        core.tiles[8].state = 'hor';
+        core.tiles[12].state = 'hor';
+        core.tiles[1].state = 'ver';
+        core.tiles[2].state = 'ver';
+        core.tiles[3].state = 'ft_tr';
         // set canvas
         let cnv = document.querySelector('canvas');
         cnv.width = core.width;
@@ -58,9 +66,36 @@
         // render
         let render = setInterval(function () {
             drawBackground();
-            // draw tiles
+            drawTiles();
+        }, 1000 / core.fps);
+        // mousemove listener
+        window.addEventListener('mousemove', function (e) {
+            core.mouse.x = e.x;
+            core.mouse.y = e.y;
+        }, false);
+        // draw background
+        function drawBackground() {
+            // blank
+            ctx.clearRect(0, 0, core.width, core.height);
+            ctx.fillStyle = 'whitesmoke';
+            ctx.fillRect(0, 0, core.width, core.height);
+            // field outline
+            //ctx.beginPath();
+            //ctx.rect(
+            //    //core.width / 2 - core.cols * core.tileOpts.size / 2 - 2,
+            //    //core.height / 2 - core.rows * core.tileOpts.size / 2 - 2,
+            //    0, 0,
+            //    core.cols * core.tileOpts.size + 2,
+            //    core.rows * core.tileOpts.size + 2
+            //);
+            //ctx.strokeStyle = '#323232';
+            //ctx.lineWidth = 1;
+            //ctx.stroke();
+        }
+        // draw tiles
+        function drawTiles() {
             core.tiles.forEach(function (el) {
-                // outline
+                // base path
                 ctx.beginPath();
                 ctx.rect(
                     el.x - core.tileOpts.size / 2,
@@ -68,9 +103,6 @@
                     core.tileOpts.size,
                     core.tileOpts.size
                 );
-                //ctx.strokeStyle = 'rgba(50, 50, 50, 0.25)';
-                //ctx.lineWidth = 1;
-                //ctx.stroke();
                 if (ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
                     ctx.fillStyle = 'rgba(50, 50, 50, 0.05)';
                     ctx.fill();
@@ -198,19 +230,64 @@
                 ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
                 ctx.lineWidth = 1;
                 ctx.stroke();
+                // draw line
+                switch (el.state) {
+                    case 'ft':
+                    case 'fr':
+                    case 'fb':
+                    case 'fl':
+                        break;
+                    case 'ft_tr':
+                    case 'fr_tt':
+                        ctx.beginPath();
+                        ctx.moveTo(
+                            el.x + core.tileOpts.size / 2,
+                            el.y
+                        );
+                        ctx.arcTo(
+                            el.x,
+                            el.y,
+                            el.x,
+                            el.y - core.tileOpts.size / 2,
+                            core.tileOpts.size / 2
+                        );
+                        ctx.strokeStyle = '#323232';
+                        ctx.lineWidth = core.vmin;
+                        ctx.stroke();
+                        break;
+                    case 'hor':
+                        ctx.beginPath();
+                        ctx.moveTo(
+                            el.x - core.tileOpts.size / 2,
+                            el.y
+                        );
+                        ctx.lineTo(
+                            el.x + core.tileOpts.size / 2,
+                            el.y
+                        );
+                        ctx.strokeStyle = '#323232';
+                        ctx.lineWidth = core.vmin;
+                        ctx.stroke();
+                        break;
+                    case 'ver':
+                        ctx.beginPath();
+                        ctx.moveTo(
+                            el.x,
+                            el.y - core.tileOpts.size / 2
+                        );
+                        ctx.lineTo(
+                            el.x,
+                            el.y + core.tileOpts.size / 2
+                        );
+                        ctx.strokeStyle = '#323232';
+                        ctx.lineWidth = core.vmin;
+                        ctx.stroke();
+                        break;
+                    default:
+                        break;
+                }
             });
-        }, 1000 / core.fps);
-        // draw background
-        function drawBackground() {
-            ctx.clearRect(0, 0, core.width, core.height);
-            ctx.fillStyle = 'whitesmoke';
-            ctx.fillRect(0, 0, core.width, core.height);
         }
-        // mousemove listener
-        window.addEventListener('mousemove', function (e) {
-            core.mouse.x = e.x;
-            core.mouse.y = e.y;
-        }, false);
     </script>
 </body>
 </html>
