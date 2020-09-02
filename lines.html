@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: gray;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <script>
+        // settings
+        let core = {
+            vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
+            width: document.body.clientWidth,
+            height: document.body.clientHeight,
+            fps: 50,
+            mouse: {
+                x: undefined,
+                y: undefined
+            },
+            tileOpts: {
+                size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 7,
+                rows: 4,
+                cols: 4
+            },
+            tiles: []
+        };
+        // set tiles
+        for (let r = 0; r < core.tileOpts.rows; r++) {
+            for (let c = 0; c < core.tileOpts.cols; c++) {
+                core.tiles.push({
+                    x: core.width / 2 - (core.tileOpts.rows * core.tileOpts.size / 2) + core.tileOpts.size * r + core.tileOpts.size / 2,
+                    y: core.height / 2 - (core.tileOpts.cols * core.tileOpts.size / 2) + core.tileOpts.size * c + core.tileOpts.size / 2
+                });
+            }
+        }
+        // set canvas
+        let cnv = document.querySelector('canvas');
+        cnv.width = core.width;
+        cnv.height = core.height;
+        let ctx = cnv.getContext('2d');
+        // render
+        let render = setInterval(function () {
+            drawBackground();
+            // draw tiles
+            core.tiles.forEach(function (el) {
+                // outline
+                ctx.beginPath();
+                ctx.rect(
+                    el.x - core.tileOpts.size / 2,
+                    el.y - core.tileOpts.size / 2,
+                    core.tileOpts.size,
+                    core.tileOpts.size
+                );
+                ctx.strokeStyle = 'rgba(50, 50, 50, 0.25)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                // top-left corner
+                ctx.beginPath();
+                ctx.moveTo(
+                    el.x - core.tileOpts.size / 2,
+                    el.y - core.tileOpts.size / 2
+                );
+                ctx.lineTo(
+                    el.x - core.tileOpts.size / 2 + core.vmin,
+                    el.y - core.tileOpts.size / 2
+                );
+                ctx.lineTo(
+                    el.x - core.tileOpts.size / 2 + core.vmin,
+                    el.y - core.tileOpts.size / 2 + 1
+                );
+                ctx.lineTo(
+                    el.x - core.tileOpts.size / 2 + 1,
+                    el.y - core.tileOpts.size / 2 + 1
+                );
+                ctx.lineTo(
+                    el.x - core.tileOpts.size / 2 + 1,
+                    el.y - core.tileOpts.size / 2 + core.vmin
+                );
+                ctx.lineTo(
+                    el.x - core.tileOpts.size / 2,
+                    el.y - core.tileOpts.size / 2 + core.vmin
+                );
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+        }, 1000 / core.fps);
+        // draw background
+        function drawBackground() {
+            ctx.clearRect(0, 0, core.width, core.height);
+            ctx.fillStyle = 'whitesmoke';
+            ctx.fillRect(0, 0, core.width, core.height);
+        }
+        // mousemove listener
+        window.addEventListener('mousemove', function (e) {
+            core.mouse.x = e.x;
+            core.mouse.y = e.y;
+        }, false);
+    </script>
+</body>
+</html>
