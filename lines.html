@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>title</title>
@@ -80,17 +80,17 @@
             ctx.fillStyle = 'whitesmoke';
             ctx.fillRect(0, 0, core.width, core.height);
             // field outline
-            //ctx.beginPath();
-            //ctx.rect(
-            //    //core.width / 2 - core.cols * core.tileOpts.size / 2 - 2,
-            //    //core.height / 2 - core.rows * core.tileOpts.size / 2 - 2,
-            //    0, 0,
-            //    core.cols * core.tileOpts.size + 2,
-            //    core.rows * core.tileOpts.size + 2
-            //);
+            ctx.beginPath();
+            ctx.rect(
+                core.width / 2 - core.tileOpts.cols * core.tileOpts.size / 2 - 2,
+                core.height / 2 - core.tileOpts.rows * core.tileOpts.size / 2 - 2,
+                core.tileOpts.cols * core.tileOpts.size + 4,
+                core.tileOpts.rows * core.tileOpts.size + 4
+            );
             //ctx.strokeStyle = '#323232';
-            //ctx.lineWidth = 1;
-            //ctx.stroke();
+            ctx.strokeStyle = 'rgba(50, 50, 50, 0.1)';
+            ctx.lineWidth = 4;
+            ctx.stroke();
         }
         // draw tiles
         function drawTiles() {
