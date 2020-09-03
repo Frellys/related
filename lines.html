@@ -81,15 +81,64 @@
             ctx.fillRect(0, 0, core.width, core.height);
             // field outline
             ctx.beginPath();
-            ctx.rect(
-                core.width / 2 - core.tileOpts.cols * core.tileOpts.size / 2 - 2,
-                core.height / 2 - core.tileOpts.rows * core.tileOpts.size / 2 - 2,
-                core.tileOpts.cols * core.tileOpts.size + 4,
-                core.tileOpts.rows * core.tileOpts.size + 4
-            );
-            //ctx.strokeStyle = '#323232';
-            ctx.strokeStyle = 'rgba(50, 50, 50, 0.1)';
-            ctx.lineWidth = 4;
+            ctx.moveTo(
+                core.width / 2,
+                core.height / 2 - core.tileOpts.rows * core.tileOpts.size / 2 - core.vmin);
+            ctx.lineTo(
+                core.width / 2 + core.tileOpts.cols * core.tileOpts.size / 2,
+                core.height / 2 - core.tileOpts.rows * core.tileOpts.size / 2 - core.vmin);
+            ctx.arcTo(
+                core.width / 2 + core.tileOpts.cols * core.tileOpts.size / 2 + core.vmin,
+                core.height / 2 - core.tileOpts.rows * core.tileOpts.size / 2 - core.vmin,
+                core.width / 2 + core.tileOpts.cols * core.tileOpts.size / 2 + core.vmin,
+                core.height / 2 - core.tileOpts.rows * core.tileOpts.size / 2,
+                core.vmin);
+            ctx.lineTo(
+                core.width / 2 + core.tileOpts.cols * core.tileOpts.size / 2 + core.vmin,
+                core.height / 2 + core.tileOpts.rows * core.tileOpts.size / 2);
+            ctx.arcTo(
+                core.width / 2 + core.tileOpts.cols * core.tileOpts.size / 2 + core.vmin,
+                core.height / 2 + core.tileOpts.rows * core.tileOpts.size / 2 + core.vmin,
+                core.width / 2 + core.tileOpts.cols * core.tileOpts.size / 2,
+                core.height / 2 + core.tileOpts.rows * core.tileOpts.size / 2 + core.vmin,
+                core.vmin);
+            ctx.lineTo(
+                core.width / 2 - core.tileOpts.cols * core.tileOpts.size / 2,
+                core.height / 2 + core.tileOpts.rows * core.tileOpts.size / 2 + core.vmin);
+            ctx.arcTo(
+                core.width / 2 - core.tileOpts.cols * core.tileOpts.size / 2 - core.vmin,
+                core.height / 2 + core.tileOpts.rows * core.tileOpts.size / 2 + core.vmin,
+                core.width / 2 - core.tileOpts.cols * core.tileOpts.size / 2 - core.vmin,
+                core.height / 2 + core.tileOpts.rows * core.tileOpts.size / 2,
+                core.vmin);
+            ctx.lineTo(
+                core.width / 2 - core.tileOpts.cols * core.tileOpts.size / 2 - core.vmin,
+                core.height / 2 - core.tileOpts.rows * core.tileOpts.size / 2);
+            ctx.arcTo(
+                core.width / 2 - core.tileOpts.cols * core.tileOpts.size / 2 - core.vmin,
+                core.height / 2 - core.tileOpts.rows * core.tileOpts.size / 2 - core.vmin,
+                core.width / 2 - core.tileOpts.cols * core.tileOpts.size / 2,
+                core.height / 2 - core.tileOpts.rows * core.tileOpts.size / 2 - core.vmin,
+                core.vmin);
+            ctx.closePath();
+            // hole
+            ctx.moveTo(
+                core.width / 2 - core.tileOpts.cols * core.tileOpts.size / 2,
+                core.height / 2 - core.tileOpts.rows * core.tileOpts.size / 2);
+            ctx.lineTo(
+                core.width / 2 - core.tileOpts.cols * core.tileOpts.size / 2,
+                core.height / 2 + core.tileOpts.rows * core.tileOpts.size / 2);
+            ctx.lineTo(
+                core.width / 2 + core.tileOpts.cols * core.tileOpts.size / 2,
+                core.height / 2 + core.tileOpts.rows * core.tileOpts.size / 2);
+            ctx.lineTo(
+                core.width / 2 + core.tileOpts.cols * core.tileOpts.size / 2,
+                core.height / 2 - core.tileOpts.rows * core.tileOpts.size / 2);
+            ctx.fillStyle = 'cadetblue';
+            ctx.fill();
+            ctx.closePath();
+            ctx.strokeStyle = 'cadetblue';
+            ctx.lineWidth = 1;
             ctx.stroke();
         }
         // draw tiles
