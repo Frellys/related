@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>title</title>
@@ -32,7 +32,17 @@
             mouse: {
                 x: undefined,
                 y: undefined,
-            }
+            },
+            buttons: [
+                {
+                    text: 'play',
+                    selected: true,
+                    pos: {
+                        x: document.body.clientWidth / 2,
+                        y: document.body.clientHeight / 2
+                    }
+                }
+            ]
         };
         // set canvas
         let cnv = document.querySelector('canvas');
@@ -43,7 +53,41 @@
         ctx.scale(dpr, dpr);
         // render
         let render = setInterval(function () {
+            drawBackground();
+            drawButtons();
         }, 1000 / core.fps);
+        // draw background
+        function drawBackground() {
+            ctx.clearRect(0, 0, core.width, core.height);
+            ctx.fillStyle = 'whitesmoke';
+            ctx.fillRect(0, 0, core.width, core.height);
+        }
+        // draw buttons
+        function drawButtons() {
+            core.buttons.forEach(function (btn) {
+                let tx = btn.pos.x;
+                let ty = btn.pos.y;
+                let size = 30;
+                let height = size * (Math.sqrt(3) / 2);
+                ctx.beginPath();
+                ctx.moveTo(tx - size / 2, ty - height);
+                ctx.lineTo(tx + size / 2, ty - height);
+                ctx.lineTo(tx + size, ty);
+                ctx.lineTo(tx + size / 2, ty + height);
+                ctx.lineTo(tx - size / 2, ty + height);
+                ctx.lineTo(tx - size, ty);
+                ctx.closePath();
+                // fill
+                if (btn.selected) {
+                    ctx.fillStyle = '#323232';
+                    ctx.fill();
+                }
+                // stroke
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = '#323232';
+                ctx.stroke();
+            });
+        }
     </script>
 </body>
 </html>
