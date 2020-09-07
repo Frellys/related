@@ -41,6 +41,22 @@
                         x: document.body.clientWidth / 2,
                         y: document.body.clientHeight / 2
                     }
+                },
+                {
+                    text: 'options',
+                    selected: false,
+                    pos: {
+                        x: document.body.clientWidth / 2,
+                        y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 12
+                    }
+                },
+                {
+                    text: 'exit',
+                    selected: false,
+                    pos: {
+                        x: document.body.clientWidth / 2,
+                        y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 24
+                    }
                 }
             ]
         };
@@ -67,7 +83,7 @@
             core.buttons.forEach(function (btn) {
                 let tx = btn.pos.x;
                 let ty = btn.pos.y;
-                let size = 30;
+                let size = core.vmin * 4;
                 let height = size * (Math.sqrt(3) / 2);
                 ctx.beginPath();
                 ctx.moveTo(tx - size / 2, ty - height);
