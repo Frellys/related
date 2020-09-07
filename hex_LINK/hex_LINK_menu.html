@@ -85,23 +85,38 @@
                 let ty = btn.pos.y;
                 let size = core.vmin * 4;
                 let height = size * (Math.sqrt(3) / 2);
-                ctx.beginPath();
-                ctx.moveTo(tx - size / 2, ty - height);
-                ctx.lineTo(tx + size / 2, ty - height);
-                ctx.lineTo(tx + size, ty);
-                ctx.lineTo(tx + size / 2, ty + height);
-                ctx.lineTo(tx - size / 2, ty + height);
-                ctx.lineTo(tx - size, ty);
-                ctx.closePath();
-                // fill
-                if (btn.selected) {
-                    ctx.fillStyle = '#323232';
-                    ctx.fill();
+                // hex
+                {
+                    ctx.beginPath();
+                    ctx.moveTo(tx - size / 2, ty - height);
+                    ctx.lineTo(tx + size / 2, ty - height);
+                    ctx.lineTo(tx + size, ty);
+                    ctx.lineTo(tx + size / 2, ty + height);
+                    ctx.lineTo(tx - size / 2, ty + height);
+                    ctx.lineTo(tx - size, ty);
+                    ctx.closePath();
+                    if (btn.selected) {
+                        // fill
+                        ctx.fillStyle = '#323232';
+                        ctx.fill();
+                        // stroke
+                        ctx.lineWidth = core.vmin / 2;
+                        ctx.strokeStyle = '#323232';
+                        ctx.stroke();
+                    }
+                    else {
+                        ctx.lineWidth = core.vmin / 2;
+                        ctx.strokeStyle = 'rgba(50, 50, 50, 0.75)';
+                        ctx.stroke();
+                    }
                 }
-                // stroke
-                ctx.lineWidth = 4;
-                ctx.strokeStyle = '#323232';
-                ctx.stroke();
+                // text
+                {
+                    ctx.font = core.vmin * 4 + 'px monospace';
+                    ctx.fillStyle = btn.selected ? '#323232' : 'rgba(50, 50, 50, 0.75)';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(btn.text, tx + core.vmin * 8, ty);
+                }
             });
         }
     </script>
