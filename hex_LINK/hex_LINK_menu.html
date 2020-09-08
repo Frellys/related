@@ -54,8 +54,6 @@
                     strike: 0,
                     pos: {
                         x: document.body.clientWidth / 2,
-                        //y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 12
-                        //y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 4 * (Math.sqrt(3) / 2) * 3
                         y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 4 * 3
                     }
                 },
@@ -65,8 +63,6 @@
                     strike: 0,
                     pos: {
                         x: document.body.clientWidth / 2,
-                        //y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 24
-                        //y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 4 * (Math.sqrt(3) / 2) * 6
                         y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 4 * 6
                     }
                 }
@@ -107,15 +103,12 @@
                         size * 3
                     );
                     if (ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
-                        //core.buttons.forEach(function (el) {
-                        //    el.selected = false;
-                        //    el.strike = 0;
-                        //});
-                        //btn.selected = true;
                         if (!btn.selected) {
                             core.buttons.forEach(function (el) {
-                                el.selected = false;
-                                el.strike = 0;
+                                if (el.selected) {
+                                    el.selected = false;
+                                    el.strike = 0;
+                                }
                             });
                             btn.selected = true;
                         }
@@ -136,11 +129,6 @@
                     ctx.lineTo(tx - size, ty);
                     ctx.closePath();
                     if (btn.selected) {
-                        // shadow
-                        //ctx.shadowBlur = core.vmin / 2;
-                        //ctx.shadowColor = '#323232';
-                        //ctx.shadowOffsetX = 0;
-                        //ctx.shadowOffsetY = 0;
                         // fill
                         ctx.fillStyle = '#323232';
                         ctx.fill();
@@ -154,11 +142,6 @@
                         ctx.strokeStyle = 'rgba(50, 50, 50, 0.75)';
                         ctx.stroke();
                     }
-                    // reset shadow
-                    //ctx.shadowBlur = 0;
-                    //ctx.shadowColor = 'none';
-                    //ctx.shadowOffsetX = 0;
-                    //ctx.shadowOffsetY = 0;
                 }
                 // text
                 {
@@ -171,7 +154,6 @@
                 {
                     if (!btn.selected) {
                         // calc
-                        //ctx.measureText(btn.text).width + core.vmin / 2
                         if (btn.strike < ctx.measureText(btn.text).width + core.vmin / 2) {
                             btn.strike += (ctx.measureText(btn.text).width + core.vmin) / 1000 * core.fps * 2;
                         }
@@ -190,7 +172,6 @@
                         );
                         ctx.lineWidth = core.vmin / 4;
                         ctx.strokeStyle = 'rgba(50, 50, 50, 0.75)';
-                        //ctx.strokeStyle = '#323232';
                         ctx.stroke();
                     }
                 }
