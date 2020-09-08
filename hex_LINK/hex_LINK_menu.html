@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>title</title>
+    <title>menu</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -122,6 +122,11 @@
                     ctx.lineTo(tx - size, ty);
                     ctx.closePath();
                     if (btn.selected) {
+                        // shadow
+                        //ctx.shadowBlur = core.vmin / 2;
+                        //ctx.shadowColor = '#323232';
+                        //ctx.shadowOffsetX = 0;
+                        //ctx.shadowOffsetY = 0;
                         // fill
                         ctx.fillStyle = '#323232';
                         ctx.fill();
@@ -135,6 +140,11 @@
                         ctx.strokeStyle = 'rgba(50, 50, 50, 0.75)';
                         ctx.stroke();
                     }
+                    // reset shadow
+                    //ctx.shadowBlur = 0;
+                    //ctx.shadowColor = 'none';
+                    //ctx.shadowOffsetX = 0;
+                    //ctx.shadowOffsetY = 0;
                 }
                 // text
                 {
