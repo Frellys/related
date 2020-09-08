@@ -97,19 +97,19 @@
                 {
                     ctx.beginPath();
                     ctx.rect(
-                        tx - size,
-                        ty - height - size / 2,
-                        size * 3,
-                        height * 3
+                        tx - size * 2,
+                        ty - size * 3 / 2,
+                        size * 4 + ctx.measureText('options').width + size,
+                        size * 3
                     );
                     if (ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
                         core.buttons.forEach(function (el) { el.selected = false; });
                         btn.selected = true;
-                        // test
-                        ctx.lineWidth = 1;
-                        ctx.strokeStyle = '#323232';
-                        ctx.stroke();
                     }
+                    // test
+                    //ctx.lineWidth = 1;
+                    //ctx.strokeStyle = '#323232';
+                    //ctx.stroke();
                 }
                 // hex
                 {
