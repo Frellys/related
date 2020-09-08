@@ -148,10 +148,6 @@
                 }
                 // text
                 {
-                    //ctx.font = core.vmin * 4 + 'px monospace';
-                    //ctx.fillStyle = btn.selected ? '#323232' : 'rgba(50, 50, 50, 0.75)';
-                    //ctx.textBaseline = 'middle';
-                    //ctx.fillText(btn.text, tx + core.btnOpts.size * 2, ty);
                     ctx.font = core.vmin * 4 + 'px monospace';
                     ctx.textBaseline = 'middle';
                     if (btn.selected) {
@@ -199,9 +195,9 @@
                         // calc
                         if (btn.strike < ctx.measureText(btn.text).width + core.vmin / 2) {
                             btn.strike += (ctx.measureText(btn.text).width + core.vmin / 2) / 1000 * core.fps * 2;
-                        }
-                        if (btn.strike > ctx.measureText(btn.text).width + core.vmin / 2) {
-                            btn.strike = ctx.measureText(btn.text).width + core.vmin / 2;
+                            if (btn.strike > ctx.measureText(btn.text).width + core.vmin / 2) {
+                                btn.strike = ctx.measureText(btn.text).width + core.vmin / 2;
+                            }
                         }
                         // draw
                         ctx.beginPath();
