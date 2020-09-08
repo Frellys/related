@@ -41,6 +41,7 @@
             buttons: [
                 {
                     text: 'play',
+                    textAlpha: 1,
                     selected: true,
                     strike: 0,
                     pos: {
@@ -50,6 +51,7 @@
                 },
                 {
                     text: 'options',
+                    textAlpha: 0.75,
                     selected: false,
                     strike: 0,
                     pos: {
@@ -59,6 +61,7 @@
                 },
                 {
                     text: 'exit',
+                    textAlpha: 0.75,
                     selected: false,
                     strike: 0,
                     pos: {
@@ -145,40 +148,53 @@
                 }
                 // text
                 {
+                    //ctx.font = core.vmin * 4 + 'px monospace';
+                    //ctx.fillStyle = btn.selected ? '#323232' : 'rgba(50, 50, 50, 0.75)';
+                    //ctx.textBaseline = 'middle';
+                    //ctx.fillText(btn.text, tx + core.btnOpts.size * 2, ty);
                     ctx.font = core.vmin * 4 + 'px monospace';
-                    ctx.fillStyle = btn.selected ? '#323232' : 'rgba(50, 50, 50, 0.75)';
                     ctx.textBaseline = 'middle';
+                    if (btn.selected) {
+                        btn.textAlpha < 1 ? btn.textAlpha += 0.025 : btn.textAlpha = 1;
+                    }
+                    else {
+                        btn.textAlpha > 0.75 ? btn.textAlpha -= 0.025 : btn.textAlpha = 0.75;
+                    }
+                    ctx.fillStyle = 'rgba(50, 50, 50, ' + btn.textAlpha + ')';
                     ctx.fillText(btn.text, tx + core.btnOpts.size * 2, ty);
                 }
                 // text strike
                 {
-                    if (btn.selected) {
-                        if (btn.strike > 0) {
-                            // calc
-                            btn.strike -= (ctx.measureText(btn.text).width + core.vmin / 2) / 1000 * core.fps * 4;
-                            if (btn.strike < 0) {
-                                btn.strike = 0;
-                            }
-                            else {
-                                // draw
-                                ctx.beginPath();
-                                ctx.moveTo(
-                                    tx + core.btnOpts.size * 2 - core.vmin / 2,
-                                    ty
-                                );
-                                ctx.lineTo(
-                                    tx + core.btnOpts.size * 2 + btn.strike,
-                                    ty
-                                );
-                                ctx.lineWidth = core.vmin / 4;
-                                ctx.strokeStyle = 'rgba(50, 50, 50, 0.75)';
-                                ctx.stroke();
-                            }
-                        }
-                        if (btn.strike < 0) {
-                            btn.strike = 0;
-                        }
-                    }
+                    // ------------
+                    // QUESTIONABLE
+                    // ------------
+                    //if (btn.selected) {
+                    //    if (btn.strike > 0) {
+                    //        // calc
+                    //        btn.strike -= (ctx.measureText(btn.text).width + core.vmin / 2) / 1000 * core.fps * 4;
+                    //        if (btn.strike < 0) {
+                    //            btn.strike = 0;
+                    //        }
+                    //        else {
+                    //            // draw
+                    //            ctx.beginPath();
+                    //            ctx.moveTo(
+                    //                tx + core.btnOpts.size * 2 - core.vmin / 2,
+                    //                ty
+                    //            );
+                    //            ctx.lineTo(
+                    //                tx + core.btnOpts.size * 2 + btn.strike,
+                    //                ty
+                    //            );
+                    //            ctx.lineWidth = core.vmin / 4;
+                    //            ctx.strokeStyle = 'rgba(50, 50, 50, 0.75)';
+                    //            ctx.stroke();
+                    //        }
+                    //    }
+                    //    if (btn.strike < 0) {
+                    //        btn.strike = 0;
+                    //    }
+                    //}
                     if (!btn.selected) {
                         // calc
                         if (btn.strike < ctx.measureText(btn.text).width + core.vmin / 2) {
