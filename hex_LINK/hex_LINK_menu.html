@@ -26,6 +26,7 @@
     <script>
         // settings
         let core = {
+            fps: 50,
             vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
             width: document.body.clientWidth,
             height: document.body.clientHeight,
@@ -41,6 +42,7 @@
                 {
                     text: 'play',
                     selected: true,
+                    strike: 0,
                     pos: {
                         x: document.body.clientWidth / 2,
                         y: document.body.clientHeight / 2
@@ -49,6 +51,7 @@
                 {
                     text: 'options',
                     selected: false,
+                    strike: 0,
                     pos: {
                         x: document.body.clientWidth / 2,
                         //y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 12
@@ -59,6 +62,7 @@
                 {
                     text: 'exit',
                     selected: false,
+                    strike: 0,
                     pos: {
                         x: document.body.clientWidth / 2,
                         //y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 24
@@ -103,8 +107,18 @@
                         size * 3
                     );
                     if (ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
-                        core.buttons.forEach(function (el) { el.selected = false; });
-                        btn.selected = true;
+                        //core.buttons.forEach(function (el) {
+                        //    el.selected = false;
+                        //    el.strike = 0;
+                        //});
+                        //btn.selected = true;
+                        if (!btn.selected) {
+                            core.buttons.forEach(function (el) {
+                                el.selected = false;
+                                el.strike = 0;
+                            });
+                            btn.selected = true;
+                        }
                     }
                     // test
                     //ctx.lineWidth = 1;
@@ -151,8 +165,34 @@
                     ctx.font = core.vmin * 4 + 'px monospace';
                     ctx.fillStyle = btn.selected ? '#323232' : 'rgba(50, 50, 50, 0.75)';
                     ctx.textBaseline = 'middle';
-                    //ctx.fillText(btn.text, tx + core.vmin * 8, ty);
                     ctx.fillText(btn.text, tx + core.btnOpts.size * 2, ty);
+                }
+                // text strike
+                {
+                    if (!btn.selected) {
+                        // calc
+                        //ctx.measureText(btn.text).width + core.vmin / 2
+                        if (btn.strike < ctx.measureText(btn.text).width + core.vmin / 2) {
+                            btn.strike += (ctx.measureText(btn.text).width + core.vmin) / 1000 * core.fps * 2;
+                        }
+                        if (btn.strike > ctx.measureText(btn.text).width + core.vmin / 2) {
+                            btn.strike = ctx.measureText(btn.text).width + core.vmin / 2;
+                        }
+                        // draw
+                        ctx.beginPath();
+                        ctx.moveTo(
+                            tx + core.btnOpts.size * 2 - core.vmin / 2,
+                            ty
+                        );
+                        ctx.lineTo(
+                            tx + core.btnOpts.size * 2 + btn.strike,
+                            ty
+                        );
+                        ctx.lineWidth = core.vmin / 4;
+                        ctx.strokeStyle = 'rgba(50, 50, 50, 0.75)';
+                        //ctx.strokeStyle = '#323232';
+                        ctx.stroke();
+                    }
                 }
             });
         }
