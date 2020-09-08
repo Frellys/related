@@ -33,6 +33,10 @@
                 x: undefined,
                 y: undefined,
             },
+            btnOpts: {
+                size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 4,
+                height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 4 * (Math.sqrt(3) / 2)
+            },
             buttons: [
                 {
                     text: 'play',
@@ -47,6 +51,7 @@
                     selected: false,
                     pos: {
                         x: document.body.clientWidth / 2,
+                        //y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 12
                         y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 12
                     }
                 },
@@ -55,6 +60,7 @@
                     selected: false,
                     pos: {
                         x: document.body.clientWidth / 2,
+                        //y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 24
                         y: document.body.clientHeight / 2 + Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 24
                     }
                 }
@@ -83,8 +89,8 @@
             core.buttons.forEach(function (btn) {
                 let tx = btn.pos.x;
                 let ty = btn.pos.y;
-                let size = core.vmin * 4;
-                let height = size * (Math.sqrt(3) / 2);
+                let size = core.btnOpts.size;
+                let height = core.btnOpts.height;
                 // hex
                 {
                     ctx.beginPath();
