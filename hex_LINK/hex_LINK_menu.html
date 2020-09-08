@@ -152,10 +152,37 @@
                 }
                 // text strike
                 {
+                    if (btn.selected) {
+                        if (btn.strike > 0) {
+                            // calc
+                            btn.strike -= (ctx.measureText(btn.text).width + core.vmin / 2) / 1000 * core.fps * 4;
+                            if (btn.strike < 0) {
+                                btn.strike = 0;
+                            }
+                            else {
+                                // draw
+                                ctx.beginPath();
+                                ctx.moveTo(
+                                    tx + core.btnOpts.size * 2 - core.vmin / 2,
+                                    ty
+                                );
+                                ctx.lineTo(
+                                    tx + core.btnOpts.size * 2 + btn.strike,
+                                    ty
+                                );
+                                ctx.lineWidth = core.vmin / 4;
+                                ctx.strokeStyle = 'rgba(50, 50, 50, 0.75)';
+                                ctx.stroke();
+                            }
+                        }
+                        if (btn.strike < 0) {
+                            btn.strike = 0;
+                        }
+                    }
                     if (!btn.selected) {
                         // calc
                         if (btn.strike < ctx.measureText(btn.text).width + core.vmin / 2) {
-                            btn.strike += (ctx.measureText(btn.text).width + core.vmin) / 1000 * core.fps * 2;
+                            btn.strike += (ctx.measureText(btn.text).width + core.vmin / 2) / 1000 * core.fps * 2;
                         }
                         if (btn.strike > ctx.measureText(btn.text).width + core.vmin / 2) {
                             btn.strike = ctx.measureText(btn.text).width + core.vmin / 2;
