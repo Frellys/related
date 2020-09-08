@@ -93,6 +93,24 @@
                 let ty = btn.pos.y;
                 let size = core.btnOpts.size;
                 let height = core.btnOpts.height;
+                // is selected
+                {
+                    ctx.beginPath();
+                    ctx.rect(
+                        tx - size,
+                        ty - height - size / 2,
+                        size * 3,
+                        height * 3
+                    );
+                    if (ctx.isPointInPath(core.mouse.x, core.mouse.y)) {
+                        core.buttons.forEach(function (el) { el.selected = false; });
+                        btn.selected = true;
+                        // test
+                        ctx.lineWidth = 1;
+                        ctx.strokeStyle = '#323232';
+                        ctx.stroke();
+                    }
+                }
                 // hex
                 {
                     ctx.beginPath();
@@ -123,10 +141,16 @@
                     ctx.font = core.vmin * 4 + 'px monospace';
                     ctx.fillStyle = btn.selected ? '#323232' : 'rgba(50, 50, 50, 0.75)';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(btn.text, tx + core.vmin * 8, ty);
+                    //ctx.fillText(btn.text, tx + core.vmin * 8, ty);
+                    ctx.fillText(btn.text, tx + core.btnOpts.size * 2, ty);
                 }
             });
         }
+        // mousemove listener
+        window.addEventListener('mousemove', function (e) {
+            core.mouse.x = e.x;
+            core.mouse.y = e.y;
+        }, false);
     </script>
 </body>
 </html>
