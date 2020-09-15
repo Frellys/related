@@ -116,7 +116,7 @@
               font-family="monospace"
               font-size="3em"
               alignment-baseline="middle"
-              text-anchor="middle" stroke-linejoin="r">></text>
+              text-anchor="middle">></text>
     </svg>
     <script>
         window.addEventListener('load', function () {
@@ -126,10 +126,50 @@
                 y: 2.5,
                 side: 10,
                 point: 'bot',
+                fill: '#323232',
+                stroke: '#323232',
+                strokeWidth: 0.5,
+                strokeLineJoin: 'round'
+            });
+            drawTriangle({
+                x: 95,
+                y: 2.5 + Math.sqrt(3) / 2 * 10,
+                side: 10,
+                point: 'top',
                 fill: 'transparent',
                 stroke: '#323232',
-                strokeWidth: 0.75,
-                strokeLineJoin: 'miter'
+                strokeWidth: 0.5,
+                strokeLineJoin: 'round'
+            });
+            drawTriangle({
+                x: 90,
+                y: 2.5,
+                side: 10,
+                point: 'bot',
+                fill: 'transparent',
+                stroke: '#323232',
+                strokeWidth: 0.5,
+                strokeLineJoin: 'round'
+            });
+            drawTriangle({
+                x: 85,
+                y: 2.5 + Math.sqrt(3) / 2 * 10,
+                side: 10,
+                point: 'top',
+                fill: 'transparent',
+                stroke: '#323232',
+                strokeWidth: 0.5,
+                strokeLineJoin: 'round'
+            });
+            drawTriangle({
+                x: 80,
+                y: 2.5,
+                side: 10,
+                point: 'bot',
+                fill: 'transparent',
+                stroke: '#323232',
+                strokeWidth: 0.5,
+                strokeLineJoin: 'round'
             });
             // download svg/png onload
             //let svg = new Blob([document.querySelector('svg').outerHTML], { type: 'image/svg+xml' });
