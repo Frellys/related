@@ -116,10 +116,21 @@
               font-family="monospace"
               font-size="3em"
               alignment-baseline="middle"
-              text-anchor="middle">></text>
+              text-anchor="middle" stroke-linejoin="r">></text>
     </svg>
     <script>
         window.addEventListener('load', function () {
+            // draw triangles
+            drawTriangle({
+                x: 100,
+                y: 2.5,
+                side: 10,
+                point: 'bot',
+                fill: 'transparent',
+                stroke: '#323232',
+                strokeWidth: 0.75,
+                strokeLineJoin: 'miter'
+            });
             // download svg/png onload
             //let svg = new Blob([document.querySelector('svg').outerHTML], { type: 'image/svg+xml' });
             //let link = document.createElement('a');
@@ -153,7 +164,38 @@
             img.src = URL.createObjectURL(blob);
             // draw triangles
         }, { once: true });
-        function drawTriangle() { }
+        function drawTriangle(args) {
+            if (typeof args == 'object') {
+                let svg = document.querySelector('svg');
+                let ns = 'http://www.w3.org/2000/svg';
+                let polygon = document.createElementNS(ns, 'polygon');
+                let points = [
+                    {
+                        x: args.x - args.side / 2,
+                        y: args.y
+                    },
+                    {
+                        x: args.x + args.side / 2,
+                        y: args.y
+                    },
+                    {
+                        x: args.x,
+                        y: args.point == 'top' ? args.y - Math.sqrt(3) / 2 * args.side : args.y + Math.sqrt(3) / 2 * args.side
+                    }
+                ];
+                points.forEach(function (el) {
+                    let p = svg.createSVGPoint();
+                    p.x = el.x;
+                    p.y = el.y;
+                    polygon.points.appendItem(p);
+                });
+                polygon.setAttributeNS(null, 'fill', args.fill);
+                polygon.setAttributeNS(null, 'stroke', args.stroke);
+                polygon.setAttributeNS(null, 'stroke-width', args.strokeWidth);
+                polygon.setAttributeNS(null, 'stroke-linejoin', args.strokeLineJoin);
+                svg.appendChild(polygon);
+            }
+        }
     </script>
 </body>
 </html>
