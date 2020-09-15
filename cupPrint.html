@@ -127,7 +127,7 @@
             //link.href = URL.createObjectURL(svg);
             //link.click();
             let svg = document.querySelector('svg');
-            let svgString = new XMLSerializer().serializeToString(svg).replace(/  +/g, ' ');
+            let svgString = new XMLSerializer().serializeToString(svg).replace(/  +/g, ' ').replace(/&#10; /g, '');
             console.log(svgString);
             let cnv = document.createElement('canvas');
             cnv.width = svg.getBoundingClientRect().width;
@@ -138,16 +138,20 @@
             img.onload = function () {
                 ctx.drawImage(img, 0, 0);
                 let link = document.createElement('a');
-                // download svg
-                link.download = Date.now().toString() + '.svg';
-                console.log(URL.createObjectURL(blob));
-                link.href = URL.createObjectURL(blob);
-                link.click();
-                // download png
-                //link.download = Date.now().toString() + '.png';
-                //console.log(cnv.toDataURL('image/png'));
-                //link.href = cnv.toDataURL('image/png');
-                //link.click();
+                if (true) {
+                    // download svg
+                    link.download = Date.now().toString() + '.svg';
+                    console.log(URL.createObjectURL(blob));
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+                }
+                else {
+                    // download png
+                    link.download = Date.now().toString() + '.png';
+                    console.log(cnv.toDataURL('image/png'));
+                    link.href = cnv.toDataURL('image/png');
+                    link.click();
+                }
             };
             img.src = URL.createObjectURL(blob);
             // draw triangles
