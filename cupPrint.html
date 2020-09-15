@@ -171,6 +171,17 @@
                 strokeWidth: 0.5,
                 strokeLineJoin: 'round'
             });
+            // draw hex
+            drawHex({
+                x: 70,
+                y: 2.5 + Math.sqrt(3) / 2 * 10,
+                side: 10,
+                point: 'bot',
+                fill: 'transparent',
+                stroke: '#323232',
+                strokeWidth: 0.5,
+                strokeLineJoin: 'round'
+            });
             // download svg/png onload
             //let svg = new Blob([document.querySelector('svg').outerHTML], { type: 'image/svg+xml' });
             //let link = document.createElement('a');
@@ -244,9 +255,33 @@
                     {
                         x: args.x + args.side / 2,
                         y: args.y - Math.sqrt(3) / 2 * args.side
+                    },
+                    {
+                        x: args.x + args.side,
+                        y: args.y
+                    },
+                    {
+                        x: args.x + args.side / 2,
+                        y: args.y + Math.sqrt(3) / 2 * args.side
+                    },
+                    {
+                        x: args.x - args.side / 2,
+                        y: args.y + Math.sqrt(3) / 2 * args.side
+                    },
+                    {
+                        x: args.x - args.side,
+                        y: args.y
+                    },
+                    {
+                        x: args.x - args.side / 2,
+                        y: args.y - Math.sqrt(3) / 2 * args.side
                     }
                 ];
                 points.forEach(function (el) {
+                    let p = svg.createSVGPoint();
+                    p.x = el.x;
+                    p.y = el.y;
+                    polygon.points.appendItem(p);
                 });
                 polygon.setAttributeNS(null, 'fill', args.fill);
                 polygon.setAttributeNS(null, 'stroke', args.stroke);
