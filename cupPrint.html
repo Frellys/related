@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>cupPrint</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: whitesmoke;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+
+        svg {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20cm" height="9cm" viewBox="0 0 200 90">
+        <!--background-->
+        <rect x="0" y="0" width="100%" height="100%" fill="powderblue" />
+        <!--top left-->
+        <polygon points="
+                 2.5 2.5,
+                 15 2.5,
+                 15 5,
+                 5 5,
+                 5 15,
+                 2.5 15"
+                 fill="#323232" />
+        <!--top right-->
+        <path d="
+              M 172.5 2.75
+              Q 172.5 27.5
+              197.25 27.5
+              L 197.25 2.75 Z"
+              fill="red" />
+        <path d="
+              M 172.5 2.5
+              Q 172.5 27.5
+              197.5 27.5"
+              fill="transparent"
+              stroke="#323232"
+              stroke-width="2" />
+        <!--bottom right-->
+        <polygon points="
+                 197.5 87.5,
+                 185 87.5,
+                 185 85,
+                 195 85,
+                 195 75,
+                 197.5 75"
+                 fill="#323232" />
+        <text fill="#323232"
+              font-family="monospace"
+              font-size="0.15cm"
+              transform="translate(0) rotate(-90 192.5 82.5)">
+            <tspan x="192.5" y="67.5">master</tspan>
+            <tspan x="192.5" y="72.5">degrodanizer</tspan>
+            <tspan x="192.5" y="77.5">maximus</tspan>
+            <tspan x="192.5" y="82.5">3000</tspan>
+        </text>
+        <!--bottom left-->
+        <!--<text fill="#323232"
+              font-family="monospace"
+              font-size="0.15cm">
+            <tspan x="2.5" y="57.5">y:1 &rarr; 0 = 1</tspan>
+            <tspan x="2.5" y="62.5">m:12 &rarr; 1100</tspan>
+            <tspan x="2.5" y="67.5">w:52 &rarr; 110100</tspan>
+            <tspan x="2.5" y="72.5">d:365 &rarr; 101101101</tspan>
+            <tspan x="2.5" y="77.5">h:8760 &rarr; 10001000111000</tspan>
+            <tspan x="2.5" y="82.5">m:525600 &rarr; 10000000010100100000</tspan>
+            <tspan x="2.5" y="87.5">s:31536000 &rarr; 1111000010011001110000000</tspan>
+        </text>-->
+        <text fill="#323232" font-family="monospace" font-size="0.15cm">
+            <tspan x="2.5" y="56">y:1 &rarr; 1</tspan>
+            <tspan x="2.5" y="61.25">m:12 &rarr; 1100</tspan>
+            <tspan x="2.5" y="66.5">w:52 &rarr; 110100</tspan>
+            <tspan x="2.5" y="71.75">d:365 &rarr; 101101101</tspan>
+            <tspan x="2.5" y="77">h:8760 &rarr; 10001000111000</tspan>
+            <tspan x="2.5" y="82.25">m:525600 &rarr; 10000000010100100000</tspan>
+            <tspan x="2.5" y="87.5">s:31536000 &rarr; 1111000010011001110000000 (╯°□°）╯︵ ┻━┻</tspan>
+        </text>
+        <!--main text-->
+        <text x="50%" y="44%"
+              fill="#323232"
+              font-family="monospace"
+              font-size="1em"
+              alignment-baseline="middle"
+              text-anchor="middle">durat</text>
+        <text x="50%" y="56%"
+              fill="#323232"
+              font-family="monospace"
+              font-size="1em"
+              alignment-baseline="middle"
+              text-anchor="middle">skaya</text>
+        <text x="35%" y="50%"
+              fill="#323232"
+              font-family="monospace"
+              font-size="3em"
+              alignment-baseline="middle"
+              text-anchor="middle"><</text>
+        <text x="65%" y="50%"
+              fill="#323232"
+              font-family="monospace"
+              font-size="3em"
+              alignment-baseline="middle"
+              text-anchor="middle">></text>
+    </svg>
+    <script>
+        window.addEventListener('load', function () {
+            // download svg onload
+            //let svg = new Blob([document.querySelector('svg').outerHTML], { type: 'image/svg+xml' });
+            //let link = document.createElement('a');
+            //link.download = Date.now().toString() + '.svg';
+            //link.href = URL.createObjectURL(svg);
+            //link.click();
+            let svg = document.querySelector('svg');
+            let svgString = new XMLSerializer().serializeToString(svg).replace(/  +/g, ' ');
+            console.log(svgString);
+            let cnv = document.createElement('canvas');
+            cnv.width = svg.getBoundingClientRect().width;
+            cnv.height = svg.getBoundingClientRect().height;
+            let ctx = cnv.getContext('2d');
+            let blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            let img = new Image();
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0);
+                let link = document.createElement('a');
+                // download svg
+                link.download = Date.now().toString() + '.svg';
+                console.log(URL.createObjectURL(blob));
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                // download png
+                //link.download = Date.now().toString() + '.png';
+                //console.log(cnv.toDataURL('image/png'));
+                //link.href = cnv.toDataURL('image/png');
+                //link.click();
+            };
+            img.src = URL.createObjectURL(blob);
+            // draw triangles
+        }, { once: true });
+        function drawTriangle() { }
+    </script>
+</body>
+</html>
