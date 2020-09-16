@@ -29,7 +29,7 @@
 <body>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20cm" height="9cm" viewBox="0 0 200 90">
         <!--background-->
-        <rect x="0" y="0" width="100%" height="100%" fill="powderblue" />
+        <!--<rect x="0" y="0" width="100%" height="100%" fill="powderblue" />-->
         <!--top left-->
         <polygon points="
                  2.5 2.5,
@@ -117,60 +117,14 @@
               font-size="3em"
               alignment-baseline="middle"
               text-anchor="middle">></text>
+        <!--idiom-->
+        <text fill="#323232" transform="translate(0) rotate(-40 127.5 55)">
+            <tspan x="120" y="65" font-weight="600" font-size="0.2cm">七転び八起き</tspan>
+            <tspan x="120" y="75" font-weight="600" font-size="0.2cm">(ななころびやおき)</tspan>
+        </text>
     </svg>
     <script>
         window.addEventListener('load', function () {
-            // draw triangles
-            drawTriangle({
-                x: 100,
-                y: 2.5,
-                side: 10,
-                point: 'bot',
-                fill: '#323232',
-                stroke: '#323232',
-                strokeWidth: 0.5,
-                strokeLineJoin: 'round'
-            });
-            drawTriangle({
-                x: 95,
-                y: 2.5 + Math.sqrt(3) / 2 * 10,
-                side: 10,
-                point: 'top',
-                fill: 'transparent',
-                stroke: '#323232',
-                strokeWidth: 0.5,
-                strokeLineJoin: 'round'
-            });
-            drawTriangle({
-                x: 90,
-                y: 2.5,
-                side: 10,
-                point: 'bot',
-                fill: 'transparent',
-                stroke: '#323232',
-                strokeWidth: 0.5,
-                strokeLineJoin: 'round'
-            });
-            drawTriangle({
-                x: 85,
-                y: 2.5 + Math.sqrt(3) / 2 * 10,
-                side: 10,
-                point: 'top',
-                fill: 'transparent',
-                stroke: '#323232',
-                strokeWidth: 0.5,
-                strokeLineJoin: 'round'
-            });
-            drawTriangle({
-                x: 80,
-                y: 2.5,
-                side: 10,
-                point: 'bot',
-                fill: 'transparent',
-                stroke: '#323232',
-                strokeWidth: 0.5,
-                strokeLineJoin: 'round'
-            });
             // draw hex
             drawHex({
                 x: 70,
@@ -193,6 +147,46 @@
                 strokeLineJoin: 'round'
             });
             drawHex({
+                x: 85,
+                y: 2.5 + Math.sqrt(3) / 2 * 10 * 2,
+                side: 10,
+                point: 'bot',
+                fill: 'transparent',
+                stroke: '#323232',
+                strokeWidth: 0.5,
+                strokeLineJoin: 'round'
+            });
+            drawHex({
+                x: 100,
+                y: 2.5 + Math.sqrt(3) / 2 * 10,
+                side: 10,
+                point: 'bot',
+                fill: 'transparent',
+                stroke: '#323232',
+                strokeWidth: 0.5,
+                strokeLineJoin: 'round'
+            });
+            drawHex({
+                x: 115,
+                y: 2.5 + Math.sqrt(3) / 2 * 10 * 2,
+                side: 10,
+                point: 'bot',
+                fill: 'red',
+                stroke: '#323232',
+                strokeWidth: 0.75,
+                strokeLineJoin: 'round'
+            });
+            drawHex({
+                x: 130,
+                y: 2.5 + Math.sqrt(3) / 2 * 10,
+                side: 10,
+                point: 'bot',
+                fill: 'red',
+                stroke: '#323232',
+                strokeWidth: 0.75,
+                strokeLineJoin: 'round'
+            });
+            drawHex({
                 x: 40,
                 y: 2.5 + Math.sqrt(3) / 2 * 10,
                 side: 10,
@@ -202,6 +196,46 @@
                 strokeWidth: 0.75,
                 strokeLineJoin: 'round'
             });
+            drawHex({
+                x: 40,
+                y: 2.5 + Math.sqrt(3) / 2 * 10 * 3,
+                side: 10,
+                point: 'bot',
+                fill: 'red',
+                stroke: '#323232',
+                strokeWidth: 0.75,
+                strokeLineJoin: 'round'
+            });
+            drawHex({
+                x: 25,
+                y: 2.5 + Math.sqrt(3) / 2 * 10 * 2,
+                side: 10,
+                point: 'bot',
+                fill: 'transparent',
+                stroke: '#323232',
+                strokeWidth: 0.5,
+                strokeLineJoin: 'round'
+            });
+            drawHex({
+                x: 25,
+                y: 2.5 + Math.sqrt(3) / 2 * 10 * 4,
+                side: 10,
+                point: 'bot',
+                fill: 'transparent',
+                stroke: '#323232',
+                strokeWidth: 0.5,
+                strokeLineJoin: 'round'
+            });
+            drawHex({
+                x: 40,
+                y: 2.5 + Math.sqrt(3) / 2 * 10 * 5,
+                side: 10,
+                point: 'bot',
+                fill: 'transparent',
+                stroke: '#323232',
+                strokeWidth: 0.5,
+                strokeLineJoin: 'round'
+            });
             // download svg/png onload
             //let svg = new Blob([document.querySelector('svg').outerHTML], { type: 'image/svg+xml' });
             //let link = document.createElement('a');
@@ -209,7 +243,8 @@
             //link.href = URL.createObjectURL(svg);
             //link.click();
             let svg = document.querySelector('svg');
-            let svgString = new XMLSerializer().serializeToString(svg).replace(/  +/g, ' ').replace(/&#10; /g, '');
+            //let svgString = new XMLSerializer().serializeToString(svg).replace(/  +/g, ' ').replace(/&#10; /g, '');
+            let svgString = new XMLSerializer().serializeToString(svg);
             let cnv = document.createElement('canvas');
             cnv.width = svg.getBoundingClientRect().width;
             cnv.height = svg.getBoundingClientRect().height;
