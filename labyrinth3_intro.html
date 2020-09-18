@@ -49,21 +49,35 @@
             ctx.fillStyle = '#323232';
             ctx.fillRect(0, 0, core.width, core.height);
             // text
-            ctx.beginPath();
-            ctx.font = '10vmin monospace';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = 'wheat';
-            ctx.fillText('some text  ', core.width / 2, core.height / 2);
-            // triag
-            ctx.beginPath();
-            // number
-            ctx.beginPath();
-            ctx.font = '10vmin monospace';
+            //ctx.beginPath();
+            ctx.font = '15vmin monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = 'wheat';
             let cw = ctx.measureText('some text  ').width / 11;
+            ctx.fillText('some text  ', core.width / 2, core.height / 2);
+            // triag
+            let size = core.vmin * 25;
+            let height = size * Math.sqrt(3) / 2;
+            ctx.beginPath();
+            ctx.moveTo(
+                core.width / 2 + cw * 5 - size / 2,
+                core.height / 2 - height / 2 + core.vmin * 2);
+            ctx.lineTo(
+                core.width / 2 + cw * 5 + size / 2,
+                core.height / 2 - height / 2 + core.vmin * 2);
+            ctx.lineTo(
+                core.width / 2 + cw * 5,
+                core.height / 2 + height / 2 + core.vmin * 2);
+            ctx.closePath();
+            ctx.fillStyle = 'wheat';
+            ctx.fill();
+            // number
+            ctx.beginPath();
+            ctx.font = '15vmin monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#323232';
             ctx.fillText('3', core.width / 2 + cw * 5, core.height / 2);
         }, 1000 / core.fps);
         // mousemove listener
