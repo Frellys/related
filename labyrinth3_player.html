@@ -32,8 +32,8 @@
             fps: 50,
             player: {
                 pos: {
-                    x: document.body.clientWidth / 2,
-                    y: document.body.clientHeight / 2
+                    x: 5,
+                    y: 5
                 },
                 moving: false,
                 point: 'top',
@@ -61,16 +61,18 @@
             ctx.fillStyle = 'whitesmoke';
             ctx.fillRect(0, 0, core.width, core.height);
             // player
+            let px = core.player.pos.x * core.player.size / 2;
+            let py = core.player.pos.y * core.player.height - core.player.height / 2;
             ctx.beginPath();
             ctx.moveTo(
-                core.player.pos.x - core.player.size / 2,
-                core.player.point == 'top' ? core.player.pos.y + core.player.height / 2 : core.player.pos.y - core.player.height / 2);
+                px - core.player.size / 2,
+                core.player.point == 'top' ? py + core.player.height / 2 : py - core.player.height / 2);
             ctx.lineTo(
-                core.player.pos.x + core.player.size / 2,
-                core.player.point == 'top' ? core.player.pos.y + core.player.height / 2 : core.player.pos.y - core.player.height / 2);
+                px + core.player.size / 2,
+                core.player.point == 'top' ? py + core.player.height / 2 : py - core.player.height / 2);
             ctx.lineTo(
-                core.player.pos.x,
-                core.player.point == 'top' ? core.player.pos.y - core.player.height / 2 : core.player.pos.y + core.player.height / 2);
+                px,
+                core.player.point == 'top' ? py - core.player.height / 2 : py + core.player.height / 2);
             ctx.closePath();
             ctx.fillStyle = '#323232';
             ctx.fill();
@@ -86,22 +88,22 @@
             if (!core.player.moving) {
                 switch (e.key) {
                     case 'ArrowLeft':
-                        core.player.pos.x -= core.player.size / 2;
+                        core.player.pos.x--;
                         core.player.point = core.player.point == 'top' ? 'bot' : 'top';
                         break;
                     case 'ArrowRight':
-                        core.player.pos.x += core.player.size / 2;
+                        core.player.pos.x++;
                         core.player.point = core.player.point == 'top' ? 'bot' : 'top';
                         break;
                     case 'ArrowUp':
                         if (core.player.point != 'top') {
-                            core.player.pos.y -= core.player.height;
+                            core.player.pos.y--;
                             core.player.point = core.player.point == 'top' ? 'bot' : 'top';
                         }
                         break;
                     case 'ArrowDown':
                         if (core.player.point == 'top') {
-                            core.player.pos.y += core.player.height;
+                            core.player.pos.y++;
                             core.player.point = core.player.point == 'top' ? 'bot' : 'top';
                         }
                         break;
