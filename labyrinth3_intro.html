@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>l3_intro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: gray;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <script>
+        // settings
+        let core = {
+            vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
+            width: document.body.clientWidth,
+            height: document.body.clientHeight,
+            fps: 50,
+            mouse: {
+                x: undefined,
+                y: undefined,
+            }
+        };
+        // set canvas
+        let cnv = document.querySelector('canvas');
+        let dpr = window.devicePixelRatio;
+        cnv.width = core.width * dpr;
+        cnv.height = core.height * dpr;
+        let ctx = cnv.getContext('2d');
+        ctx.scale(dpr, dpr);
+        // render
+        let render = setInterval(function () {
+            // draw bg
+            ctx.clearRect(0, 0, core.width, core.height);
+            ctx.fillStyle = '#323232';
+            ctx.fillRect(0, 0, core.width, core.height);
+            // text
+            ctx.beginPath();
+            ctx.font = '10vmin monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = 'wheat';
+            ctx.fillText('some text  ', core.width / 2, core.height / 2);
+            // triag
+            ctx.beginPath();
+            // number
+            ctx.beginPath();
+            ctx.font = '10vmin monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = 'wheat';
+            let cw = ctx.measureText('some text  ').width / 11;
+            ctx.fillText('3', core.width / 2 + cw * 5, core.height / 2);
+        }, 1000 / core.fps);
+        // mousemove listener
+        window.addEventListener('mousemove', function (e) {
+            core.mouse.x = e.x;
+            core.mouse.y = e.y;
+        }, false);
+    </script>
+</body>
+</html>
