@@ -211,9 +211,33 @@
                         }
                         case 'up': {
                             ctx.beginPath();
-                            if (core.player.top) {
-                            }
-                            else {
+                            {
+                                ctx.moveTo(
+                                    px - core.player.size / 2,
+                                    py + core.player.height / 2
+                                );
+                                let dH = core.player.height - core.player.shift;
+                                let dt = dH / core.player.height * core.player.size / 2;
+                                ctx.lineTo(
+                                    px - (core.player.size / 2 - dt),
+                                    py - core.player.height / 2 + core.player.shift
+                                );
+                                ctx.lineTo(
+                                    px + (core.player.size / 2 - dt),
+                                    py - core.player.height / 2 + core.player.shift
+                                );
+                                ctx.lineTo(
+                                    px + core.player.size / 2,
+                                    py + core.player.height / 2
+                                );
+                                ctx.lineTo(
+                                    px + dt,
+                                    py + core.player.height / 2 + core.player.shift
+                                );
+                                ctx.lineTo(
+                                    px - dt,
+                                    py + core.player.height / 2 + core.player.shift
+                                );
                             }
                             ctx.closePath();
                             ctx.fillStyle = 'wheat';
@@ -228,6 +252,7 @@
                         }
                     }
                     core.player.shift -= core.player.size / core.fps * 4;
+                    //core.player.shift -= core.player.size / core.fps * 2;
                     if (core.player.shift <= 0) {
                         core.player.shift = 0;
                         core.player.moving = false;
