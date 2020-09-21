@@ -79,7 +79,7 @@
             tile.field.forEach(function (row, Yidx) {
                 let ty = (core.height / 2 - tile.field.length * tile.height / 2) + Yidx * tile.height;
                 row.forEach(function (t, Xidx) {
-                    let tx = (core.width / 2 - row.length * tile.size / 2) + Xidx * tile.size / 2;
+                    let tx = (core.width / 2 - row.length * tile.size / 4) + Xidx * tile.size / 2;
                     switch (t) {
                         case '0':
                             ctx.beginPath();
