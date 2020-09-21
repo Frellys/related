@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>l3_player</title>
+    <title>l3_tiles</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -76,6 +76,14 @@
             // tiles
             let cx = core.width / 2;
             let cy = core.height / 2;
+            tile.field.forEach(function (row, Yidx) {
+                //let shift = row.length % 2 == 0 ? tile.height / 2 : 0;
+                //let ty = Yidx * tile.height - shift - tile.field.length * tile.height / 2;
+                let ty = (core.height - tile.field.length * tile.height / 2) + Yidx * tile.height;
+                row.forEach(function (t, Xidx) {
+                    //let tx = Xidx * tile.size - row.length * tile.size / 2;
+                });
+            });
         }, 1000 / core.fps);
         // mousemove listener
         window.addEventListener('mousemove', function (e) {
