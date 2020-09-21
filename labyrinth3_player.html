@@ -112,6 +112,46 @@
                 if (core.player.shift > 0) {
                     switch (core.player.moving) {
                         case 'left': {
+                            ctx.beginPath();
+                            if (core.player.top) {
+                                ctx.moveTo(
+                                    px - core.size / 2 + core.player.shift,
+                                    py - core.height / 2
+                                );
+                                ctx.moveTo(
+                                    px + core.size / 2,
+                                    py - core.height / 2
+                                );
+                                ctx.moveTo(
+                                    px + core.player.shift,
+                                    py + core.height / 2
+                                );
+                                ctx.moveTo(
+                                    px,
+                                    py + core.height / 2
+                                );
+                            }
+                            else {
+                                ctx.moveTo(
+                                    px - core.size / 2 + core.player.shift,
+                                    py - core.height /2
+                                );
+                                ctx.moveTo(
+                                    px + core.size / 2,
+                                    py - core.height / 2
+                                );
+                                ctx.moveTo(
+                                    px + core.player.shift,
+                                    py + core.height / 2
+                                );
+                                ctx.moveTo(
+                                    px,
+                                    py + core.height / 2
+                                );
+                            }
+                            ctx.closePath();
+                            ctx.fillStyle = 'wheat';
+                            ctx.fill();
                             break;
                         }
                         case 'right': {
