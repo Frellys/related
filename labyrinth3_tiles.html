@@ -54,63 +54,33 @@
         cnv.height = core.height * dpr;
         let ctx = cnv.getContext('2d');
         ctx.scale(dpr, dpr);
+        // tile
+        let tile = {
+            size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10,
+            height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10 * Math.sqrt(3) / 2,
+            color: 'teal',
+            lineWidth: '2vmin',
+            field: [
+                ['0', '0', '0', '0'],
+                ['0', '0', '0', '0'],
+                ['0', '0', '0', '0'],
+                ['0', '0', '0', '0']
+            ]
+        };
         // render
         let render = setInterval(function () {
             // draw bg
             ctx.clearRect(0, 0, core.width, core.height);
             ctx.fillStyle = '#323232';
             ctx.fillRect(0, 0, core.width, core.height);
-            // player
-            let px = core.player.pos.x * core.player.size / 2;
-            let py = core.player.pos.y * core.player.height - core.player.height / 2;
-            ctx.beginPath();
-            ctx.moveTo(
-                px - core.player.size / 2,
-                core.player.point == 'top' ? py + core.player.height / 2 : py - core.player.height / 2);
-            ctx.lineTo(
-                px + core.player.size / 2,
-                core.player.point == 'top' ? py + core.player.height / 2 : py - core.player.height / 2);
-            ctx.lineTo(
-                px,
-                core.player.point == 'top' ? py - core.player.height / 2 : py + core.player.height / 2);
-            ctx.closePath();
-            ctx.fillStyle = 'wheat';
-            ctx.fill();
             // tiles
+            let cx = core.width / 2;
+            let cy = core.height / 2;
         }, 1000 / core.fps);
         // mousemove listener
         window.addEventListener('mousemove', function (e) {
             core.mouse.x = e.x;
             core.mouse.y = e.y;
-        }, false);
-        // arrows listener
-        window.addEventListener('keydown', function (e) {
-            if (!core.player.moving) {
-                switch (e.key) {
-                    case 'ArrowLeft':
-                        core.player.pos.x--;
-                        core.player.point = core.player.point == 'top' ? 'bot' : 'top';
-                        break;
-                    case 'ArrowRight':
-                        core.player.pos.x++;
-                        core.player.point = core.player.point == 'top' ? 'bot' : 'top';
-                        break;
-                    case 'ArrowUp':
-                        if (core.player.point != 'top') {
-                            core.player.pos.y--;
-                            core.player.point = core.player.point == 'top' ? 'bot' : 'top';
-                        }
-                        break;
-                    case 'ArrowDown':
-                        if (core.player.point == 'top') {
-                            core.player.pos.y++;
-                            core.player.point = core.player.point == 'top' ? 'bot' : 'top';
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
         }, false);
     </script>
 </body>

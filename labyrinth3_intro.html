@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>l3_intro</title>
@@ -59,17 +59,7 @@
             // triag
             let size = core.vmin * 25;
             let height = size * Math.sqrt(3) / 2;
-            //ctx.beginPath();
-            //ctx.moveTo(
-            //    core.width / 2 + cw * 5 + cw / 2 - height / 2,
-            //    core.height / 2 + size / 2 - core.vmin);
-            //ctx.lineTo(
-            //    core.width / 2 + cw * 5 + cw / 2 - height / 2,
-            //    core.height / 2 - size / 2 - core.vmin);
-            //ctx.lineTo(
-            //    core.width / 2 + cw * 5 + cw / 2 + height / 2,
-            //    core.height / 2 - core.vmin);
-            //ctx.closePath();
+            // main
             ctx.beginPath();
             ctx.moveTo(
                 core.width / 2 + cw * 5 - size / 2,
@@ -80,6 +70,34 @@
             ctx.lineTo(
                 core.width / 2 + cw * 5,
                 core.height / 2 + height / 2 + core.vmin * 2);
+            ctx.closePath();
+            ctx.fillStyle = 'wheat';
+            ctx.fill();
+            // top
+            ctx.beginPath();
+            ctx.moveTo(
+                core.width / 2 + cw * 5 - size / 2,
+                core.height / 2 - height / 2 + core.vmin * 2 - core.vmin);
+            ctx.lineTo(
+                core.width / 2 + cw * 5 + size / 2,
+                core.height / 2 - height / 2 + core.vmin * 2 - core.vmin);
+            ctx.lineTo(
+                core.width / 2 + cw * 5,
+                core.height / 2 - height / 2 - height + core.vmin * 2 - core.vmin);
+            ctx.closePath();
+            ctx.fillStyle = 'wheat';
+            ctx.fill();
+            // left
+            ctx.beginPath();
+            ctx.moveTo(
+                core.width / 2 + cw * 5 - size / 2 - size / 2 - core.vmin,
+                core.height / 2 - height / 2 + core.vmin * 2 - height - core.vmin);
+            ctx.lineTo(
+                core.width / 2 + cw * 5 + size / 2 - size / 2 - core.vmin,
+                core.height / 2 - height / 2 + core.vmin * 2 - height - core.vmin);
+            ctx.lineTo(
+                core.width / 2 + cw * 5 - size / 2 - core.vmin,
+                core.height / 2 + height / 2 + core.vmin * 2 - height - core.vmin);
             ctx.closePath();
             ctx.fillStyle = 'wheat';
             ctx.fill();
