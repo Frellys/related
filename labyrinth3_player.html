@@ -233,47 +233,8 @@
             core.mouse.x = e.x;
             core.mouse.y = e.y;
         }, false);
-        // arrows listener
+        // arrow down/up listeners
         window.addEventListener('keydown', function (e) {
-            //if (!core.player.moving) {
-            //    switch (e.key) {
-            //        case 'ArrowLeft': {
-            //            console.log(e.key.split('Arrow')[1].toLowerCase());
-            //            core.player.shift = core.player.size;
-            //            core.player.pos.x--;
-            //            core.player.top = core.player.top ? false : true;
-            //            break;
-            //        }
-            //        case 'ArrowRight': {
-            //            core.player.moving = e.key.split('Arrow')[1].toLowerCase();
-            //            core.player.shift = core.player.size;
-            //            core.player.pos.x++;
-            //            core.player.top = core.player.top ? false : true;
-            //            break;
-            //        }
-            //        case 'ArrowUp': {
-            //            if (!core.player.top) {
-            //                console.log(e.key.split('Arrow')[1].toLowerCase());
-            //                core.player.shift = core.player.size;
-            //                core.player.pos.y--;
-            //                core.player.top = core.player.top ? false : true;
-            //            }
-            //            break;
-            //        }
-            //        case 'ArrowDown': {
-            //            if (core.player.top) {
-            //                console.log(e.key.split('Arrow')[1].toLowerCase());
-            //                core.player.shift = core.player.size;
-            //                core.player.pos.y++;
-            //                core.player.top = core.player.top ? false : true;
-            //            }
-            //            break;
-            //        }
-            //        default: {
-            //            break;
-            //        }
-            //    }
-            //}
             if (!core.pressed) {
                 switch (e.key) {
                     case 'ArrowLeft': {
