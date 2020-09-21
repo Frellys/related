@@ -80,9 +80,13 @@
                         break;
                     }
                     case 'ArrowUp': {
+                        if (!core.player.top) {
+                        }
                         break;
                     }
                     case 'ArrowDown': {
+                        if (core.player.top) {
+                        }
                         break;
                     }
                     default: {
@@ -115,38 +119,38 @@
                             ctx.beginPath();
                             if (core.player.top) {
                                 ctx.moveTo(
-                                    px - core.size / 2 + core.player.shift,
-                                    py - core.height / 2
-                                );
-                                ctx.moveTo(
-                                    px + core.size / 2,
-                                    py - core.height / 2
-                                );
-                                ctx.moveTo(
-                                    px + core.player.shift,
-                                    py + core.height / 2
-                                );
-                                ctx.moveTo(
                                     px,
-                                    py + core.height / 2
+                                    py - core.player.height / 2
+                                );
+                                ctx.lineTo(
+                                    px + core.player.shift,
+                                    py - core.player.height / 2
+                                );
+                                ctx.lineTo(
+                                    px + core.player.size / 2,
+                                    py + core.player.height / 2
+                                );
+                                ctx.lineTo(
+                                    px - core.player.size / 2 + core.player.shift,
+                                    py + core.player.height / 2
                                 );
                             }
                             else {
                                 ctx.moveTo(
-                                    px - core.size / 2 + core.player.shift,
-                                    py - core.height /2
+                                    px - core.player.size / 2 + core.player.shift,
+                                    py - core.player.height / 2
                                 );
-                                ctx.moveTo(
-                                    px + core.size / 2,
-                                    py - core.height / 2
+                                ctx.lineTo(
+                                    px + core.player.size / 2,
+                                    py - core.player.height / 2
                                 );
-                                ctx.moveTo(
+                                ctx.lineTo(
                                     px + core.player.shift,
-                                    py + core.height / 2
+                                    py + core.player.height / 2
                                 );
-                                ctx.moveTo(
+                                ctx.lineTo(
                                     px,
-                                    py + core.height / 2
+                                    py + core.player.height / 2
                                 );
                             }
                             ctx.closePath();
