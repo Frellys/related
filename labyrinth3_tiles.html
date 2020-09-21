@@ -73,13 +73,41 @@
             ctx.clearRect(0, 0, core.width, core.height);
             ctx.fillStyle = '#323232';
             ctx.fillRect(0, 0, core.width, core.height);
+            // draw horizontal
+            ctx.beginPath();
+            ctx.moveTo(
+                0,
+                core.height / 2
+            );
+            ctx.lineTo(
+                core.width,
+                core.height / 2
+            );
+            ctx.closePath();
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = 'rebeccapurple';
+            ctx.stroke();
+            // draw vertical
+            ctx.beginPath();
+            ctx.moveTo(
+                core.width / 2,
+                0
+            );
+            ctx.lineTo(
+                core.width / 2,
+                core.height
+            );
+            ctx.closePath();
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = 'rebeccapurple';
+            ctx.stroke();
             // tiles
             let cx = core.width / 2;
             let cy = core.height / 2;
             tile.field.forEach(function (row, Yidx) {
-                let ty = (core.height / 2 - tile.field.length * tile.height / 2) + Yidx * tile.height;
+                let ty = (core.height / 2 - (tile.field.length - 1) * tile.height / 2) + Yidx * tile.height;
                 row.forEach(function (t, Xidx) {
-                    let tx = (core.width / 2 - row.length * tile.size / 4) + Xidx * tile.size / 2;
+                    let tx = (core.width / 2 - (row.length - 1) * tile.size / 4) + Xidx * tile.size / 2;
                     switch (t) {
                         case '0':
                             ctx.beginPath();
