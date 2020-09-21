@@ -58,13 +58,13 @@
         let tile = {
             size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10,
             height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10 * Math.sqrt(3) / 2,
-            color: 'teal',
-            lineWidth: '2vmin',
+            strokeStyle: 'teal',
+            lineWidth: core.vmin / 2,
             field: [
-                ['0', '0', '0', '0'],
-                ['0', '0', '0', '0'],
-                ['0', '0', '0', '0'],
-                ['0', '0', '0', '0']
+                ['0', '1', '0', '1', '0'],
+                ['0', '1', '0', '1', '0', '1', '0'],
+                ['1', '0', '1', '0', '1', '0', '1'],
+                ['1', '0', '1', '0', '1']
             ]
         };
         // render
@@ -77,11 +77,52 @@
             let cx = core.width / 2;
             let cy = core.height / 2;
             tile.field.forEach(function (row, Yidx) {
-                //let shift = row.length % 2 == 0 ? tile.height / 2 : 0;
-                //let ty = Yidx * tile.height - shift - tile.field.length * tile.height / 2;
-                let ty = (core.height - tile.field.length * tile.height / 2) + Yidx * tile.height;
+                let ty = (core.height / 2 - tile.field.length * tile.height / 2) + Yidx * tile.height;
                 row.forEach(function (t, Xidx) {
-                    //let tx = Xidx * tile.size - row.length * tile.size / 2;
+                    let tx = (core.width / 2 - row.length * tile.size / 2) + Xidx * tile.size / 2;
+                    switch (t) {
+                        case '0':
+                            ctx.beginPath();
+                            ctx.moveTo(
+                                tx - tile.size / 2,
+                                ty + tile.height / 2
+                            );
+                            ctx.lineTo(
+                                tx + tile.size / 2,
+                                ty + tile.height / 2
+                            );
+                            ctx.lineTo(
+                                tx,
+                                ty - tile.height / 2
+                            );
+                            ctx.closePath();
+                            ctx.lineWidth = tile.lineWidth;
+                            ctx.strokeStyle = tile.strokeStyle;
+                            ctx.stroke();
+                            break;
+                        case '1':
+                            ctx.beginPath();
+                            ctx.moveTo(
+                                tx - tile.size / 2,
+                                ty - tile.height / 2
+                            );
+                            ctx.lineTo(
+                                tx + tile.size / 2,
+                                ty - tile.height / 2
+                            );
+                            ctx.lineTo(
+                                tx,
+                                ty + tile.height / 2
+                            );
+                            ctx.closePath();
+                            ctx.lineWidth = tile.lineWidth;
+                            ctx.lineJoin = 'round';
+                            ctx.strokeStyle = tile.strokeStyle;
+                            ctx.stroke();
+                            break;
+                        default:
+                            break;
+                    }
                 });
             });
         }, 1000 / core.fps);
