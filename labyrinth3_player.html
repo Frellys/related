@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>l3_player</title>
@@ -36,7 +36,7 @@
                     y: 5
                 },
                 moving: false,
-                point: 'top',
+                top: true,
                 size: document.body.clientHeight / 100 * 10,
                 height: document.body.clientHeight / 100 * 10 * Math.sqrt(3) / 2,
                 R: document.body.clientHeight / 100 * 10 * Math.sqrt(3) / 3,
@@ -66,13 +66,13 @@
             ctx.beginPath();
             ctx.moveTo(
                 px - core.player.size / 2,
-                core.player.point == 'top' ? py + core.player.height / 2 : py - core.player.height / 2);
+                core.player.top ? py + core.player.height / 2 : py - core.player.height / 2);
             ctx.lineTo(
                 px + core.player.size / 2,
-                core.player.point == 'top' ? py + core.player.height / 2 : py - core.player.height / 2);
+                core.player.top ? py + core.player.height / 2 : py - core.player.height / 2);
             ctx.lineTo(
                 px,
-                core.player.point == 'top' ? py - core.player.height / 2 : py + core.player.height / 2);
+                core.player.top ? py - core.player.height / 2 : py + core.player.height / 2);
             ctx.closePath();
             ctx.fillStyle = 'wheat';
             ctx.fill();
@@ -88,23 +88,27 @@
             if (!core.player.moving) {
                 switch (e.key) {
                     case 'ArrowLeft':
+                        console.log(e.key.split('Arrow')[1].toLowerCase());
                         core.player.pos.x--;
-                        core.player.point = core.player.point == 'top' ? 'bot' : 'top';
+                        core.player.top = core.player.top ? false : true;
                         break;
                     case 'ArrowRight':
+                        console.log(e.key.split('Arrow')[1].toLowerCase());
                         core.player.pos.x++;
-                        core.player.point = core.player.point == 'top' ? 'bot' : 'top';
+                        core.player.top = core.player.top ? false : true;
                         break;
                     case 'ArrowUp':
-                        if (core.player.point != 'top') {
+                        if (!core.player.top) {
+                            console.log(e.key.split('Arrow')[1].toLowerCase());
                             core.player.pos.y--;
-                            core.player.point = core.player.point == 'top' ? 'bot' : 'top';
+                            core.player.top = core.player.top ? false : true;
                         }
                         break;
                     case 'ArrowDown':
-                        if (core.player.point == 'top') {
+                        if (core.player.top) {
+                            console.log(e.key.split('Arrow')[1].toLowerCase());
                             core.player.pos.y++;
-                            core.player.point = core.player.point == 'top' ? 'bot' : 'top';
+                            core.player.top = core.player.top ? false : true;
                         }
                         break;
                     default:
