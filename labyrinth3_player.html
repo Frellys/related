@@ -30,12 +30,14 @@
             width: document.body.clientWidth,
             height: document.body.clientHeight,
             fps: 50,
+            pressed: false,
             player: {
                 pos: {
                     x: 5,
                     y: 5
                 },
                 moving: false,
+                shift: 0,
                 top: true,
                 size: document.body.clientHeight / 100 * 10,
                 height: document.body.clientHeight / 100 * 10 * Math.sqrt(3) / 2,
@@ -63,19 +65,87 @@
             // player
             let px = core.player.pos.x * core.player.size / 2;
             let py = core.player.pos.y * core.player.height - core.player.height / 2;
-            ctx.beginPath();
-            ctx.moveTo(
-                px - core.player.size / 2,
-                core.player.top ? py + core.player.height / 2 : py - core.player.height / 2);
-            ctx.lineTo(
-                px + core.player.size / 2,
-                core.player.top ? py + core.player.height / 2 : py - core.player.height / 2);
-            ctx.lineTo(
-                px,
-                core.player.top ? py - core.player.height / 2 : py + core.player.height / 2);
-            ctx.closePath();
-            ctx.fillStyle = 'wheat';
-            ctx.fill();
+            if (!core.player.moving) {
+                ctx.beginPath();
+                ctx.moveTo(
+                    px - core.player.size / 2,
+                    core.player.top ? py + core.player.height / 2 : py - core.player.height / 2);
+                ctx.lineTo(
+                    px + core.player.size / 2,
+                    core.player.top ? py + core.player.height / 2 : py - core.player.height / 2);
+                ctx.lineTo(
+                    px,
+                    core.player.top ? py - core.player.height / 2 : py + core.player.height / 2);
+                ctx.closePath();
+                ctx.fillStyle = 'wheat';
+                ctx.fill();
+            }
+            else {
+                if (core.player.shift > 0) {
+                    switch (core.player.moving) {
+                        case 'left': {
+                            break;
+                        }
+                        case 'right': {
+                            ctx.beginPath();
+                            if (core.player.top) {
+                                ctx.moveTo(
+                                    px - core.player.shift,
+                                    py - core.player.height / 2
+                                );
+                                ctx.lineTo(
+                                    px,
+                                    py - core.player.height / 2
+                                );
+                                ctx.lineTo(
+                                    px + core.player.size / 2 - core.player.shift,
+                                    py + core.player.height / 2
+                                );
+                                ctx.lineTo(
+                                    px - core.player.size / 2,
+                                    py + core.player.height / 2
+                                );
+                            }
+                            else {
+                                ctx.moveTo(
+                                    px - core.player.size / 2,
+                                    py - core.player.height / 2
+                                );
+                                ctx.lineTo(
+                                    px + core.player.size / 2 - core.player.shift,
+                                    py - core.player.height / 2
+                                );
+                                ctx.lineTo(
+                                    px,
+                                    py + core.player.height / 2
+                                );
+                                ctx.lineTo(
+                                    px - core.player.shift,
+                                    py + core.player.height / 2
+                                );
+                            }
+                            ctx.closePath();
+                            ctx.fillStyle = 'wheat';
+                            ctx.fill();
+                            break;
+                        }
+                        case 'up': {
+                            break;
+                        }
+                        case 'down': {
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                    core.player.shift -= core.player.size / core.fps * 4;
+                    if (core.player.shift <= 0) {
+                        core.player.shift = 0;
+                        core.player.moving = false;
+                    }
+                }
+            }
             // tiles
         }, 1000 / core.fps);
         // mousemove listener
@@ -85,34 +155,62 @@
         }, false);
         // arrows listener
         window.addEventListener('keydown', function (e) {
-            if (!core.player.moving) {
+            //if (!core.player.moving) {
+            //    switch (e.key) {
+            //        case 'ArrowLeft': {
+            //            console.log(e.key.split('Arrow')[1].toLowerCase());
+            //            core.player.shift = core.player.size;
+            //            core.player.pos.x--;
+            //            core.player.top = core.player.top ? false : true;
+            //            break;
+            //        }
+            //        case 'ArrowRight': {
+            //            core.player.moving = e.key.split('Arrow')[1].toLowerCase();
+            //            core.player.shift = core.player.size;
+            //            core.player.pos.x++;
+            //            core.player.top = core.player.top ? false : true;
+            //            break;
+            //        }
+            //        case 'ArrowUp': {
+            //            if (!core.player.top) {
+            //                console.log(e.key.split('Arrow')[1].toLowerCase());
+            //                core.player.shift = core.player.size;
+            //                core.player.pos.y--;
+            //                core.player.top = core.player.top ? false : true;
+            //            }
+            //            break;
+            //        }
+            //        case 'ArrowDown': {
+            //            if (core.player.top) {
+            //                console.log(e.key.split('Arrow')[1].toLowerCase());
+            //                core.player.shift = core.player.size;
+            //                core.player.pos.y++;
+            //                core.player.top = core.player.top ? false : true;
+            //            }
+            //            break;
+            //        }
+            //        default: {
+            //            break;
+            //        }
+            //    }
+            //}
+            if (!core.player.moving && !core.pressed) {
                 switch (e.key) {
-                    case 'ArrowLeft':
-                        console.log(e.key.split('Arrow')[1].toLowerCase());
-                        core.player.pos.x--;
-                        core.player.top = core.player.top ? false : true;
+                    case 'ArrowLeft': {
                         break;
-                    case 'ArrowRight':
-                        console.log(e.key.split('Arrow')[1].toLowerCase());
-                        core.player.pos.x++;
-                        core.player.top = core.player.top ? false : true;
+                    }
+                    case 'ArrowRight': {
                         break;
-                    case 'ArrowUp':
-                        if (!core.player.top) {
-                            console.log(e.key.split('Arrow')[1].toLowerCase());
-                            core.player.pos.y--;
-                            core.player.top = core.player.top ? false : true;
-                        }
+                    }
+                    case 'ArrowUp': {
                         break;
-                    case 'ArrowDown':
-                        if (core.player.top) {
-                            console.log(e.key.split('Arrow')[1].toLowerCase());
-                            core.player.pos.y++;
-                            core.player.top = core.player.top ? false : true;
-                        }
+                    }
+                    case 'ArrowDown': {
                         break;
-                    default:
+                    }
+                    default: {
                         break;
+                    }
                 }
             }
         }, false);
