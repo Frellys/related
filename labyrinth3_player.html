@@ -81,11 +81,19 @@
                     }
                     case 'ArrowUp': {
                         if (!core.player.top) {
+                            core.player.moving = core.pressed.split('Arrow')[1].toLowerCase();
+                            core.player.shift = core.player.size;
+                            core.player.pos.y--;
+                            core.player.top = core.player.top ? false : true;
                         }
                         break;
                     }
                     case 'ArrowDown': {
                         if (core.player.top) {
+                            core.player.moving = core.pressed.split('Arrow')[1].toLowerCase();
+                            core.player.shift = core.player.size;
+                            core.player.pos.y++;
+                            core.player.top = core.player.top ? false : true;
                         }
                         break;
                     }
