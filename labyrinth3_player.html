@@ -82,7 +82,7 @@
                     case 'ArrowUp': {
                         if (!core.player.top) {
                             core.player.moving = core.pressed.split('Arrow')[1].toLowerCase();
-                            core.player.shift = core.player.size;
+                            core.player.shift = core.player.height;
                             core.player.pos.y--;
                             core.player.top = core.player.top ? false : true;
                         }
@@ -91,7 +91,7 @@
                     case 'ArrowDown': {
                         if (core.player.top) {
                             core.player.moving = core.pressed.split('Arrow')[1].toLowerCase();
-                            core.player.shift = core.player.size;
+                            core.player.shift = core.player.height;
                             core.player.pos.y++;
                             core.player.top = core.player.top ? false : true;
                         }
@@ -210,6 +210,14 @@
                             break;
                         }
                         case 'up': {
+                            ctx.beginPath();
+                            if (core.player.top) {
+                            }
+                            else {
+                            }
+                            ctx.closePath();
+                            ctx.fillStyle = 'wheat';
+                            ctx.fill();
                             break;
                         }
                         case 'down': {
