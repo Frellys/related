@@ -65,6 +65,13 @@
             // input
             if (!core.player.moving) {
                 switch (core.pressed) {
+                    case 'ArrowLeft': {
+                        core.player.moving = core.pressed.split('Arrow')[1].toLowerCase();
+                        core.player.shift = core.player.size;
+                        core.player.pos.x--;
+                        core.player.top = core.player.top ? false : true;
+                        break;
+                    }
                     case 'ArrowRight': {
                         core.player.moving = core.pressed.split('Arrow')[1].toLowerCase();
                         core.player.shift = core.player.size;
@@ -72,13 +79,17 @@
                         core.player.top = core.player.top ? false : true;
                         break;
                     }
+                    case 'ArrowUp': {
+                        break;
+                    }
+                    case 'ArrowDown': {
+                        break;
+                    }
                     default: {
                         break;
                     }
                 }
             }
-            //console.log(core.pressed);
-            //console.log(core.player.moving);
             // player
             let px = core.player.pos.x * core.player.size / 2;
             let py = core.player.pos.y * core.player.height - core.player.height / 2;
