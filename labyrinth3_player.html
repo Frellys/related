@@ -62,6 +62,23 @@
             ctx.clearRect(0, 0, core.width, core.height);
             ctx.fillStyle = '#323232';
             ctx.fillRect(0, 0, core.width, core.height);
+            // input
+            if (!core.player.moving) {
+                switch (core.pressed) {
+                    case 'ArrowRight': {
+                        core.player.moving = core.pressed.split('Arrow')[1].toLowerCase();
+                        core.player.shift = core.player.size;
+                        core.player.pos.x++;
+                        core.player.top = core.player.top ? false : true;
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            }
+            //console.log(core.pressed);
+            //console.log(core.player.moving);
             // player
             let px = core.player.pos.x * core.player.size / 2;
             let py = core.player.pos.y * core.player.height - core.player.height / 2;
@@ -194,24 +211,33 @@
             //        }
             //    }
             //}
-            if (!core.player.moving && !core.pressed) {
+            if (!core.pressed) {
                 switch (e.key) {
                     case 'ArrowLeft': {
+                        core.pressed = e.key;
                         break;
                     }
                     case 'ArrowRight': {
+                        core.pressed = e.key;
                         break;
                     }
                     case 'ArrowUp': {
+                        core.pressed = e.key;
                         break;
                     }
                     case 'ArrowDown': {
+                        core.pressed = e.key;
                         break;
                     }
                     default: {
                         break;
                     }
                 }
+            }
+        }, false);
+        window.addEventListener('keyup', function (e) {
+            if (core.pressed == e.key) {
+                core.pressed = false;
             }
         }, false);
     </script>
