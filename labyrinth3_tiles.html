@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>labyrinth3_tiles</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: whitesmoke;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <script>
+        // core
+        let core = {
+            vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
+            width: document.body.clientWidth,
+            height: document.body.clientHeight,
+        };
+        // set canvas
+        let cnv = document.querySelector('canvas');
+        let dpr = window.devicePixelRatio;
+        cnv.width = core.width * dpr;
+        cnv.height = core.height * dpr;
+        let ctx = cnv.getContext('2d');
+        ctx.scale(dpr, dpr);
+        // draw background
+        ctx.clearRect(0, 0, core.width, core.height);
+        ctx.fillStyle = 'whitesmoke';
+        ctx.fillRect(0, 0, core.width, core.height);
+    </script>
+</body>
+</html>
