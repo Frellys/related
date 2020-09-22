@@ -43,79 +43,57 @@
     <div id="wrap">
         <div id="top">
             <div class="col" style="position: relative;">
-                <!-- 0 -->
-                <svg id="t_0" width="100%" height="10vmin" style="position:absolute; bottom:0;">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">0:</text>
+                <svg id="t_0" style="position:absolute; bottom:0;">
+                    <!--<text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">0:</text>-->
                 </svg>
             </div>
             <div class="col">
-                <!-- 2 -->
-                <svg id="t_2" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">2:</text>
-                </svg>
-                <!-- 4 -->
-                <svg id="t_4" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">4:</text>
-                </svg>
-                <!-- 6 -->
-                <svg id="t_6" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">6:</text>
-                </svg>
+                <svg id="t_2"></svg>
+                <svg id="t_4"></svg>
+                <svg id="t_6"></svg>
             </div>
             <div class="col">
-                <!-- 8 -->
-                <svg id="t_8" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">8:</text>
-                </svg>
-                <!-- 10 -->
-                <svg id="t_10" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">10:</text>
-                </svg>
-                <!-- 12 -->
-                <svg id="t_12" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">12:</text>
-                </svg>
+                <svg id="t_8"></svg>
+                <svg id="t_10"></svg>
+                <svg id="t_12"></svg>
             </div>
         </div>
         <hr>
         <div id="bot">
             <div class="col">
-                <!-- 1 -->
-                <svg id="t_1" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">1:</text>
-                </svg>
+                <svg id="t_1"></svg>
             </div>
             <div class="col">
-                <!-- 3 -->
-                <svg id="t_3" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">3:</text>
-                </svg>
-                <!-- 5 -->
-                <svg id="t_5" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">5:</text>
-                </svg>
-                <!-- 7 -->
-                <svg id="t_7" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">7:</text>
-                </svg>
+                <svg id="t_3"></svg>
+                <svg id="t_5"></svg>
+                <svg id="t_7"></svg>
             </div>
             <div class="col">
-                <!-- 9 -->
-                <svg id="t_9" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">9:</text>
-                </svg>
-                <!-- 11 -->
-                <svg id="t_11" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">11:</text>
-                </svg>
-                <!-- 13 -->
-                <svg id="t_13" width="100%" height="10vmin">
-                    <text x="25%" y="50%" font-size="5vmin" font-family="monospace" fill="#323232" text-anchor="middle" alignment-baseline="middle">13:</text>
-                </svg>
+                <svg id="t_9"></svg>
+                <svg id="t_11"></svg>
+                <svg id="t_13"></svg>
             </div>
         </div>
     </div>
     <script>
+        let ns = 'http://www.w3.org/2000/svg';
+        document.querySelectorAll('svg').forEach(function (svg) {
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '10vmin');
+            svg.setAttribute('abc', 'zzz');
+            // label
+            let text = document.createElementNS(ns, 'text');
+            text.setAttributeNS(null, 'x', '25%');
+            text.setAttributeNS(null, 'y', '50%');
+            text.setAttributeNS(null, 'font-size', '5vmin');
+            text.setAttributeNS(null, 'font-family', 'monospace');
+            text.setAttributeNS(null, 'fill', '#323232');
+            text.setAttributeNS(null, 'text-anchor', 'middle');
+            text.setAttributeNS(null, 'alignment-baseline', 'middle');
+            text.innerHTML = svg.id.split('_')[1].toString() + ':';
+            svg.appendChild(text);
+            console.log(svg);
+        });
     </script>
 </body>
 </html>
