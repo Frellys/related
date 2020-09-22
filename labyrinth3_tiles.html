@@ -19,99 +19,59 @@
             width: 100vw;
             vertical-align: middle;
         }
+
+        #wrap {
+            width: 100vh;
+            height: auto;
+            margin: 0 auto;
+        }
+
+            #wrap #top,
+            #wrap #bot {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+            /*#wrap #top .col,
+                #wrap #bot .col {
+                    a
+                }*/
+
+            #wrap hr {
+                border: none;
+                border-top: 0.5vmin solid #323232;
+            }
     </style>
 </head>
 <body>
-    <canvas></canvas>
-    <script>
-        // core
-        let core = {
-            vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
-            width: document.body.clientWidth,
-            height: document.body.clientHeight,
-            triag: {
-                size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 5,
-                height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 5 * Math.sqrt(3) / 2
-            }
-        };
-        // set canvas
-        let cnv = document.querySelector('canvas');
-        let dpr = window.devicePixelRatio;
-        cnv.width = core.width * dpr;
-        cnv.height = core.height * dpr;
-        let ctx = cnv.getContext('2d');
-        ctx.scale(dpr, dpr);
-        // draw background
-        ctx.clearRect(0, 0, core.width, core.height);
-        ctx.fillStyle = 'whitesmoke';
-        ctx.fillRect(0, 0, core.width, core.height);
-        // draw sep line
-        ctx.beginPath();
-        ctx.moveTo(
-            core.width / 4 * 1,
-            core.height / 2
-        );
-        ctx.lineTo(
-            core.width / 4 * 3,
-            core.height / 2
-        );
-        ctx.strokeStyle = '#323232';
-        ctx.lineWidth = core.vmin / 2;
-        ctx.stroke();
-        // 0
-        {
-            let tx = core.width / 4;
-            let ty = core.height / 2 - core.vmin * 5;
-            ctx.textAlign = 'start';
-            ctx.textBaseline = 'middle';
-            ctx.font = core.vmin * 5 + 'px monospace';
-            ctx.fillStyle = '#323232';
-            ctx.fillText('0:', tx, ty);
-            ctx.beginPath();
-            tx = tx + core.triag.size;
-            ctx.moveTo(
-                tx + core.triag.size,
-                ty - core.triag.height / 2
-            );
-            ctx.lineTo(
-                tx + core.triag.size + core.triag.size / 2,
-                ty + core.triag.height / 2
-            );
-            ctx.lineTo(
-                tx + core.triag.size - core.triag.size / 2,
-                ty + core.triag.height / 2
-            );
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
-            ctx.fill();
-        }
-        // 1
-        {
-            let tx = core.width / 4;
-            let ty = core.height / 2 + core.vmin * 5;
-            ctx.textAlign = 'start';
-            ctx.textBaseline = 'middle';
-            ctx.font = core.vmin * 5 + 'px monospace';
-            ctx.fillStyle = '#323232';
-            ctx.fillText('1:', tx, ty);
-            ctx.beginPath();
-            tx = tx + core.triag.size;
-            ctx.moveTo(
-                tx + core.triag.size,
-                ty + core.triag.height / 2
-            );
-            ctx.lineTo(
-                tx + core.triag.size + core.triag.size / 2,
-                ty - core.triag.height / 2
-            );
-            ctx.lineTo(
-                tx + core.triag.size - core.triag.size / 2,
-                ty - core.triag.height / 2
-            );
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
-            ctx.fill();
-        }
-    </script>
+    <div id="wrap">
+        <div id="top">
+            <div class="col" style="position: relative;">
+                <svg width="100%" height="10vmin" style="position:absolute; bottom:0;"></svg>
+            </div>
+            <!--<div class="col">
+                <svg width="100%" height="10vmin"></svg>
+            </div>-->
+            <div class="col">
+                <svg width="100%" height="10vmin"></svg>
+                <svg width="100%" height="10vmin"></svg>
+                <svg width="100%" height="10vmin"></svg>
+            </div>
+            <div class="col"></div>
+            <div class="col"></div>
+        </div>
+        <hr>
+        <div id="bot">
+            <div class="col">
+                <svg width="100%" height="10vmin"></svg>
+            </div>
+            <div class="col">
+                <svg width="100%" height="10vmin"></svg>
+                <svg width="100%" height="10vmin"></svg>
+                <svg width="100%" height="10vmin"></svg>
+            </div>
+            <div class="col"></div>
+            <div class="col"></div>
+        </div>
+    </div>
 </body>
 </html>
