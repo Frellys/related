@@ -76,6 +76,10 @@
         </div>
     </div>
     <script>
+        let triag = {
+            size: 5,
+            height: 5 * Math.sqrt(3) / 2
+        };
         let ns = 'http://www.w3.org/2000/svg';
         document.querySelectorAll('svg').forEach(function (svg) {
             svg.setAttribute('width', '100%');
@@ -90,8 +94,38 @@
             text.setAttributeNS(null, 'fill', '#323232');
             text.setAttributeNS(null, 'text-anchor', 'middle');
             text.setAttributeNS(null, 'alignment-baseline', 'middle');
-            text.innerHTML = svg.id.split('_')[1].toString() + ':';
+            text.innerHTML = svg.id.split('_')[1] + ':';
             svg.appendChild(text);
+            // triag
+            switch (parseInt(svg.id.split('_')[1])) {
+                case 0: {
+                    // top center
+                    let tc_circle = document.createElementNS(ns, 'circle');
+                    tc_circle.setAttributeNS(null, 'cx', '75%');
+                    tc_circle.setAttributeNS(null, 'cy', 5 - (triag.height / 2) + 'vmin');
+                    tc_circle.setAttributeNS(null, 'r', '.5vmin');
+                    tc_circle.setAttributeNS(null, 'fill', '#323232');
+                    svg.appendChild(tc_circle);
+                    // bottom left
+                    let bl_circle = document.createElementNS(ns, 'circle');
+                    bl_circle.setAttributeNS(null, 'cx', 'calc(75% - ' + (triag.size / 2) + 'vmin)');
+                    bl_circle.setAttributeNS(null, 'cy', 5 + (triag.height / 2) + 'vmin');
+                    bl_circle.setAttributeNS(null, 'r', '.5vmin');
+                    bl_circle.setAttributeNS(null, 'fill', '#323232');
+                    svg.appendChild(bl_circle);
+                    // bottom right
+                    let br_circle = document.createElementNS(ns, 'circle');
+                    br_circle.setAttributeNS(null, 'cx', 'calc(75% + ' + (triag.size / 2) + 'vmin)');
+                    br_circle.setAttributeNS(null, 'cy', 5 + (triag.height / 2) + 'vmin');
+                    br_circle.setAttributeNS(null, 'r', '.5vmin');
+                    br_circle.setAttributeNS(null, 'fill', '#323232');
+                    svg.appendChild(br_circle);
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
             console.log(svg);
         });
     </script>
