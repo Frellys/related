@@ -29,6 +29,10 @@
             vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
             width: document.body.clientWidth,
             height: document.body.clientHeight,
+            triag: {
+                size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 5,
+                height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 5 * Math.sqrt(3) / 2
+            }
         };
         // set canvas
         let cnv = document.querySelector('canvas');
@@ -55,12 +59,59 @@
         ctx.lineWidth = core.vmin / 2;
         ctx.stroke();
         // 0
-        ctx.beginPath();
-        ctx.textAlign = 'start';
-        ctx.textBaseline = 'middle';
-        ctx.font = core.vmin * 5 + 'px monospace';
-        ctx.fillStyle = '#323232';
-        ctx.fillText('0:', core.width / 4, core.height / 2 - core.vmin * 5);
+        {
+            let tx = core.width / 4;
+            let ty = core.height / 2 - core.vmin * 5;
+            ctx.textAlign = 'start';
+            ctx.textBaseline = 'middle';
+            ctx.font = core.vmin * 5 + 'px monospace';
+            ctx.fillStyle = '#323232';
+            ctx.fillText('0:', tx, ty);
+            ctx.beginPath();
+            tx = tx + core.triag.size;
+            ctx.moveTo(
+                tx + core.triag.size,
+                ty - core.triag.height / 2
+            );
+            ctx.lineTo(
+                tx + core.triag.size + core.triag.size / 2,
+                ty + core.triag.height / 2
+            );
+            ctx.lineTo(
+                tx + core.triag.size - core.triag.size / 2,
+                ty + core.triag.height / 2
+            );
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
+            ctx.fill();
+        }
+        // 1
+        {
+            let tx = core.width / 4;
+            let ty = core.height / 2 + core.vmin * 5;
+            ctx.textAlign = 'start';
+            ctx.textBaseline = 'middle';
+            ctx.font = core.vmin * 5 + 'px monospace';
+            ctx.fillStyle = '#323232';
+            ctx.fillText('1:', tx, ty);
+            ctx.beginPath();
+            tx = tx + core.triag.size;
+            ctx.moveTo(
+                tx + core.triag.size,
+                ty + core.triag.height / 2
+            );
+            ctx.lineTo(
+                tx + core.triag.size + core.triag.size / 2,
+                ty - core.triag.height / 2
+            );
+            ctx.lineTo(
+                tx + core.triag.size - core.triag.size / 2,
+                ty - core.triag.height / 2
+            );
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(50, 50, 50, 0.25)';
+            ctx.fill();
+        }
     </script>
 </body>
 </html>
