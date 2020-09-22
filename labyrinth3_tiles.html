@@ -41,6 +41,26 @@
         ctx.clearRect(0, 0, core.width, core.height);
         ctx.fillStyle = 'whitesmoke';
         ctx.fillRect(0, 0, core.width, core.height);
+        // draw sep line
+        ctx.beginPath();
+        ctx.moveTo(
+            core.width / 4 * 1,
+            core.height / 2
+        );
+        ctx.lineTo(
+            core.width / 4 * 3,
+            core.height / 2
+        );
+        ctx.strokeStyle = '#323232';
+        ctx.lineWidth = core.vmin / 2;
+        ctx.stroke();
+        // 0
+        ctx.beginPath();
+        ctx.textAlign = 'start';
+        ctx.textBaseline = 'middle';
+        ctx.font = core.vmin * 5 + 'px monospace';
+        ctx.fillStyle = '#323232';
+        ctx.fillText('0:', core.width / 4, core.height / 2 - core.vmin * 5);
     </script>
 </body>
 </html>
