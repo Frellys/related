@@ -122,6 +122,30 @@
                     svg.appendChild(br_circle);
                     break;
                 }
+                case 1: {
+                    // top left
+                    let tl_circle = document.createElementNS(ns, 'circle');
+                    tl_circle.setAttributeNS(null, 'cx', 'calc(75% - ' + (triag.size / 2) + 'vmin)');
+                    tl_circle.setAttributeNS(null, 'cy', 5 - (triag.height / 2) + 'vmin');
+                    tl_circle.setAttributeNS(null, 'r', '.5vmin');
+                    tl_circle.setAttributeNS(null, 'fill', '#323232');
+                    svg.appendChild(tl_circle);
+                    // top right
+                    let tr_circle = document.createElementNS(ns, 'circle');
+                    tr_circle.setAttributeNS(null, 'cx', 'calc(75% + ' + (triag.size / 2) + 'vmin)');
+                    tr_circle.setAttributeNS(null, 'cy', 5 - (triag.height / 2) + 'vmin');
+                    tr_circle.setAttributeNS(null, 'r', '.5vmin');
+                    tr_circle.setAttributeNS(null, 'fill', '#323232');
+                    svg.appendChild(tr_circle);
+                    // bottom center
+                    let bc_circle = document.createElementNS(ns, 'circle');
+                    bc_circle.setAttributeNS(null, 'cx', '75%');
+                    bc_circle.setAttributeNS(null, 'cy', 5 + (triag.height / 2) + 'vmin');
+                    bc_circle.setAttributeNS(null, 'r', '.5vmin');
+                    bc_circle.setAttributeNS(null, 'fill', '#323232');
+                    svg.appendChild(bc_circle);
+                    break;
+                }
                 default: {
                     break;
                 }
