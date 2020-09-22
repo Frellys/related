@@ -40,7 +40,9 @@
                 shift: 0,
                 top: true,
                 size: document.body.clientHeight / 100 * 10,
+                half_size: document.body.clientHeight / 100 * 10 / 2,
                 height: document.body.clientHeight / 100 * 10 * Math.sqrt(3) / 2,
+                half_height: document.body.clientHeight / 100 * 10 * Math.sqrt(3) / 2 / 2,
                 R: document.body.clientHeight / 100 * 10 * Math.sqrt(3) / 3,
                 r: document.body.clientHeight / 100 * 10 * Math.sqrt(3) / 3 / 2
             },
@@ -106,16 +108,29 @@
             let px = core.player.pos.x * core.player.size / 2;
             let py = core.player.pos.y * core.player.height - core.player.height / 2;
             if (!core.player.moving) {
+                //ctx.beginPath();
+                //ctx.moveTo(
+                //    px - core.player.size / 2,
+                //    core.player.top ? py + core.player.height / 2 : py - core.player.height / 2);
+                //ctx.lineTo(
+                //    px + core.player.size / 2,
+                //    core.player.top ? py + core.player.height / 2 : py - core.player.height / 2);
+                //ctx.lineTo(
+                //    px,
+                //    core.player.top ? py - core.player.height / 2 : py + core.player.height / 2);
+                //ctx.closePath();
+                //ctx.fillStyle = 'wheat';
+                //ctx.fill();
                 ctx.beginPath();
                 ctx.moveTo(
                     px - core.player.size / 2,
-                    core.player.top ? py + core.player.height / 2 : py - core.player.height / 2);
+                    core.player.top ? py + core.player.half_height : py - core.player.half_height);
                 ctx.lineTo(
                     px + core.player.size / 2,
-                    core.player.top ? py + core.player.height / 2 : py - core.player.height / 2);
+                    core.player.top ? py + core.player.half_height : py - core.player.half_height);
                 ctx.lineTo(
                     px,
-                    core.player.top ? py - core.player.height / 2 : py + core.player.height / 2);
+                    core.player.top ? py - core.player.half_height : py + core.player.half_height);
                 ctx.closePath();
                 ctx.fillStyle = 'wheat';
                 ctx.fill();
@@ -216,8 +231,8 @@
                                     px - core.player.size / 2,
                                     py + core.player.height / 2
                                 );
-                                let dH = core.player.height - core.player.shift;
-                                let dt = dH / core.player.height * core.player.size / 2;
+                                //let dH = core.player.height - core.player.shift;
+                                let dt = (core.player.height - core.player.shift) / core.player.height * core.player.size / 2;
                                 ctx.lineTo(
                                     px - (core.player.size / 2 - dt),
                                     py - core.player.height / 2 + core.player.shift
@@ -245,6 +260,37 @@
                             break;
                         }
                         case 'down': {
+                            ctx.beginPath();
+                            {
+                                ctx.moveTo(
+                                    px - core.player.size / 2,
+                                    py - core.player.height / 2
+                                );
+                                let dt = (core.player.height - core.player.shift) / core.player.height * core.player.size / 2;
+                                ctx.lineTo(
+                                    px - dt,
+                                    py - core.player.height / 2 - core.player.shift
+                                );
+                                ctx.lineTo(
+                                    px + dt,
+                                    py - core.player.height / 2 - core.player.shift
+                                );
+                                ctx.lineTo(
+                                    px + core.player.size / 2,
+                                    py - core.player.height / 2
+                                );
+                                ctx.lineTo(
+                                    px + (core.player.size / 2 - dt),
+                                    py + core.player.height / 2 - core.player.shift
+                                );
+                                ctx.lineTo(
+                                    px - (core.player.size / 2 - dt),
+                                    py + core.player.height / 2 - core.player.shift
+                                );
+                            }
+                            ctx.closePath();
+                            ctx.fillStyle = 'wheat';
+                            ctx.fill();
                             break;
                         }
                         default: {
