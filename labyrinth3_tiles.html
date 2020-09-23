@@ -116,45 +116,43 @@
                 // triag
                 let w = document.querySelector('#wrap').clientWidth / 3 - vmin * 5;
                 let h = svg.clientHeight;
-                let circles = {
-                    r: '.5vmin',
-                    fill: '#323232',
-                    top: [
-                        {
-                            cx: w / 4 * 3,
-                            cy: h / 2 - triag.height / 2
-                        },
-                        {
-                            cx: w / 4 * 3 - triag.size / 2,
-                            cy: h / 2 + triag.height / 2
-                        },
-                        {
-                            cx: w / 4 * 3 + triag.size / 2,
-                            cy: h / 2 + triag.height / 2
-                        }
-                    ],
-                    bot: [
-                        {
-                            cx: w / 4 * 3 - triag.size / 2,
-                            cy: h / 2 - triag.height / 2
-                        },
-                        {
-                            cx: w / 4 * 3 + triag.size / 2,
-                            cy: h / 2 - triag.height / 2
-                        },
-                        {
-                            cx: w / 4 * 3,
-                            cy: h / 2 + triag.height / 2
-                        }
-                    ]
-                };
                 function drawCircles(target) {
+                    let circles = {
+                        top: [
+                            {
+                                cx: w / 4 * 3,
+                                cy: h / 2 - triag.height / 2
+                            },
+                            {
+                                cx: w / 4 * 3 - triag.size / 2,
+                                cy: h / 2 + triag.height / 2
+                            },
+                            {
+                                cx: w / 4 * 3 + triag.size / 2,
+                                cy: h / 2 + triag.height / 2
+                            }
+                        ],
+                        bot: [
+                            {
+                                cx: w / 4 * 3 - triag.size / 2,
+                                cy: h / 2 - triag.height / 2
+                            },
+                            {
+                                cx: w / 4 * 3 + triag.size / 2,
+                                cy: h / 2 - triag.height / 2
+                            },
+                            {
+                                cx: w / 4 * 3,
+                                cy: h / 2 + triag.height / 2
+                            }
+                        ]
+                    };
                     circles[parseInt(target.id.split('_')[1]) % 2 == 0 ? 'top' : 'bot'].forEach(function (el) {
                         let c = document.createElementNS(ns, 'circle');
                         c.setAttributeNS(null, 'cx', el.cx);
                         c.setAttributeNS(null, 'cy', el.cy);
-                        c.setAttributeNS(null, 'r', circles.r);
-                        c.setAttributeNS(null, 'fill', circles.fill);
+                        c.setAttributeNS(null, 'r', '.5vmin');
+                        c.setAttributeNS(null, 'fill', '#323232');
                         target.appendChild(c);
                     });
                 }
@@ -162,8 +160,19 @@
                     let polyline = document.createElementNS(ns, 'polyline');
                     points.forEach(function (el) {
                         let p = svg.createSVGPoint();
-                        p.x = el.x;
-                        p.y = el.y;
+                        switch (el) {
+                            case 'tl':
+                            case 'tc':
+                            case 'tr':
+                            case 'bl':
+                            case 'bc':
+                            case 'br':
+                            default: {
+                                p.x = el.x;
+                                p.y = el.y;
+                                break;
+                            }
+                        }
                         polyline.points.appendItem(p);
                     });
                     polyline.setAttributeNS(null, 'fill', 'none');
