@@ -38,20 +38,22 @@
                     display: block;
                     background-color: rgba(200, 200, 50, 0.5);
                 }
-                #wrap > #top > div.col > svg:hover,
-                #wrap > #bot > div.col > svg:hover {
-                    background-color: rgba(50, 50, 150, 0.125);
-                }
+
+                    #wrap > #top > div.col > svg:hover,
+                    #wrap > #bot > div.col > svg:hover {
+                        background-color: rgba(50, 50, 150, 0.125);
+                    }
+
                     #wrap > #top > div.col > svg:not(:last-child),
                     #wrap > #bot > div.col > svg:not(:last-child) {
                         margin-bottom: 1vmin;
                     }
 
-                    #wrap > hr {
-                        border: none;
-                        border-top: 0.5vmin solid #323232;
-                        margin: 1vmin 0 1vmin 0;
-                    }
+            #wrap > hr {
+                border: none;
+                border-top: 0.5vmin solid #323232;
+                margin: 1vmin 0 1vmin 0;
+            }
     </style>
 </head>
 <body>
@@ -170,52 +172,10 @@
                 }
                 switch (parseInt(svg.id.split('_')[1])) {
                     case 0: {
-                        //// top center
-                        //let tc_circle = document.createElementNS(ns, 'circle');
-                        //tc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
-                        //tc_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        //tc_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //tc_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(tc_circle);
-                        //// bottom left
-                        //let bl_circle = document.createElementNS(ns, 'circle');
-                        //bl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
-                        //bl_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        //bl_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //bl_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(bl_circle);
-                        //// bottom right
-                        //let br_circle = document.createElementNS(ns, 'circle');
-                        //br_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
-                        //br_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        //br_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //br_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(br_circle);
                         drawCircles(svg);
                         break;
                     }
                     case 1: {
-                        //// top left
-                        //let tl_circle = document.createElementNS(ns, 'circle');
-                        //tl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
-                        //tl_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        //tl_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //tl_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(tl_circle);
-                        //// top right
-                        //let tr_circle = document.createElementNS(ns, 'circle');
-                        //tr_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
-                        //tr_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        //tr_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //tr_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(tr_circle);
-                        //// bottom center
-                        //let bc_circle = document.createElementNS(ns, 'circle');
-                        //bc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
-                        //bc_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        //bc_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //bc_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(bc_circle);
                         drawCircles(svg);
                         break;
                     }
@@ -415,12 +375,6 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        //let bl_circle = document.createElementNS(ns, 'circle');
-                        //bl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
-                        //bl_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        //bl_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //bl_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(bl_circle);
                         drawCircles(svg);
                         break;
                     }
@@ -446,12 +400,6 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        //let tl_circle = document.createElementNS(ns, 'circle');
-                        //tl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
-                        //tl_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        //tl_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //tl_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(tl_circle);
                         drawCircles(svg);
                         break;
                     }
@@ -477,12 +425,6 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        //let tc_circle = document.createElementNS(ns, 'circle');
-                        //tc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
-                        //tc_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        //tc_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //tc_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(tc_circle);
                         drawCircles(svg);
                         break;
                     }
@@ -508,12 +450,6 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        //let bc_circle = document.createElementNS(ns, 'circle');
-                        //bc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
-                        //bc_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        //bc_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //bc_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(bc_circle);
                         drawCircles(svg);
                         break;
                     }
@@ -539,12 +475,6 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        //let br_circle = document.createElementNS(ns, 'circle');
-                        //br_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
-                        //br_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        //br_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //br_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(br_circle);
                         drawCircles(svg);
                         break;
                     }
@@ -570,12 +500,6 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        //let tr_circle = document.createElementNS(ns, 'circle');
-                        //tr_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
-                        //tr_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        //tr_circle.setAttributeNS(null, 'r', '.5vmin');
-                        //tr_circle.setAttributeNS(null, 'fill', '#323232');
-                        //svg.appendChild(tr_circle);
                         drawCircles(svg);
                         break;
                     }
