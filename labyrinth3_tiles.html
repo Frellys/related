@@ -166,7 +166,11 @@
                                 p.y = h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2;
                                 break;
                             }
-                            case 'tc':
+                            case 'tc': {
+                                p.x = w / 4 * 3;
+                                p.y = h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2;
+                                break;
+                            }
                             case 'tr': {
                                 p.x = w / 4 * 3 + vmin * 5 / 2;
                                 p.y = h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2;
@@ -208,10 +212,11 @@
                                 x: w / 4 * 3 - vmin * 5 / 2,
                                 y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
                             },
-                            {
-                                x: w / 4 * 3,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
+                            //{
+                            //    x: w / 4 * 3,
+                            //    y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
+                            //},
+                            'tc',
                             {
                                 x: w / 4 * 3 + vmin * 5 / 2,
                                 y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
