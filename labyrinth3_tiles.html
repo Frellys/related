@@ -352,12 +352,66 @@
                     break;
                 }
                 case 10: {
+                    let polyline = document.createElementNS(ns, 'polyline');
+                    [
+                        {
+                            x: w / 4 * 3 - vmin * 5 / 2,
+                            y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
+                        },
+                        {
+                            x: w / 4 * 3 + vmin * 5 / 2,
+                            y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
+                        }
+                    ].forEach(function (el) {
+                        let p = svg.createSVGPoint();
+                        p.x = el.x;
+                        p.y = el.y;
+                        polyline.points.appendItem(p);
+                    });
+                    polyline.setAttributeNS(null, 'fill', 'none');
+                    polyline.setAttributeNS(null, 'stroke', '#323232');
+                    polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
+                    polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
+                    svg.appendChild(polyline);
+                    let tc_circle = document.createElementNS(ns, 'circle');
+                    tc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
+                    tc_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
+                    tc_circle.setAttributeNS(null, 'r', '.5vmin');
+                    tc_circle.setAttributeNS(null, 'fill', '#323232');
+                    svg.appendChild(tc_circle);
                     break;
                 }
                 case 11: {
                     break;
                 }
                 case 12: {
+                    let polyline = document.createElementNS(ns, 'polyline');
+                    [
+                        {
+                            x: w / 4 * 3,
+                            y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
+                        },
+                        {
+                            x: w / 4 * 3 - vmin * 5 / 2,
+                            y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
+                        }
+                    ].forEach(function (el) {
+                        let p = svg.createSVGPoint();
+                        p.x = el.x;
+                        p.y = el.y;
+                        polyline.points.appendItem(p);
+                    });
+                    polyline.setAttributeNS(null, 'fill', 'none');
+                    polyline.setAttributeNS(null, 'stroke', '#323232');
+                    polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
+                    polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
+                    svg.appendChild(polyline);
+                    let br_circle = document.createElementNS(ns, 'circle');
+                    br_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
+                    br_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
+                    br_circle.setAttributeNS(null, 'r', '.5vmin');
+                    br_circle.setAttributeNS(null, 'fill', '#323232');
+                    svg.appendChild(br_circle);
                     break;
                 }
                 case 13: {
