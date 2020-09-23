@@ -149,26 +149,14 @@
                     ]
                 };
                 function drawCircles(target) {
-                    if (parseInt(target.id.split('_')[1]) % 2 == 0) {
-                        circles.top.forEach(function (el) {
-                            let c = document.createElementNS(ns, 'circle');
-                            c.setAttributeNS(null, 'cx', el.cx);
-                            c.setAttributeNS(null, 'cy', el.cy);
-                            c.setAttributeNS(null, 'r', circles.r);
-                            c.setAttributeNS(null, 'fill', circles.fill);
-                            target.appendChild(c);
-                        });
-                    }
-                    else {
-                        circles.bot.forEach(function (el) {
-                            let c = document.createElementNS(ns, 'circle');
-                            c.setAttributeNS(null, 'cx', el.cx);
-                            c.setAttributeNS(null, 'cy', el.cy);
-                            c.setAttributeNS(null, 'r', circles.r);
-                            c.setAttributeNS(null, 'fill', circles.fill);
-                            target.appendChild(c);
-                        });
-                    }
+                    circles[parseInt(target.id.split('_')[1]) % 2 == 0 ? 'top' : 'bot'].forEach(function (el) {
+                        let c = document.createElementNS(ns, 'circle');
+                        c.setAttributeNS(null, 'cx', el.cx);
+                        c.setAttributeNS(null, 'cy', el.cy);
+                        c.setAttributeNS(null, 'r', circles.r);
+                        c.setAttributeNS(null, 'fill', circles.fill);
+                        target.appendChild(c);
+                    });
                 }
                 switch (parseInt(svg.id.split('_')[1])) {
                     case 0: {
