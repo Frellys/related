@@ -233,7 +233,6 @@
                     polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                     svg.appendChild(polyline);
                     break;
-                    break;
                 }
                 case 5: {
                     let polyline = document.createElementNS(ns, 'polyline');
@@ -264,12 +263,89 @@
                     break;
                 }
                 case 6: {
+                    let polyline = document.createElementNS(ns, 'polyline');
+                    [
+                        {
+                            x: w / 4 * 3 + vmin * 5 / 2,
+                            y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
+                        },
+                        {
+                            x: w / 4 * 3 - vmin * 5 / 2,
+                            y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
+                        },
+                        {
+                            x: w / 4 * 3,
+                            y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
+                        }
+                    ].forEach(function (el) {
+                        let p = svg.createSVGPoint();
+                        p.x = el.x;
+                        p.y = el.y;
+                        polyline.points.appendItem(p);
+                    });
+                    polyline.setAttributeNS(null, 'fill', 'none');
+                    polyline.setAttributeNS(null, 'stroke', '#323232');
+                    polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
+                    polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
+                    svg.appendChild(polyline);
                     break;
                 }
                 case 7: {
+                    let polyline = document.createElementNS(ns, 'polyline');
+                    [
+                        {
+                            x: w / 4 * 3 + vmin * 5 / 2,
+                            y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
+                        },
+                        {
+                            x: w / 4 * 3 - vmin * 5 / 2,
+                            y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
+                        },
+                        {
+                            x: w / 4 * 3,
+                            y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
+                        }
+                    ].forEach(function (el) {
+                        let p = svg.createSVGPoint();
+                        p.x = el.x;
+                        p.y = el.y;
+                        polyline.points.appendItem(p);
+                    });
+                    polyline.setAttributeNS(null, 'fill', 'none');
+                    polyline.setAttributeNS(null, 'stroke', '#323232');
+                    polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
+                    polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
+                    svg.appendChild(polyline);
                     break;
                 }
                 case 8: {
+                    let polyline = document.createElementNS(ns, 'polyline');
+                    [
+                        {
+                            x: w / 4 * 3,
+                            y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
+                        },
+                        {
+                            x: w / 4 * 3 + vmin * 5 / 2,
+                            y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
+                        }
+                    ].forEach(function (el) {
+                        let p = svg.createSVGPoint();
+                        p.x = el.x;
+                        p.y = el.y;
+                        polyline.points.appendItem(p);
+                    });
+                    polyline.setAttributeNS(null, 'fill', 'none');
+                    polyline.setAttributeNS(null, 'stroke', '#323232');
+                    polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
+                    polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
+                    svg.appendChild(polyline);
+                    let bl_circle = document.createElementNS(ns, 'circle');
+                    bl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
+                    bl_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
+                    bl_circle.setAttributeNS(null, 'r', '.5vmin');
+                    bl_circle.setAttributeNS(null, 'fill', '#323232');
+                    svg.appendChild(bl_circle);
                     break;
                 }
                 case 9: {
