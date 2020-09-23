@@ -21,30 +21,44 @@
         }
 
         #wrap {
-            width: 100vmin;
+            width: 80vmin;
             height: auto;
             margin: 0 auto;
         }
 
-            #wrap #top,
-            #wrap #bot {
+            #wrap > #top,
+            #wrap > #bot {
                 display: grid;
                 grid-template-columns: 1fr 1fr 1fr;
+                grid-gap: 1vmin;
             }
 
-            #wrap hr {
-                border: none;
-                border-top: 0.5vmin solid #323232;
-                margin: 0.5vmin 0 0.5vmin 0;
-            }
+                #wrap > #top > div.col > svg,
+                #wrap > #bot > div.col > svg {
+                    display: block;
+                    background-color: rgba(200, 200, 50, 0.5);
+                }
+                #wrap > #top > div.col > svg:hover,
+                #wrap > #bot > div.col > svg:hover {
+                    background-color: rgba(50, 50, 150, 0.125);
+                }
+                    #wrap > #top > div.col > svg:not(:last-child),
+                    #wrap > #bot > div.col > svg:not(:last-child) {
+                        margin-bottom: 1vmin;
+                    }
+
+                    #wrap > hr {
+                        border: none;
+                        border-top: 0.5vmin solid #323232;
+                        margin: 1vmin 0 1vmin 0;
+                    }
     </style>
 </head>
 <body>
     <div id="wrap">
         <div id="top">
             <div class="col" style="position: relative;">
-                <svg id="t_0" style="position:absolute; bottom:0;">
-                </svg>
+                <svg id="t_0" style="position:absolute; bottom:0;"></svg>
             </div>
             <div class="col">
                 <svg id="t_2"></svg>
@@ -86,7 +100,6 @@
                 svg.setAttribute('width', '100%');
                 svg.setAttribute('height', '10vmin');
                 svg.setAttribute('viewbox', '0 0 100 100');
-                //svg.setAttribute('preserveAspectRatio', 'none');
                 // label
                 let text = document.createElementNS(ns, 'text');
                 text.setAttributeNS(null, 'x', '25%');
@@ -99,59 +112,111 @@
                 text.innerHTML = svg.id.split('_')[1] + ':';
                 svg.appendChild(text);
                 // triag
-                //let w = svg.getBoundingClientRect().width;
-                //let h = svg.getBoundingClientRect().height;
-                let w = document.querySelector('#wrap').clientWidth / 3;
+                let w = document.querySelector('#wrap').clientWidth / 3 - vmin * 5;
                 let h = svg.clientHeight;
-                console.log(w);
-                console.log(h);
+                let circles = {
+                    r: '.5vmin',
+                    fill: '#323232',
+                    top: [
+                        {
+                            cx: w / 4 * 3,
+                            cy: h / 2 - triag.height / 2
+                        },
+                        {
+                            cx: w / 4 * 3 - triag.size / 2,
+                            cy: h / 2 + triag.height / 2
+                        },
+                        {
+                            cx: w / 4 * 3 + triag.size / 2,
+                            cy: h / 2 + triag.height / 2
+                        }
+                    ],
+                    bot: [
+                        {
+                            cx: w / 4 * 3 - triag.size / 2,
+                            cy: h / 2 - triag.height / 2
+                        },
+                        {
+                            cx: w / 4 * 3 + triag.size / 2,
+                            cy: h / 2 - triag.height / 2
+                        },
+                        {
+                            cx: w / 4 * 3,
+                            cy: h / 2 + triag.height / 2
+                        }
+                    ]
+                };
+                function drawCircles(target) {
+                    if (parseInt(target.id.split('_')[1]) % 2 == 0) {
+                        circles.top.forEach(function (el) {
+                            let c = document.createElementNS(ns, 'circle');
+                            c.setAttributeNS(null, 'cx', el.cx);
+                            c.setAttributeNS(null, 'cy', el.cy);
+                            c.setAttributeNS(null, 'r', circles.r);
+                            c.setAttributeNS(null, 'fill', circles.fill);
+                            target.appendChild(c);
+                        });
+                    }
+                    else {
+                        circles.bot.forEach(function (el) {
+                            let c = document.createElementNS(ns, 'circle');
+                            c.setAttributeNS(null, 'cx', el.cx);
+                            c.setAttributeNS(null, 'cy', el.cy);
+                            c.setAttributeNS(null, 'r', circles.r);
+                            c.setAttributeNS(null, 'fill', circles.fill);
+                            target.appendChild(c);
+                        });
+                    }
+                }
                 switch (parseInt(svg.id.split('_')[1])) {
                     case 0: {
-                        // top center
-                        let tc_circle = document.createElementNS(ns, 'circle');
-                        tc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
-                        tc_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        tc_circle.setAttributeNS(null, 'r', '.5vmin');
-                        tc_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(tc_circle);
-                        // bottom left
-                        let bl_circle = document.createElementNS(ns, 'circle');
-                        bl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
-                        bl_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        bl_circle.setAttributeNS(null, 'r', '.5vmin');
-                        bl_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(bl_circle);
-                        // bottom right
-                        let br_circle = document.createElementNS(ns, 'circle');
-                        br_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
-                        br_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        br_circle.setAttributeNS(null, 'r', '.5vmin');
-                        br_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(br_circle);
+                        //// top center
+                        //let tc_circle = document.createElementNS(ns, 'circle');
+                        //tc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
+                        //tc_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
+                        //tc_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //tc_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(tc_circle);
+                        //// bottom left
+                        //let bl_circle = document.createElementNS(ns, 'circle');
+                        //bl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
+                        //bl_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
+                        //bl_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //bl_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(bl_circle);
+                        //// bottom right
+                        //let br_circle = document.createElementNS(ns, 'circle');
+                        //br_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
+                        //br_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
+                        //br_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //br_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(br_circle);
+                        drawCircles(svg);
                         break;
                     }
                     case 1: {
-                        // top left
-                        let tl_circle = document.createElementNS(ns, 'circle');
-                        tl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
-                        tl_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        tl_circle.setAttributeNS(null, 'r', '.5vmin');
-                        tl_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(tl_circle);
-                        // top right
-                        let tr_circle = document.createElementNS(ns, 'circle');
-                        tr_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
-                        tr_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        tr_circle.setAttributeNS(null, 'r', '.5vmin');
-                        tr_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(tr_circle);
-                        // bottom center
-                        let bc_circle = document.createElementNS(ns, 'circle');
-                        bc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
-                        bc_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        bc_circle.setAttributeNS(null, 'r', '.5vmin');
-                        bc_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(bc_circle);
+                        //// top left
+                        //let tl_circle = document.createElementNS(ns, 'circle');
+                        //tl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
+                        //tl_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
+                        //tl_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //tl_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(tl_circle);
+                        //// top right
+                        //let tr_circle = document.createElementNS(ns, 'circle');
+                        //tr_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
+                        //tr_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
+                        //tr_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //tr_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(tr_circle);
+                        //// bottom center
+                        //let bc_circle = document.createElementNS(ns, 'circle');
+                        //bc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
+                        //bc_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
+                        //bc_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //bc_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(bc_circle);
+                        drawCircles(svg);
                         break;
                     }
                     case 2: {
@@ -180,6 +245,7 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
+                        drawCircles(svg);
                         break;
                     }
                     case 3: {
@@ -208,6 +274,7 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
+                        drawCircles(svg);
                         break;
                     }
                     case 4: {
@@ -236,6 +303,7 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
+                        drawCircles(svg);
                         break;
                     }
                     case 5: {
@@ -264,6 +332,7 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
+                        drawCircles(svg);
                         break;
                     }
                     case 6: {
@@ -292,6 +361,7 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
+                        drawCircles(svg);
                         break;
                     }
                     case 7: {
@@ -320,6 +390,7 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
+                        drawCircles(svg);
                         break;
                     }
                     case 8: {
@@ -344,12 +415,13 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        let bl_circle = document.createElementNS(ns, 'circle');
-                        bl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
-                        bl_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        bl_circle.setAttributeNS(null, 'r', '.5vmin');
-                        bl_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(bl_circle);
+                        //let bl_circle = document.createElementNS(ns, 'circle');
+                        //bl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
+                        //bl_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
+                        //bl_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //bl_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(bl_circle);
+                        drawCircles(svg);
                         break;
                     }
                     case 9: {
@@ -374,12 +446,13 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        let tl_circle = document.createElementNS(ns, 'circle');
-                        tl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
-                        tl_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        tl_circle.setAttributeNS(null, 'r', '.5vmin');
-                        tl_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(tl_circle);
+                        //let tl_circle = document.createElementNS(ns, 'circle');
+                        //tl_circle.setAttributeNS(null, 'cx', w / 4 * 3 - triag.size / 2);
+                        //tl_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
+                        //tl_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //tl_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(tl_circle);
+                        drawCircles(svg);
                         break;
                     }
                     case 10: {
@@ -404,12 +477,13 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        let tc_circle = document.createElementNS(ns, 'circle');
-                        tc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
-                        tc_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        tc_circle.setAttributeNS(null, 'r', '.5vmin');
-                        tc_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(tc_circle);
+                        //let tc_circle = document.createElementNS(ns, 'circle');
+                        //tc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
+                        //tc_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
+                        //tc_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //tc_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(tc_circle);
+                        drawCircles(svg);
                         break;
                     }
                     case 11: {
@@ -434,12 +508,13 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        let bc_circle = document.createElementNS(ns, 'circle');
-                        bc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
-                        bc_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        bc_circle.setAttributeNS(null, 'r', '.5vmin');
-                        bc_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(bc_circle);
+                        //let bc_circle = document.createElementNS(ns, 'circle');
+                        //bc_circle.setAttributeNS(null, 'cx', w / 4 * 3);
+                        //bc_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
+                        //bc_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //bc_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(bc_circle);
+                        drawCircles(svg);
                         break;
                     }
                     case 12: {
@@ -464,12 +539,13 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        let br_circle = document.createElementNS(ns, 'circle');
-                        br_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
-                        br_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
-                        br_circle.setAttributeNS(null, 'r', '.5vmin');
-                        br_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(br_circle);
+                        //let br_circle = document.createElementNS(ns, 'circle');
+                        //br_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
+                        //br_circle.setAttributeNS(null, 'cy', h / 2 + triag.height / 2);
+                        //br_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //br_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(br_circle);
+                        drawCircles(svg);
                         break;
                     }
                     case 13: {
@@ -494,12 +570,13 @@
                         polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
                         polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                         svg.appendChild(polyline);
-                        let tr_circle = document.createElementNS(ns, 'circle');
-                        tr_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
-                        tr_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
-                        tr_circle.setAttributeNS(null, 'r', '.5vmin');
-                        tr_circle.setAttributeNS(null, 'fill', '#323232');
-                        svg.appendChild(tr_circle);
+                        //let tr_circle = document.createElementNS(ns, 'circle');
+                        //tr_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
+                        //tr_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
+                        //tr_circle.setAttributeNS(null, 'r', '.5vmin');
+                        //tr_circle.setAttributeNS(null, 'fill', '#323232');
+                        //svg.appendChild(tr_circle);
+                        drawCircles(svg);
                         break;
                     }
                     default: {
