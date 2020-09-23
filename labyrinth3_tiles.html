@@ -101,7 +101,7 @@
                 case 0: {
                     // top center
                     let tc_circle = document.createElementNS(ns, 'circle');
-                    tc_circle.id = 'tc_circle';
+                    tc_circle.id = 'tc';
                     tc_circle.setAttributeNS(null, 'cx', '75%');
                     tc_circle.setAttributeNS(null, 'cy', 5 - (triag.height / 2) + 'vmin');
                     tc_circle.setAttributeNS(null, 'r', '.5vmin');
@@ -109,7 +109,7 @@
                     svg.appendChild(tc_circle);
                     // bottom left
                     let bl_circle = document.createElementNS(ns, 'circle');
-                    bl_circle.id = 'bl_circle';
+                    bl_circle.id = 'bl';
                     bl_circle.setAttributeNS(null, 'cx', 'calc(75% - ' + (triag.size / 2) + 'vmin)');
                     bl_circle.setAttributeNS(null, 'cy', 5 + (triag.height / 2) + 'vmin');
                     bl_circle.setAttributeNS(null, 'r', '.5vmin');
@@ -117,7 +117,7 @@
                     svg.appendChild(bl_circle);
                     // bottom right
                     let br_circle = document.createElementNS(ns, 'circle');
-                    br_circle.id = 'br_circle';
+                    br_circle.id = 'br';
                     br_circle.setAttributeNS(null, 'cx', 'calc(75% + ' + (triag.size / 2) + 'vmin)');
                     br_circle.setAttributeNS(null, 'cy', 5 + (triag.height / 2) + 'vmin');
                     br_circle.setAttributeNS(null, 'r', '.5vmin');
@@ -128,7 +128,7 @@
                 case 1: {
                     // top left
                     let tl_circle = document.createElementNS(ns, 'circle');
-                    tl_circle.id = 'tl_circle';
+                    tl_circle.id = 'tl';
                     tl_circle.setAttributeNS(null, 'cx', 'calc(75% - ' + (triag.size / 2) + 'vmin)');
                     tl_circle.setAttributeNS(null, 'cy', 5 - (triag.height / 2) + 'vmin');
                     tl_circle.setAttributeNS(null, 'r', '.5vmin');
@@ -136,7 +136,7 @@
                     svg.appendChild(tl_circle);
                     // top right
                     let tr_circle = document.createElementNS(ns, 'circle');
-                    tr_circle.id = 'tr_circle';
+                    tr_circle.id = 'tr';
                     tr_circle.setAttributeNS(null, 'cx', 'calc(75% + ' + (triag.size / 2) + 'vmin)');
                     tr_circle.setAttributeNS(null, 'cy', 5 - (triag.height / 2) + 'vmin');
                     tr_circle.setAttributeNS(null, 'r', '.5vmin');
@@ -144,7 +144,7 @@
                     svg.appendChild(tr_circle);
                     // bottom center
                     let bc_circle = document.createElementNS(ns, 'circle');
-                    bc_circle.id = 'bc_circle';
+                    bc_circle.id = 'bc';
                     bc_circle.setAttributeNS(null, 'cx', '75%');
                     bc_circle.setAttributeNS(null, 'cy', 5 + (triag.height / 2) + 'vmin');
                     bc_circle.setAttributeNS(null, 'r', '.5vmin');
