@@ -176,13 +176,21 @@
                                 p.y = h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2;
                                 break;
                             }
-                            case 'bl':
+                            case 'bl': {
+                                p.x = w / 4 * 3 - vmin * 5 / 2;
+                                p.y = h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2;
+                                break;
+                            }
                             case 'bc': {
                                 p.x = w / 4 * 3;
                                 p.y = h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2;
                                 break;
                             }
-                            case 'br':
+                            case 'br': {
+                                p.x = w / 4 * 3 + vmin * 5 / 2;
+                                p.y = h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2;
+                                break;
+                            }
                             default: {
                                 p.x = el.x;
                                 p.y = el.y;
@@ -207,21 +215,7 @@
                         break;
                     }
                     case 2: {
-                        drawPolyline(svg, [
-                            {
-                                x: w / 4 * 3 - vmin * 5 / 2,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            //{
-                            //    x: w / 4 * 3,
-                            //    y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            //},
-                            'tc',
-                            {
-                                x: w / 4 * 3 + vmin * 5 / 2,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            }
-                        ]);
+                        drawPolyline(svg, ['bl', 'tc', 'br']);
                         drawCircles(svg);
                         break;
                     }
@@ -231,158 +225,52 @@
                         break;
                     }
                     case 4: {
-                        drawPolyline(svg, [
-                            {
-                                x: w / 4 * 3,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 + vmin * 5 / 2,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 - vmin * 5 / 2,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            }
-                        ]);
+                        drawPolyline(svg, ['tc', 'br', 'bl']);
                         drawCircles(svg);
                         break;
                     }
                     case 5: {
-                        drawPolyline(svg, [
-                            {
-                                x: w / 4 * 3,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 + vmin * 5 / 2,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 - vmin * 5 / 2,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            }
-                        ]);
+                        drawPolyline(svg, ['tl', 'tr', 'bc']);
                         drawCircles(svg);
                         break;
                     }
                     case 6: {
-                        drawPolyline(svg, [
-                            {
-                                x: w / 4 * 3 + vmin * 5 / 2,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 - vmin * 5 / 2,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            }
-                        ]);
+                        drawPolyline(svg, ['tc', 'bl', 'br']);
                         drawCircles(svg);
                         break;
                     }
                     case 7: {
-                        drawPolyline(svg, [
-                            {
-                                x: w / 4 * 3 + vmin * 5 / 2,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 - vmin * 5 / 2,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            }
-                        ]);
+                        drawPolyline(svg, ['bc', 'tl', 'tr']);
                         drawCircles(svg);
                         break;
                     }
                     case 8: {
-                        drawPolyline(svg, [
-                            {
-                                x: w / 4 * 3,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 + vmin * 5 / 2,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            }
-                        ]);
+                        drawPolyline(svg, ['tc', 'br']);
                         drawCircles(svg);
                         break;
                     }
                     case 9: {
-                        drawPolyline(svg, [
-                            {
-                                x: w / 4 * 3,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 + vmin * 5 / 2,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            }
-                        ]);
+                        drawPolyline(svg, ['tr', 'bc']);
                         drawCircles(svg);
                         break;
                     }
                     case 10: {
-                        drawPolyline(svg, [
-                            {
-                                x: w / 4 * 3 - vmin * 5 / 2,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 + vmin * 5 / 2,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            }
-                        ]);
+                        drawPolyline(svg, ['bl', 'br']);
                         drawCircles(svg);
                         break;
                     }
                     case 11: {
-                        drawPolyline(svg, [
-                            {
-                                x: w / 4 * 3 - vmin * 5 / 2,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 + vmin * 5 / 2,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            }
-                        ]);
+                        drawPolyline(svg, ['tl', 'tr']);
                         drawCircles(svg);
                         break;
                     }
                     case 12: {
-                        drawPolyline(svg, [
-                            {
-                                x: w / 4 * 3,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 - vmin * 5 / 2,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            }
-                        ]);
+                        drawPolyline(svg, ['bl', 'tc']);
                         drawCircles(svg);
                         break;
                     }
                     case 13: {
-                        drawPolyline(svg, [
-                            {
-                                x: w / 4 * 3,
-                                y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
-                            },
-                            {
-                                x: w / 4 * 3 - vmin * 5 / 2,
-                                y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
-                            }
-                        ]);
+                        drawPolyline(svg, ['tl', 'bc']);
                         drawCircles(svg);
                         break;
                     }
