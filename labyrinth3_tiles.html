@@ -469,6 +469,33 @@
                     break;
                 }
                 case 13: {
+                    let polyline = document.createElementNS(ns, 'polyline');
+                    [
+                        {
+                            x: w / 4 * 3,
+                            y: h / 2 + vmin * 5 * Math.sqrt(3) / 2 / 2
+                        },
+                        {
+                            x: w / 4 * 3 - vmin * 5 / 2,
+                            y: h / 2 - vmin * 5 * Math.sqrt(3) / 2 / 2
+                        }
+                    ].forEach(function (el) {
+                        let p = svg.createSVGPoint();
+                        p.x = el.x;
+                        p.y = el.y;
+                        polyline.points.appendItem(p);
+                    });
+                    polyline.setAttributeNS(null, 'fill', 'none');
+                    polyline.setAttributeNS(null, 'stroke', '#323232');
+                    polyline.setAttributeNS(null, 'stroke-width', vmin / 2);
+                    polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
+                    svg.appendChild(polyline);
+                    let tr_circle = document.createElementNS(ns, 'circle');
+                    tr_circle.setAttributeNS(null, 'cx', w / 4 * 3 + triag.size / 2);
+                    tr_circle.setAttributeNS(null, 'cy', h / 2 - triag.height / 2);
+                    tr_circle.setAttributeNS(null, 'r', '.5vmin');
+                    tr_circle.setAttributeNS(null, 'fill', '#323232');
+                    svg.appendChild(tr_circle);
                     break;
                 }
                 default: {
@@ -477,8 +504,6 @@
             }
             console.log(svg);
         });
-                            //let sss = document.querySelector('svg#t_0 > circle')
-                            //console.log(window.getComputedStyle(sss, null));
     </script>
 </body>
 </html>
