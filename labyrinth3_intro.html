@@ -30,6 +30,12 @@
             width: document.body.clientWidth,
             height: document.body.clientHeight,
             fps: 50,
+            fadein: 0.0,
+            triag: {
+                size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 25,
+                height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 25 * Math.sqrt(3) / 2,
+                shift: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 25 * Math.sqrt(3) / 2
+            },
             mouse: {
                 x: undefined,
                 y: undefined,
@@ -48,66 +54,78 @@
             ctx.clearRect(0, 0, core.width, core.height);
             ctx.fillStyle = '#323232';
             ctx.fillRect(0, 0, core.width, core.height);
-            // text
-            //ctx.beginPath();
-            ctx.font = '15vmin monospace';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = 'wheat';
-            let cw = ctx.measureText('some text  ').width / 11;
-            ctx.fillText('some text  ', core.width / 2, core.height / 2);
-            // triag
-            let size = core.vmin * 25;
-            let height = size * Math.sqrt(3) / 2;
-            // main
-            ctx.beginPath();
-            ctx.moveTo(
-                core.width / 2 + cw * 5 - size / 2,
-                core.height / 2 - height / 2 + core.vmin * 2);
-            ctx.lineTo(
-                core.width / 2 + cw * 5 + size / 2,
-                core.height / 2 - height / 2 + core.vmin * 2);
-            ctx.lineTo(
-                core.width / 2 + cw * 5,
-                core.height / 2 + height / 2 + core.vmin * 2);
-            ctx.closePath();
-            ctx.fillStyle = 'wheat';
-            ctx.fill();
-            // top
-            ctx.beginPath();
-            ctx.moveTo(
-                core.width / 2 + cw * 5 - size / 2,
-                core.height / 2 - height / 2 + core.vmin * 2 - core.vmin);
-            ctx.lineTo(
-                core.width / 2 + cw * 5 + size / 2,
-                core.height / 2 - height / 2 + core.vmin * 2 - core.vmin);
-            ctx.lineTo(
-                core.width / 2 + cw * 5,
-                core.height / 2 - height / 2 - height + core.vmin * 2 - core.vmin);
-            ctx.closePath();
-            ctx.fillStyle = 'wheat';
-            ctx.fill();
-            // left
-            ctx.beginPath();
-            ctx.moveTo(
-                core.width / 2 + cw * 5 - size / 2 - size / 2 - core.vmin,
-                core.height / 2 - height / 2 + core.vmin * 2 - height - core.vmin);
-            ctx.lineTo(
-                core.width / 2 + cw * 5 + size / 2 - size / 2 - core.vmin,
-                core.height / 2 - height / 2 + core.vmin * 2 - height - core.vmin);
-            ctx.lineTo(
-                core.width / 2 + cw * 5 - size / 2 - core.vmin,
-                core.height / 2 + height / 2 + core.vmin * 2 - height - core.vmin);
-            ctx.closePath();
-            ctx.fillStyle = 'wheat';
-            ctx.fill();
-            // number
-            ctx.beginPath();
-            ctx.font = '15vmin monospace';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#323232';
-            ctx.fillText('3', core.width / 2 + cw * 5, core.height / 2);
+            if (core.fadein < 1.0) {
+                // text
+                ctx.font = '15vmin monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = 'rgba(245, 222, 179, ' + core.fadein + ')';
+                let cw = ctx.measureText('some text  ').width / 11;
+                ctx.fillText('some text  ', core.width / 2, core.height / 2);
+                // top
+                ctx.beginPath();
+                ctx.moveTo(
+                    core.width / 2 + cw * 5 - core.triag.size / 2,
+                    core.height / 2 - core.triag.height / 2 + core.vmin * 2 - core.vmin);
+                ctx.lineTo(
+                    core.width / 2 + cw * 5 + core.triag.size / 2,
+                    core.height / 2 - core.triag.height / 2 + core.vmin * 2 - core.vmin);
+                ctx.lineTo(
+                    core.width / 2 + cw * 5,
+                    core.height / 2 - core.triag.height / 2 - core.triag.height + core.vmin * 2 - core.vmin);
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(245, 222, 179, ' + core.fadein + ')';
+                ctx.fill();
+                // shift
+                if (core.fadein < 1.0) {
+                    core.fadein += 0.0065;
+                }
+                if (core.fadein >= 1.0) core.fadein = 1.0;
+            }
+            else {
+                // text
+                ctx.font = '15vmin monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = 'rgba(245, 222, 179, ' + core.fadein + ')';
+                let cw = ctx.measureText('some text  ').width / 11;
+                ctx.fillText('some text  ', core.width / 2, core.height / 2);
+                // main
+                ctx.beginPath();
+                ctx.moveTo(
+                    core.width / 2 + cw * 5 - core.triag.size / 2,
+                    core.height / 2 - core.triag.height / 2 + core.vmin * 2);
+                ctx.lineTo(
+                    core.width / 2 + cw * 5 + core.triag.size / 2,
+                    core.height / 2 - core.triag.height / 2 + core.vmin * 2);
+                ctx.lineTo(
+                    core.width / 2 + cw * 5,
+                    core.height / 2 + core.triag.height / 2 + core.vmin * 2);
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(245, 222, 179, ' + core.fadein + ')';
+                ctx.fill();
+                // top
+                //ctx.beginPath();
+                //ctx.moveTo(
+                //    core.width / 2 + cw * 5 - core.triag.size / 2,
+                //    core.height / 2 - core.triag.height / 2 + core.vmin * 2 - core.vmin);
+                //ctx.lineTo(
+                //    core.width / 2 + cw * 5 + core.triag.size / 2,
+                //    core.height / 2 - core.triag.height / 2 + core.vmin * 2 - core.vmin);
+                //ctx.lineTo(
+                //    core.width / 2 + cw * 5,
+                //    core.height / 2 - core.triag.height / 2 - core.triag.height + core.vmin * 2 - core.vmin);
+                //ctx.closePath();
+                //ctx.fillStyle = 'rgba(245, 222, 179, ' + core.fadein + ')';
+                //ctx.fill();
+                // number
+                ctx.beginPath();
+                ctx.font = '15vmin monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#323232';
+                ctx.fillText('3', core.width / 2 + cw * 5, core.height / 2);
+            }
         }, 1000 / core.fps);
         // mousemove listener
         window.addEventListener('mousemove', function (e) {
