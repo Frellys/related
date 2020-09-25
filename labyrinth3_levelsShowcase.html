@@ -61,23 +61,79 @@
             // draw
             let cnv = document.createElement('canvas');
             cnv.width = Math.min(document.body.clientWidth, document.body.clientHeight);
-            cnv.height = level.length * tile.height + tile.lineWidth * 2;
+            cnv.height = level.length * tile.height + tile.lineWidth * 4;
             wrap.appendChild(cnv);
             let ctx = cnv.getContext('2d');
+            // hor/ver
+            ctx.beginPath();
+            ctx.moveTo(0, cnv.height / 2);
+            ctx.lineTo(cnv.width, cnv.height / 2);
+            ctx.moveTo(cnv.width / 2, 0);
+            ctx.lineTo(cnv.width / 2, cnv.height);
+            ctx.strokeStyle = 'wheat';
+            ctx.lineWidth = core.vmin / 2;
+            ctx.stroke();
+            // level
             level.forEach(function (row, rdx) {
                 let ty = cnv.height / 2 - (level.length - 1) * tile.height / 2 + tile.height * rdx;
                 row.forEach(function (t, tdx) {
-                    let tx = cnv.width / 2 - (row.length - 1) * tile.size + tile.size * tdx;
-                    console.log({
-                        x: tx,
-                        y: ty
-                    });
+                    let tx = cnv.width / 2 - (row.length - 1) * tile.size / 4 + tile.size / 2 * tdx;
+                    // draw
+                    switch (t) {
+                        case '0': {
+                            drawCircles(ctx, { x: tx, y: ty }, ['bl','tc','br']);
+                            break;
+                        }
+                        case '1': {
+                            drawCircles(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
                 });
             });
             // sep
             let hr = document.createElement('hr');
             wrap.appendChild(hr);
         });
+        function drawCircles(ctx, c, pos) {
+            pos.forEach(function (p) {
+                ctx.beginPath();
+                switch (p) {
+                    case 'tl': {
+                        ctx.arc(c.x - tile.size / 2, c.y - tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        break;
+                    }
+                    case 'tc': {
+                        ctx.arc(c.x, c.y - tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        break;
+                    }
+                    case 'tr': {
+                        ctx.arc(c.x + tile.size / 2, c.y - tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        break;
+                    }
+                    case 'bl': {
+                        ctx.arc(c.x - tile.size / 2, c.y + tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        break;
+                    }
+                    case 'bc': {
+                        ctx.arc(c.x, c.y + tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        break;
+                    }
+                    case 'br': {
+                        ctx.arc(c.x + tile.size / 2, c.y + tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+                ctx.fillStyle = '#323232';
+                ctx.fill();
+            });
+        }
     </script>
 </body>
 </html>
