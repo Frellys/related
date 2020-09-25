@@ -13,16 +13,18 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: gray;
+            background-color: whitesmoke;
             display: table-cell;
             height: 100vh;
             width: 100vw;
             vertical-align: middle;
         }
     </style>
+    <script src="labyrinth3_levels.js"></script>
 </head>
 <body>
     <script>
+        alert(levels);
         let core = {
             vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
             width: document.body.clientWidth,
