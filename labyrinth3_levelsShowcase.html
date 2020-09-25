@@ -30,6 +30,7 @@
                 color: #323232;
                 font-family: monospace;
             }
+
             #wrap > hr {
                 border: none;
                 border-top: 0.25vmin solid rgba(50, 50, 50, 0.25);
@@ -46,8 +47,8 @@
             height: document.body.clientHeight
         };
         let tile = {
-            size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10,
-            height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10 * Math.sqrt(3) / 2,
+            size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 5,
+            height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 5 * Math.sqrt(3) / 2,
             strokeStyle: 'teal',
             lineWidth: core.vmin / 2
         };
@@ -55,12 +56,12 @@
         levels.forEach(function (level, ldx) {
             // header
             let header = document.createElement('h1');
-            header.innerHTML = 'lvl ' + ldx;
+            header.innerHTML = 'lvl ' + (ldx + 1).toString();
             wrap.appendChild(header);
             // draw
             let cnv = document.createElement('canvas');
             cnv.width = Math.min(document.body.clientWidth, document.body.clientHeight);
-            cnv.height = 100;
+            cnv.height = level.length * tile.height + tile.lineWidth * 2;
             wrap.appendChild(cnv);
             let ctx = cnv.getContext('2d');
             // sep
