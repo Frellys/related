@@ -23,6 +23,17 @@
 </head>
 <body>
     <script>
+        let core = {
+            vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
+            width: document.body.clientWidth,
+            height: document.body.clientHeight
+        };
+        let tile = {
+            size: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10,
+            height: Math.min(document.body.clientWidth, document.body.clientHeight) / 100 * 10 * Math.sqrt(3) / 2,
+            strokeStyle: 'teal',
+            lineWidth: core.vmin / 2
+        };
     </script>
 </body>
 </html>
