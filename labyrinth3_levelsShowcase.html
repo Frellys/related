@@ -7,7 +7,7 @@
     <style>
         html {
             user-select: none;
-            overflow: hidden;
+            /*overflow: hidden;*/
         }
 
         body {
@@ -19,10 +19,22 @@
             width: 100vw;
             vertical-align: middle;
         }
+
+        #wrap {
+            width: 100vmin;
+            height: auto;
+            margin: 0 auto;
+        }
+
+            #wrap > h1 {
+                color: #323232;
+                font-family: monospace;
+            }
     </style>
     <script src="labyrinth3_levels.js"></script>
 </head>
 <body>
+    <div id="wrap"></div>
     <script>
         let core = {
             vmin: Math.min(document.body.clientWidth, document.body.clientHeight) / 100,
@@ -35,6 +47,12 @@
             strokeStyle: 'teal',
             lineWidth: core.vmin / 2
         };
+        let wrap = document.querySelector('body > div#wrap');
+        levels.forEach(function (level, ldx) {
+            let header = document.createElement('h1');
+            header.innerHTML = 'lvl ' + ldx;
+            wrap.appendChild(header);
+        });
     </script>
 </body>
 </html>
