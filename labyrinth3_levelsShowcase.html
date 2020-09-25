@@ -30,6 +30,10 @@
                 color: #323232;
                 font-family: monospace;
             }
+            #wrap > hr {
+                border: none;
+                border-top: 0.25vmin solid rgba(50, 50, 50, 0.25);
+            }
     </style>
     <script src="labyrinth3_levels.js"></script>
 </head>
@@ -49,9 +53,19 @@
         };
         let wrap = document.querySelector('body > div#wrap');
         levels.forEach(function (level, ldx) {
+            // header
             let header = document.createElement('h1');
             header.innerHTML = 'lvl ' + ldx;
             wrap.appendChild(header);
+            // draw
+            let cnv = document.createElement('canvas');
+            cnv.width = Math.min(document.body.clientWidth, document.body.clientHeight);
+            cnv.height = 100;
+            wrap.appendChild(cnv);
+            let ctx = cnv.getContext('2d');
+            // sep
+            let hr = document.createElement('hr');
+            wrap.appendChild(hr);
         });
     </script>
 </body>
