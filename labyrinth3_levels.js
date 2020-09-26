@@ -2,12 +2,12 @@ let levels = [
     // 0
     {
         start: {
-            x: 0,
-            y: 0
+            c: 0,
+            r: 0
         },
         end: {
-            x: 1,
-            y: 1
+            c: 1,
+            r: 1
         },
         field: [
             ['0', '1', '0', '1', '0'],
@@ -19,12 +19,12 @@ let levels = [
     // 1
     {
         start: {
-            x: 0,
-            y: 0
+            c: 0,
+            r: 0
         },
         end: {
-            x: 1,
-            y: 1
+            c: 1,
+            r: 1
         },
         field: [
             [],
@@ -36,12 +36,12 @@ let levels = [
     // 2
     {
         start: {
-            x: 0,
-            y: 0
+            c: 0,
+            r: 0
         },
         end: {
-            x: 1,
-            y: 1
+            c: 1,
+            r: 1
         },
         field: [
             [],
