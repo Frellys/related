@@ -89,12 +89,12 @@
                             break;
                         }
                         case '2': {
-                            drawLine(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
+                            //drawLine(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case '3': {
-                            drawLine(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
+                            //drawLine(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
@@ -145,12 +145,36 @@
             });
         }
         function drawLine(ctx, c, pos) {
-            pos.forEach(function (p, ) {
+            pos.forEach(function (p, pdx) {
                 ctx.beginPath();
                 switch (p) {
-                    case 'tl':
-                    case 'tc':
-                    case 'tr':
+                    case 'tl': {
+                        if (pdx == 0) {
+                            ctx.moveTo(c.x - tile.size / 2, c.y - tile.height / 2);
+                        }
+                        else {
+                            ctx.lineTo(c.x - tile.size / 2, c.y - tile.height / 2);
+                        }
+                        break;
+                    }
+                    case 'tc': {
+                        if (pdx == 0) {
+                            ctx.moveTo(c.x, c.y - tile.height / 2);
+                        }
+                        else {
+                            ctx.lineTo(c.x, c.y - tile.height / 2);
+                        }
+                        break;
+                    }
+                    case 'tr': {
+                        if (pdx == 0) {
+                            ctx.moveTo(c.x + tile.size / 2, c.y - tile.height / 2);
+                        }
+                        else {
+                            ctx.lineTo(c.x + tile.size / 2, c.y - tile.height / 2);
+                        }
+                        break;
+                    }
                     case 'bl':
                     case 'bc':
                     case 'br':
