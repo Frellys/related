@@ -147,14 +147,53 @@
                             }
                         ]
                     };
-                    circles[parseInt(target.id.split('_')[1]) % 2 == 0 ? 'top' : 'bot'].forEach(function (el) {
-                        let c = document.createElementNS(ns, 'circle');
-                        c.setAttributeNS(null, 'cx', el.cx);
-                        c.setAttributeNS(null, 'cy', el.cy);
-                        c.setAttributeNS(null, 'r', '.5vmin');
-                        c.setAttributeNS(null, 'fill', '#323232');
-                        target.appendChild(c);
-                    });
+                    switch (target.id.split('_')[1]) {
+                        case '0':
+                        case '2':
+                        case '4':
+                        case '6':
+                        case '8':
+                        case '10':
+                        case '12': {
+                            circles.top.forEach(function (el) {
+                                let c = document.createElementNS(ns, 'circle');
+                                c.setAttributeNS(null, 'cx', el.cx);
+                                c.setAttributeNS(null, 'cy', el.cy);
+                                c.setAttributeNS(null, 'r', '.5vmin');
+                                c.setAttributeNS(null, 'fill', '#323232');
+                                target.appendChild(c);
+                            });
+                            break;
+                        }
+                        case '1':
+                        case '3':
+                        case '5':
+                        case '7':
+                        case '9':
+                        case '11':
+                        case '13': {
+                            circles.bot.forEach(function (el) {
+                                let c = document.createElementNS(ns, 'circle');
+                                c.setAttributeNS(null, 'cx', el.cx);
+                                c.setAttributeNS(null, 'cy', el.cy);
+                                c.setAttributeNS(null, 'r', '.5vmin');
+                                c.setAttributeNS(null, 'fill', '#323232');
+                                target.appendChild(c);
+                            });
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                    //circles[parseInt(target.id.split('_')[1]) % 2 == 0 ? 'top' : 'bot'].forEach(function (el) {
+                    //    let c = document.createElementNS(ns, 'circle');
+                    //    c.setAttributeNS(null, 'cx', el.cx);
+                    //    c.setAttributeNS(null, 'cy', el.cy);
+                    //    c.setAttributeNS(null, 'r', '.5vmin');
+                    //    c.setAttributeNS(null, 'fill', '#323232');
+                    //    target.appendChild(c);
+                    //});
                 }
                 function drawPolyline(target, points) {
                     let polyline = document.createElementNS(ns, 'polyline');
