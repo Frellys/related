@@ -88,6 +88,14 @@
                         ctx.fillText('s', tx, ty);
                     }
                     // draw finish
+                    if (level.finish.c == tdx && level.finish.r == rdx) {
+                        ctx.beginPath();
+                        ctx.font = tile.size / 2 + 'px monospace';
+                        ctx.textBaseline = 'middle';
+                        ctx.textAlign = 'center';
+                        ctx.fillStyle = '#323232';
+                        ctx.fillText('f', tx, ty);
+                    }
                     // draw tile
                     switch (t) {
                         case '0': {

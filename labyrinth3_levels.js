@@ -5,7 +5,7 @@ let levels = [
             c: 0,
             r: 0
         },
-        end: {
+        finish: {
             c: 1,
             r: 1
         },
@@ -22,7 +22,7 @@ let levels = [
             c: 0,
             r: 0
         },
-        end: {
+        finish: {
             c: 1,
             r: 1
         },
@@ -39,7 +39,7 @@ let levels = [
             c: 0,
             r: 0
         },
-        end: {
+        finish: {
             c: 1,
             r: 1
         },
