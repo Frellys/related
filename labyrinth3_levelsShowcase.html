@@ -81,19 +81,21 @@
                     // draw
                     switch (t) {
                         case '0': {
-                            drawCircles(ctx, { x: tx, y: ty }, ['bl','tc','br']);
+                            drawDots(ctx, { x: tx, y: ty }, ['bl','tc','br']);
                             break;
                         }
                         case '1': {
-                            drawCircles(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
+                            drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
                         case '2': {
-                            drawCircles(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
+                            drawLine(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
+                            drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case '3': {
-                            drawCircles(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
+                            drawLine(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
+                            drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
                         default: {
@@ -106,7 +108,7 @@
             let hr = document.createElement('hr');
             wrap.appendChild(hr);
         });
-        function drawCircles(ctx, c, pos) {
+        function drawDots(ctx, c, pos) {
             pos.forEach(function (p) {
                 ctx.beginPath();
                 switch (p) {
@@ -142,9 +144,9 @@
                 ctx.fill();
             });
         }
-        function drawLines(ctx, c, pos) {
-            pos.forEach(function (p) {
-                ctx.beginPath;
+        function drawLine(ctx, c, pos) {
+            pos.forEach(function (p, ) {
+                ctx.beginPath();
                 switch (p) {
                     case 'tl':
                     case 'tc':
