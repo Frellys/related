@@ -175,9 +175,33 @@
                         }
                         break;
                     }
-                    case 'bl':
-                    case 'bc':
-                    case 'br':
+                    case 'bl': {
+                        if (pdx == 0) {
+                            ctx.moveTo(c.x - tile.size / 2, c.y + tile.height / 2);
+                        }
+                        else {
+                            ctx.lineTo(c.x - tile.size / 2, c.y + tile.height / 2);
+                        }
+                        break;
+                    }
+                    case 'bc': {
+                        if (pdx == 0) {
+                            ctx.moveTo(c.x, c.y + tile.height / 2);
+                        }
+                        else {
+                            ctx.lineTo(c.x, c.y + tile.height / 2);
+                        }
+                        break;
+                    }
+                    case 'br': {
+                        if (pdx == 0) {
+                            ctx.moveTo(c.x + tile.size / 2, c.y + tile.height / 2);
+                        }
+                        else {
+                            ctx.lineTo(c.x + tile.size / 2, c.y + tile.height / 2);
+                        }
+                        break;
+                    }
                     default: {
                         break;
                     }
