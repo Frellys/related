@@ -78,7 +78,17 @@
                 let ty = cnv.height / 2 - (level.field.length - 1) * tile.height / 2 + tile.height * rdx;
                 row.forEach(function (t, tdx) {
                     let tx = cnv.width / 2 - (row.length - 1) * tile.size / 4 + tile.size / 2 * tdx;
-                    // draw
+                    // draw start
+                    if (level.start.c == tdx && level.start.r == rdx) {
+                        ctx.beginPath();
+                        ctx.font = tile.size / 2 + 'px monospace';
+                        ctx.textBaseline = 'middle';
+                        ctx.textAlign = 'center';
+                        ctx.fillStyle = '#323232';
+                        ctx.fillText('s', tx, ty);
+                    }
+                    // draw finish
+                    // draw tile
                     switch (t) {
                         case '0': {
                             drawDots(ctx, { x: tx, y: ty }, ['bl','tc','br']);
