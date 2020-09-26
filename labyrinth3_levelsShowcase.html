@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>labyrinth3_levelsShowcase</title>
@@ -132,6 +132,24 @@
                 }
                 ctx.fillStyle = '#323232';
                 ctx.fill();
+            });
+        }
+        function drawLines(ctx, c, pos) {
+            pos.forEach(function (p) {
+                ctx.beginPath;
+                switch (p) {
+                    case 'tl':
+                    case 'tc':
+                    case 'tr':
+                    case 'bl':
+                    case 'bc':
+                    case 'br':
+                    default: {
+                        break;
+                    }
+                }
+                ctx.strokeStyle = '#323232';
+                ctx.stroke();
             });
         }
     </script>
