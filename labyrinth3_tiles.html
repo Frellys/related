@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>labyrinth3_tiles</title>
@@ -205,71 +205,71 @@
                     polyline.setAttributeNS(null, 'stroke-linejoin', 'round');
                     target.appendChild(polyline);
                 }
-                switch (parseInt(svg.id.split('_')[1])) {
-                    case 0: {
+                switch (svg.id.split('_')[1]) {
+                    case '0': {
                         drawCircles(svg);
                         break;
                     }
-                    case 1: {
+                    case '1': {
                         drawCircles(svg);
                         break;
                     }
-                    case 2: {
+                    case '2': {
                         drawPolyline(svg, ['bl', 'tc', 'br']);
                         drawCircles(svg);
                         break;
                     }
-                    case 3: {
+                    case '3': {
                         drawPolyline(svg, ['tl', 'bc', 'tr']);
                         drawCircles(svg);
                         break;
                     }
-                    case 4: {
+                    case '4': {
                         drawPolyline(svg, ['tc', 'br', 'bl']);
                         drawCircles(svg);
                         break;
                     }
-                    case 5: {
+                    case '5': {
                         drawPolyline(svg, ['tl', 'tr', 'bc']);
                         drawCircles(svg);
                         break;
                     }
-                    case 6: {
+                    case '6': {
                         drawPolyline(svg, ['tc', 'bl', 'br']);
                         drawCircles(svg);
                         break;
                     }
-                    case 7: {
+                    case '7': {
                         drawPolyline(svg, ['bc', 'tl', 'tr']);
                         drawCircles(svg);
                         break;
                     }
-                    case 8: {
+                    case '8': {
                         drawPolyline(svg, ['tc', 'br']);
                         drawCircles(svg);
                         break;
                     }
-                    case 9: {
+                    case '9': {
                         drawPolyline(svg, ['tr', 'bc']);
                         drawCircles(svg);
                         break;
                     }
-                    case 10: {
+                    case '10': {
                         drawPolyline(svg, ['bl', 'br']);
                         drawCircles(svg);
                         break;
                     }
-                    case 11: {
+                    case '11': {
                         drawPolyline(svg, ['tl', 'tr']);
                         drawCircles(svg);
                         break;
                     }
-                    case 12: {
+                    case '12': {
                         drawPolyline(svg, ['bl', 'tc']);
                         drawCircles(svg);
                         break;
                     }
-                    case 13: {
+                    case '13': {
                         drawPolyline(svg, ['tl', 'bc']);
                         drawCircles(svg);
                         break;
