@@ -7,6 +7,8 @@
     <style>
         html {
             user-select: none;
+            overflow-x: hidden;
+            overflow-y: auto;
             /*overflow: hidden;*/
         }
 
@@ -60,7 +62,7 @@
             wrap.appendChild(header);
             // draw
             let cnv = document.createElement('canvas');
-            cnv.width = Math.min(document.body.clientWidth, document.body.clientHeight);
+            cnv.width = Math.min(core.width, core.height);
             cnv.height = level.field.length * tile.height + tile.lineWidth * 4;
             wrap.appendChild(cnv);
             let ctx = cnv.getContext('2d');
@@ -81,25 +83,117 @@
                     // draw start
                     if (level.start.c == tdx && level.start.r == rdx) {
                         ctx.beginPath();
-                        ctx.font = tile.size / 2 + 'px monospace';
-                        ctx.textBaseline = 'middle';
-                        ctx.textAlign = 'center';
-                        ctx.fillStyle = '#323232';
-                        ctx.fillText('s', tx, ty);
+                        switch (t) {
+                            case '0':
+                            case '2':
+                            case '4':
+                            case '6':
+                            case '8':
+                            case 'A':
+                            case 'C': {
+                                ctx.moveTo(
+                                    tx - tile.size / 2,
+                                    ty + tile.height / 2
+                                );
+                                ctx.lineTo(
+                                    tx,
+                                    ty - tile.height / 2
+                                );
+                                ctx.lineTo(
+                                    tx + tile.size / 2,
+                                    ty + tile.height / 2
+                                );
+                                ctx.fillStyle = 'lightgreen';
+                                ctx.fill();
+                                break;
+                            }
+                            case '1':
+                            case '3':
+                            case '5':
+                            case '7':
+                            case '9':
+                            case 'B':
+                            case 'D': {
+                                ctx.moveTo(
+                                    tx - tile.size / 2,
+                                    ty - tile.height / 2
+                                );
+                                ctx.lineTo(
+                                    tx,
+                                    ty + tile.height / 2
+                                );
+                                ctx.lineTo(
+                                    tx + tile.size / 2,
+                                    ty - tile.height / 2
+                                );
+                                ctx.fillStyle = 'lightgreen';
+                                ctx.fill();
+                                break;
+                            }
+                            default: {
+                                break;
+                            }
+                        }
                     }
                     // draw finish
                     if (level.finish.c == tdx && level.finish.r == rdx) {
                         ctx.beginPath();
-                        ctx.font = tile.size / 2 + 'px monospace';
-                        ctx.textBaseline = 'middle';
-                        ctx.textAlign = 'center';
-                        ctx.fillStyle = '#323232';
-                        ctx.fillText('f', tx, ty);
+                        switch (t) {
+                            case '0':
+                            case '2':
+                            case '4':
+                            case '6':
+                            case '8':
+                            case 'A':
+                            case 'C': {
+                                ctx.moveTo(
+                                    tx - tile.size / 2,
+                                    ty + tile.height / 2
+                                );
+                                ctx.lineTo(
+                                    tx,
+                                    ty - tile.height / 2
+                                );
+                                ctx.lineTo(
+                                    tx + tile.size / 2,
+                                    ty + tile.height / 2
+                                );
+                                ctx.fillStyle = 'lightpink';
+                                ctx.fill();
+                                break;
+                            }
+                            case '1':
+                            case '3':
+                            case '5':
+                            case '7':
+                            case '9':
+                            case 'B':
+                            case 'D': {
+                                ctx.moveTo(
+                                    tx - tile.size / 2,
+                                    ty - tile.height / 2
+                                );
+                                ctx.lineTo(
+                                    tx,
+                                    ty + tile.height / 2
+                                );
+                                ctx.lineTo(
+                                    tx + tile.size / 2,
+                                    ty - tile.height / 2
+                                );
+                                ctx.fillStyle = 'lightpink';
+                                ctx.fill();
+                                break;
+                            }
+                            default: {
+                                break;
+                            }
+                        }
                     }
                     // draw tile
                     switch (t) {
                         case '0': {
-                            drawDots(ctx, { x: tx, y: ty }, ['bl','tc','br']);
+                            drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case '1': {
