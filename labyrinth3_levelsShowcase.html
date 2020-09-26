@@ -61,7 +61,7 @@
             // draw
             let cnv = document.createElement('canvas');
             cnv.width = Math.min(document.body.clientWidth, document.body.clientHeight);
-            cnv.height = level.length * tile.height + tile.lineWidth * 4;
+            cnv.height = level.field.length * tile.height + tile.lineWidth * 4;
             wrap.appendChild(cnv);
             let ctx = cnv.getContext('2d');
             // hor/ver
@@ -74,8 +74,8 @@
             ctx.lineWidth = core.vmin / 2;
             ctx.stroke();
             // level
-            level.forEach(function (row, rdx) {
-                let ty = cnv.height / 2 - (level.length - 1) * tile.height / 2 + tile.height * rdx;
+            level.field.forEach(function (row, rdx) {
+                let ty = cnv.height / 2 - (level.field.length - 1) * tile.height / 2 + tile.height * rdx;
                 row.forEach(function (t, tdx) {
                     let tx = cnv.width / 2 - (row.length - 1) * tile.size / 4 + tile.size / 2 * tdx;
                     // draw
