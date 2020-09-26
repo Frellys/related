@@ -184,8 +184,8 @@
                         case '4':
                         case '6':
                         case '8':
-                        case '10':
-                        case '12': {
+                        case 'A':
+                        case 'C': {
                             circles.top.forEach(function (el) {
                                 let c = document.createElementNS(ns, 'circle');
                                 c.setAttributeNS(null, 'cx', el.cx);
@@ -201,8 +201,8 @@
                         case '5':
                         case '7':
                         case '9':
-                        case '11':
-                        case '13': {
+                        case 'B':
+                        case 'D': {
                             circles.bot.forEach(function (el) {
                                 let c = document.createElementNS(ns, 'circle');
                                 c.setAttributeNS(null, 'cx', el.cx);
@@ -316,22 +316,22 @@
                         drawCircles(svg);
                         break;
                     }
-                    case '10': {
+                    case 'A': {
                         drawPolyline(svg, ['bl', 'br']);
                         drawCircles(svg);
                         break;
                     }
-                    case '11': {
+                    case 'B': {
                         drawPolyline(svg, ['tl', 'tr']);
                         drawCircles(svg);
                         break;
                     }
-                    case '12': {
+                    case 'C': {
                         drawPolyline(svg, ['bl', 'tc']);
                         drawCircles(svg);
                         break;
                     }
-                    case '13': {
+                    case 'D': {
                         drawPolyline(svg, ['tl', 'bc']);
                         drawCircles(svg);
                         break;
