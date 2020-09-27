@@ -56,31 +56,19 @@
         let wrap = document.querySelector('body > div#wrap');
         levels.forEach(function (level, ldx) {
             // header
-            //let header = document.createElement('h1');
-            //header.innerHTML = 'lvl ' + (ldx + 1).toString();
-            //wrap.appendChild(header);
+            let header = document.createElement('h1');
+            header.innerHTML = 'lvl ' + (ldx + 1).toString();
+            wrap.appendChild(header);
             // canvas
             let cnv = document.createElement('canvas');
             cnv.width = Math.min(core.width, core.height);
-            //cnv.height = level.field.length * tile.height + tile.lineWidth * 4;
             cnv.height = level.field.length * tile.height + tile.size;
             wrap.appendChild(cnv);
             let ctx = cnv.getContext('2d');
             // bg
             ctx.beginPath();
-            //ctx.fillStyle = 'rgba(50, 50, 50, 0.075)';
-            //ctx.fillStyle = 'lightblue';
-            //ctx.fillStyle = 'lightsteelblue';
             ctx.fillStyle = 'lightsteelblue';
             ctx.fillRect(0, 0, cnv.width, cnv.height);
-            // lvl
-            ctx.beginPath();
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            ctx.font = tile.size / 4 * 3 + 'px monospace';
-            ctx.fillStyle = '#323232';
-            //ctx.fillText('lvl ' + (ldx + 1).toString(), 0, 0);
-            ctx.fillText('lvl: ' + (ldx + 1).toString(), core.vmin * 2, core.vmin * 2);
             // hor/ver
             ctx.beginPath();
             ctx.moveTo(0, cnv.height / 2);
