@@ -57,10 +57,13 @@
         levels.forEach(function (level, ldx) {
             // header
             let header = document.createElement('h1');
-            header.innerHTML = 'lvl ' + (ldx + 1).toString();
+            header.style.marginTop = core.vmin * 2 + 'px';
+            header.style.marginBottom = core.vmin / 2 + 'px';
+            header.innerHTML = 'lvl: ' + (ldx + 1).toString();
             wrap.appendChild(header);
             // canvas
             let cnv = document.createElement('canvas');
+            cnv.style.display = 'block';
             cnv.width = Math.min(core.width, core.height);
             cnv.height = level.field.length * tile.height + tile.size;
             wrap.appendChild(cnv);
@@ -204,12 +207,10 @@
                             break;
                         }
                         case '2': {
-                            //drawLine(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case '3': {
-                            //drawLine(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
@@ -220,8 +221,10 @@
                 });
             });
             // sep
-            let hr = document.createElement('hr');
-            wrap.appendChild(hr);
+            //let hr = document.createElement('hr');
+            //hr.style.marginTop = core.vmin + 'px';
+            //hr.style.marginBottom = core.vmin + 'px';
+            //wrap.appendChild(hr);
         });
         function drawDots(ctx, c, pos) {
             pos.forEach(function (p) {
