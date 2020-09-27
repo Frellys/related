@@ -56,15 +56,23 @@
         let wrap = document.querySelector('body > div#wrap');
         levels.forEach(function (level, ldx) {
             // header
-            let header = document.createElement('h1');
-            header.innerHTML = 'lvl ' + (ldx + 1).toString();
-            wrap.appendChild(header);
-            // draw
+            //let header = document.createElement('h1');
+            //header.innerHTML = 'lvl ' + (ldx + 1).toString();
+            //wrap.appendChild(header);
+            // canvas
             let cnv = document.createElement('canvas');
             cnv.width = Math.min(core.width, core.height);
             cnv.height = level.field.length * tile.height + tile.lineWidth * 4;
             wrap.appendChild(cnv);
             let ctx = cnv.getContext('2d');
+            // lvl
+            ctx.beginPath();
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.font = tile.size / 2 + 'px monospace';
+            ctx.fillStyle = '#323232';
+            //ctx.fillText('lvl ' + (ldx + 1).toString(), 0, 0);
+            ctx.fillText('lvl ' + (ldx + 1).toString(), core.vmin, core.vmin);
             // hor/ver
             ctx.beginPath();
             ctx.moveTo(0, cnv.height / 2);
