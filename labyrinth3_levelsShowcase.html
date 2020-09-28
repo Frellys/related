@@ -131,13 +131,68 @@
                 ctx.fillStyle = 'lightgreen';
                 ctx.fill();
             }
+            {
+                // finish
+                ctx.beginPath();
+                let sx = cnv.width / 2 - (level.field[0].length - 1) * tile.size / 4 + tile.size / 2 * level.finish.c;
+                let sy = cnv.height / 2 - (level.field.length - 1) * tile.height / 2 + tile.height * level.finish.r;
+                switch (level.field[level.finish.r][level.finish.c]) {
+                    case '0':
+                    case '2':
+                    case '4':
+                    case '6':
+                    case '8':
+                    case 'A':
+                    case 'C': {
+                        ctx.moveTo(
+                            sx - tile.size / 2,
+                            sy + tile.height / 2
+                        );
+                        ctx.lineTo(
+                            sx,
+                            sy - tile.height / 2
+                        );
+                        ctx.lineTo(
+                            sx + tile.size / 2,
+                            sy + tile.height / 2
+                        );
+                        break;
+                    }
+                    case '1':
+                    case '3':
+                    case '5':
+                    case '7':
+                    case '9':
+                    case 'B':
+                    case 'D': {
+                        ctx.moveTo(
+                            sx - tile.size / 2,
+                            sy - tile.height / 2
+                        );
+                        ctx.lineTo(
+                            sx,
+                            sy + tile.height / 2
+                        );
+                        ctx.lineTo(
+                            sx + tile.size / 2,
+                            sy - tile.height / 2
+                        );
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+                ctx.fillStyle = 'lightpink';
+                ctx.fill();
+            }
             // level
             level.field.forEach(function (row, rdx) {
                 let ty = cnv.height / 2 - (level.field.length - 1) * tile.height / 2 + tile.height * rdx;
                 row.forEach(function (t, tdx) {
                     let tx = cnv.width / 2 - (row.length - 1) * tile.size / 4 + tile.size / 2 * tdx;
-                    // draw start
-                    //if (level.start.c == tdx && level.start.r == rdx) {
+                    // draw finish
+                    //if (level.finish.c == tdx && level.finish.r == rdx) {
                     //    ctx.beginPath();
                     //    switch (t) {
                     //        case '0':
@@ -159,7 +214,7 @@
                     //                tx + tile.size / 2,
                     //                ty + tile.height / 2
                     //            );
-                    //            ctx.fillStyle = 'lightgreen';
+                    //            ctx.fillStyle = 'lightpink';
                     //            ctx.fill();
                     //            break;
                     //        }
@@ -182,7 +237,7 @@
                     //                tx + tile.size / 2,
                     //                ty - tile.height / 2
                     //            );
-                    //            ctx.fillStyle = 'lightgreen';
+                    //            ctx.fillStyle = 'lightpink';
                     //            ctx.fill();
                     //            break;
                     //        }
@@ -191,61 +246,6 @@
                     //        }
                     //    }
                     //}
-                    // draw finish
-                    if (level.finish.c == tdx && level.finish.r == rdx) {
-                        ctx.beginPath();
-                        switch (t) {
-                            case '0':
-                            case '2':
-                            case '4':
-                            case '6':
-                            case '8':
-                            case 'A':
-                            case 'C': {
-                                ctx.moveTo(
-                                    tx - tile.size / 2,
-                                    ty + tile.height / 2
-                                );
-                                ctx.lineTo(
-                                    tx,
-                                    ty - tile.height / 2
-                                );
-                                ctx.lineTo(
-                                    tx + tile.size / 2,
-                                    ty + tile.height / 2
-                                );
-                                ctx.fillStyle = 'lightpink';
-                                ctx.fill();
-                                break;
-                            }
-                            case '1':
-                            case '3':
-                            case '5':
-                            case '7':
-                            case '9':
-                            case 'B':
-                            case 'D': {
-                                ctx.moveTo(
-                                    tx - tile.size / 2,
-                                    ty - tile.height / 2
-                                );
-                                ctx.lineTo(
-                                    tx,
-                                    ty + tile.height / 2
-                                );
-                                ctx.lineTo(
-                                    tx + tile.size / 2,
-                                    ty - tile.height / 2
-                                );
-                                ctx.fillStyle = 'lightpink';
-                                ctx.fill();
-                                break;
-                            }
-                            default: {
-                                break;
-                            }
-                        }
-                    }
                     // draw tile
                     switch (t) {
                         case '0': {
