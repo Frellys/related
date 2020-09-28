@@ -191,79 +191,24 @@
                 let ty = cnv.height / 2 - (level.field.length - 1) * tile.height / 2 + tile.height * rdx;
                 row.forEach(function (t, tdx) {
                     let tx = cnv.width / 2 - (row.length - 1) * tile.size / 4 + tile.size / 2 * tdx;
-                    // draw finish
-                    //if (level.finish.c == tdx && level.finish.r == rdx) {
-                    //    ctx.beginPath();
-                    //    switch (t) {
-                    //        case '0':
-                    //        case '2':
-                    //        case '4':
-                    //        case '6':
-                    //        case '8':
-                    //        case 'A':
-                    //        case 'C': {
-                    //            ctx.moveTo(
-                    //                tx - tile.size / 2,
-                    //                ty + tile.height / 2
-                    //            );
-                    //            ctx.lineTo(
-                    //                tx,
-                    //                ty - tile.height / 2
-                    //            );
-                    //            ctx.lineTo(
-                    //                tx + tile.size / 2,
-                    //                ty + tile.height / 2
-                    //            );
-                    //            ctx.fillStyle = 'lightpink';
-                    //            ctx.fill();
-                    //            break;
-                    //        }
-                    //        case '1':
-                    //        case '3':
-                    //        case '5':
-                    //        case '7':
-                    //        case '9':
-                    //        case 'B':
-                    //        case 'D': {
-                    //            ctx.moveTo(
-                    //                tx - tile.size / 2,
-                    //                ty - tile.height / 2
-                    //            );
-                    //            ctx.lineTo(
-                    //                tx,
-                    //                ty + tile.height / 2
-                    //            );
-                    //            ctx.lineTo(
-                    //                tx + tile.size / 2,
-                    //                ty - tile.height / 2
-                    //            );
-                    //            ctx.fillStyle = 'lightpink';
-                    //            ctx.fill();
-                    //            break;
-                    //        }
-                    //        default: {
-                    //            break;
-                    //        }
-                    //    }
-                    //}
                     // draw tile
                     switch (t) {
                         case '0': {
                             drawLine(ctx, { x: tx, y: ty }, ['bl', 'tc']);
-                            //drawLine(ctx, { x: tx, y: ty }, ['tc', 'br']);
-                            drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
+                            drawLine(ctx, { x: tx, y: ty }, ['tc', 'br']);
+                            //drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case '1': {
-                            drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
+                            //drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
                         case '2': {
-                            drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
+                            //drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case '3': {
-                            drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
+                            //drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
                         default: {
@@ -278,27 +223,27 @@
                 ctx.beginPath();
                 switch (p) {
                     case 'tl': {
-                        ctx.arc(c.x - tile.size / 2, c.y - tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        ctx.arc(c.x - tile.size / 2, c.y - tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
                         break;
                     }
                     case 'tc': {
-                        ctx.arc(c.x, c.y - tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        ctx.arc(c.x, c.y - tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
                         break;
                     }
                     case 'tr': {
-                        ctx.arc(c.x + tile.size / 2, c.y - tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        ctx.arc(c.x + tile.size / 2, c.y - tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
                         break;
                     }
                     case 'bl': {
-                        ctx.arc(c.x - tile.size / 2, c.y + tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        ctx.arc(c.x - tile.size / 2, c.y + tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
                         break;
                     }
                     case 'bc': {
-                        ctx.arc(c.x, c.y + tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        ctx.arc(c.x, c.y + tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
                         break;
                     }
                     case 'br': {
-                        ctx.arc(c.x + tile.size / 2, c.y + tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
+                        ctx.arc(c.x + tile.size / 2, c.y + tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
                         break;
                     }
                     default: {
@@ -372,6 +317,7 @@
                     }
                 }
             });
+            ctx.lineCap = 'round';
             ctx.lineWidth = ctx.lineWidth;
             ctx.strokeStyle = '#323232';
             ctx.stroke();
