@@ -198,54 +198,77 @@
                     // draw tile
                     switch (t) {
                         case '0': {
+                            drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case '1': {
+                            drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
                         case '2': {
                             drawLine(ctx, { x: tx, y: ty }, ['bl', 'tc']);
                             drawLine(ctx, { x: tx, y: ty }, ['tc', 'br']);
+                            drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case '3': {
+                            drawLine(ctx, { x: tx, y: ty }, ['tl', 'bc']);
+                            drawLine(ctx, { x: tx, y: ty }, ['bc', 'tr']);
+                            drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
                         case '4': {
                             drawLine(ctx, { x: tx, y: ty }, ['tc', 'br']);
                             drawLine(ctx, { x: tx, y: ty }, ['br', 'bl']);
+                            drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case '5': {
+                            drawLine(ctx, { x: tx, y: ty }, ['tl', 'tr']);
+                            drawLine(ctx, { x: tx, y: ty }, ['tr', 'bc']);
+                            drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
                         case '6': {
                             drawLine(ctx, { x: tx, y: ty }, ['tc', 'bl']);
                             drawLine(ctx, { x: tx, y: ty }, ['bl', 'br']);
+                            drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case '7': {
+                            drawLine(ctx, { x: tx, y: ty }, ['bc', 'tl']);
+                            drawLine(ctx, { x: tx, y: ty }, ['tl', 'tr']);
+                            drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
                         case '8': {
                             drawLine(ctx, { x: tx, y: ty }, ['tc', 'br']);
+                            drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case '9': {
+                            drawLine(ctx, { x: tx, y: ty }, ['tr', 'bc']);
+                            drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
                         case 'A': {
                             drawLine(ctx, { x: tx, y: ty }, ['bl', 'br']);
+                            drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case 'B': {
+                            drawLine(ctx, { x: tx, y: ty }, ['tl', 'tr']);
+                            drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
                         case 'C': {
                             drawLine(ctx, { x: tx, y: ty }, ['bl', 'tc']);
+                            drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
                         case 'D': {
+                            drawLine(ctx, { x: tx, y: ty }, ['tl', 'bc']);
+                            drawDots(ctx, { x: tx, y: ty }, ['tl', 'bc', 'tr']);
                             break;
                         }
                         default: {
@@ -260,27 +283,27 @@
                 ctx.beginPath();
                 switch (p) {
                     case 'tl': {
-                        ctx.arc(c.x - tile.size / 2, c.y - tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
+                        ctx.arc(c.x - tile.size / 2, c.y - tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
                         break;
                     }
                     case 'tc': {
-                        ctx.arc(c.x, c.y - tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
+                        ctx.arc(c.x, c.y - tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
                         break;
                     }
                     case 'tr': {
-                        ctx.arc(c.x + tile.size / 2, c.y - tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
+                        ctx.arc(c.x + tile.size / 2, c.y - tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
                         break;
                     }
                     case 'bl': {
-                        ctx.arc(c.x - tile.size / 2, c.y + tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
+                        ctx.arc(c.x - tile.size / 2, c.y + tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
                         break;
                     }
                     case 'bc': {
-                        ctx.arc(c.x, c.y + tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
+                        ctx.arc(c.x, c.y + tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
                         break;
                     }
                     case 'br': {
-                        ctx.arc(c.x + tile.size / 2, c.y + tile.height / 2, tile.lineWidth / 2, 0, 2 * Math.PI);
+                        ctx.arc(c.x + tile.size / 2, c.y + tile.height / 2, tile.lineWidth, 0, 2 * Math.PI);
                         break;
                     }
                     default: {
