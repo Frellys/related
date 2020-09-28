@@ -78,6 +78,35 @@
             ctx.stroke();
             // level
             level.field.forEach(function (row, rdx) {
+                {
+                    // start
+                    ctx.beginPath();
+                    let sx = 123;
+                    let sy = 123;
+                    switch (level.field[level.start.r][level.start.c]) {
+                        case '0':
+                        case '2':
+                        case '4':
+                        case '6':
+                        case '8':
+                        case 'A':
+                        case 'C': {
+                            break;
+                        }
+                        case '1':
+                        case '3':
+                        case '5':
+                        case '7':
+                        case '9':
+                        case 'B':
+                        case 'D': {
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                }
                 let ty = cnv.height / 2 - (level.field.length - 1) * tile.height / 2 + tile.height * rdx;
                 row.forEach(function (t, tdx) {
                     let tx = cnv.width / 2 - (row.length - 1) * tile.size / 4 + tile.size / 2 * tdx;
