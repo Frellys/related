@@ -198,8 +198,8 @@
                     // draw tile
                     switch (t) {
                         case '0': {
-                            drawLine(ctx, { x: tx, y: ty }, ['bl', 'tc']);
-                            drawLine(ctx, { x: tx, y: ty }, ['tc', 'br']);
+                            //drawLine(ctx, { x: tx, y: ty }, ['bl', 'tc']);
+                            //drawLine(ctx, { x: tx, y: ty }, ['tc', 'br']);
                             //drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
@@ -216,30 +216,35 @@
                             break;
                         }
                         case '4': {
+                            drawLine(ctx, { x: tx, y: ty }, ['tc', 'br', 'bl']);
                             break;
                         }
                         case '5': {
                             break;
                         }
                         case '6': {
+                            drawLine(ctx, { x: tx, y: ty }, ['tc', 'bl', 'br']);
                             break;
                         }
                         case '7': {
                             break;
                         }
                         case '8': {
+                            drawLine(ctx, { x: tx, y: ty }, ['tc', 'br']);
                             break;
                         }
                         case '9': {
                             break;
                         }
                         case 'A': {
+                            drawLine(ctx, { x: tx, y: ty }, ['bl', 'br']);
                             break;
                         }
                         case 'B': {
                             break;
                         }
                         case 'C': {
+                            drawLine(ctx, { x: tx, y: ty }, ['bl', 'tc']);
                             break;
                         }
                         case 'D': {
