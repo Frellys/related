@@ -63,19 +63,23 @@
             cnv.height = level.field.length * tile.height + tile.size;
             wrap.appendChild(cnv);
             let ctx = cnv.getContext('2d');
-            // bg
-            ctx.beginPath();
-            ctx.fillStyle = 'lightsteelblue';
-            ctx.fillRect(0, 0, cnv.width, cnv.height);
-            // hor/ver
-            ctx.beginPath();
-            ctx.moveTo(0, cnv.height / 2);
-            ctx.lineTo(cnv.width, cnv.height / 2);
-            ctx.moveTo(cnv.width / 2, 0);
-            ctx.lineTo(cnv.width / 2, cnv.height);
-            ctx.strokeStyle = 'wheat';
-            ctx.lineWidth = core.vmin / 2;
-            ctx.stroke();
+            {
+                // bg
+                ctx.beginPath();
+                ctx.fillStyle = 'lightsteelblue';
+                ctx.fillRect(0, 0, cnv.width, cnv.height);
+            }
+            {
+                // hor/ver
+                ctx.beginPath();
+                ctx.moveTo(0, cnv.height / 2);
+                ctx.lineTo(cnv.width, cnv.height / 2);
+                ctx.moveTo(cnv.width / 2, 0);
+                ctx.lineTo(cnv.width / 2, cnv.height);
+                ctx.strokeStyle = 'wheat';
+                ctx.lineWidth = core.vmin / 2;
+                ctx.stroke();
+            }
             {
                 // start
                 ctx.beginPath();
