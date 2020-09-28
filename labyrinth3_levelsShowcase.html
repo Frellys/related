@@ -194,6 +194,8 @@
                     // draw tile
                     switch (t) {
                         case '0': {
+                            drawLine(ctx, { x: tx, y: ty }, ['bl', 'tc']);
+                            //drawLine(ctx, { x: tx, y: ty }, ['tc', 'br']);
                             drawDots(ctx, { x: tx, y: ty }, ['bl', 'tc', 'br']);
                             break;
                         }
@@ -253,8 +255,8 @@
             });
         }
         function drawLine(ctx, c, pos) {
+            ctx.beginPath();
             pos.forEach(function (p, pdx) {
-                ctx.beginPath();
                 switch (p) {
                     case 'tl': {
                         if (pdx == 0) {
@@ -314,9 +316,10 @@
                         break;
                     }
                 }
-                ctx.strokeStyle = '#323232';
-                ctx.stroke();
             });
+            ctx.lineWidth = ctx.lineWidth;
+            ctx.strokeStyle = '#323232';
+            ctx.stroke();
         }
     </script>
 </body>
