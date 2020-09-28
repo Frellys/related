@@ -101,8 +101,6 @@
                             sx + tile.size / 2,
                             sy + tile.height / 2
                         );
-                        ctx.fillStyle = 'lightgreen';
-                        ctx.fill();
                         break;
                     }
                     case '1':
@@ -124,14 +122,14 @@
                             sx + tile.size / 2,
                             sy - tile.height / 2
                         );
-                        ctx.fillStyle = 'lightgreen';
-                        ctx.fill();
                         break;
                     }
                     default: {
                         break;
                     }
                 }
+                ctx.fillStyle = 'lightgreen';
+                ctx.fill();
             }
             // level
             level.field.forEach(function (row, rdx) {
