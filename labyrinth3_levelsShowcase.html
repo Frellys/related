@@ -278,6 +278,14 @@
                 });
             });
         });
+        {
+            // scroll
+            document.documentElement.scrollTo({
+                left: 0,
+                top: document.documentElement.scrollHeight - document.documentElement.clientHeight,
+                behavior: 'smooth'
+            });
+        }
         function drawDots(ctx, c, pos) {
             pos.forEach(function (p) {
                 ctx.beginPath();
