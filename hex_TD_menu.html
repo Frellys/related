@@ -50,6 +50,7 @@
             drawBackground();
             drawButtonPlay();
             drawButtonOptions();
+            drawButtonExit();
         }, 1000 / core.fps);
         function drawBackground() {
             ctx.clearRect(0, 0, core.width, core.height);
@@ -95,6 +96,27 @@
             let height = size * Math.sqrt(3) / 2;
             let tx = core.width / 2 - (size * 2.5) - core.vmin * 2;
             let ty = core.height / 2 - height;
+            // path
+            ctx.beginPath();
+            ctx.moveTo(tx - size / 2, ty - height);
+            ctx.lineTo(tx + size / 2, ty - height);
+            ctx.lineTo(tx + size, ty);
+            ctx.lineTo(tx + size / 2, ty + height);
+            ctx.lineTo(tx - size / 2, ty + height);
+            ctx.lineTo(tx - size, ty);
+            ctx.closePath();
+            // color
+            ctx.fillStyle = ctx.isPointInPath(core.mouse.x, core.mouse.y) ? 'wheat' : 'whitesmoke';
+            ctx.fill();
+            ctx.strokeStyle = '#121212';
+            ctx.lineWidth = core.vmin / 4;
+            ctx.stroke();
+        }
+        function drawButtonExit() {
+            let size = core.vmin * 6;
+            let height = size * Math.sqrt(3) / 2;
+            let tx = core.width / 2 - (size * 2.5) - core.vmin * 2;
+            let ty = core.height / 2 + height;
             // path
             ctx.beginPath();
             ctx.moveTo(tx - size / 2, ty - height);
