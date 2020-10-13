@@ -72,8 +72,8 @@
             // color
             ctx.fillStyle = ctx.isPointInPath(core.mouse.x, core.mouse.y) ? 'wheat' : 'powderblue';
             ctx.fill();
-            ctx.strokeStyle = ctx.isPointInPath(core.mouse.x, core.mouse.y) ? 'powderblue' : 'wheat';
-            ctx.lineWidth = core.vmin;
+            ctx.strokeStyle = '#121212';
+            ctx.lineWidth = core.vmin / 4;
             ctx.stroke();
         }
         // mousemove listener
