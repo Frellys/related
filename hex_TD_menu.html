@@ -95,7 +95,7 @@
             let size = core.vmin * 6;
             let height = size * Math.sqrt(3) / 2;
             let tx = core.width / 2 - (size * 2.5) - core.vmin * 2;
-            let ty = core.height / 2 - height;
+            let ty = core.height / 2 - height - core.vmin / 2;
             // path
             ctx.beginPath();
             ctx.moveTo(tx - size / 2, ty - height);
@@ -116,7 +116,7 @@
             let size = core.vmin * 6;
             let height = size * Math.sqrt(3) / 2;
             let tx = core.width / 2 - (size * 2.5) - core.vmin * 2;
-            let ty = core.height / 2 + height;
+            let ty = core.height / 2 + height + core.vmin / 2;
             // path
             ctx.beginPath();
             ctx.moveTo(tx - size / 2, ty - height);
@@ -131,6 +131,16 @@
             ctx.fill();
             ctx.strokeStyle = '#121212';
             ctx.lineWidth = core.vmin / 4;
+            ctx.stroke();
+            // icon
+            ctx.beginPath();
+            ctx.moveTo(tx - size / 4, ty - size / 4);
+            ctx.lineTo(tx + size / 4, ty + size / 4);
+            ctx.moveTo(tx + size / 4, ty - size / 4);
+            ctx.lineTo(tx - size / 4, ty + size / 4);
+            ctx.closePath();
+            ctx.strokeStyle = '#121212';
+            ctx.lineWidth = core.vmin / 2;
             ctx.stroke();
         }
         // mousemove listener
