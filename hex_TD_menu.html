@@ -35,6 +35,7 @@
             mouse: {
                 x: undefined,
                 y: undefined,
+                pressed: false
             }
         };
         // set canvas
@@ -47,12 +48,39 @@
         // render
         let render = setInterval(function () {
             drawBackground();
+            drawButtonPlay();
         }, 1000 / core.fps);
         function drawBackground() {
             ctx.clearRect(0, 0, core.width, core.height);
             ctx.fillStyle = core.colors.background;
             ctx.fillRect(0, 0, core.width, core.height);
         }
+        function drawButtonPlay() {
+            let tx = core.width / 2;
+            let ty = core.height / 2;
+            let size = core.vmin * 12;
+            let height = size * Math.sqrt(3) / 2;
+            // path
+            ctx.beginPath();
+            ctx.moveTo(tx - size / 2, ty - height);
+            ctx.lineTo(tx + size / 2, ty - height);
+            ctx.lineTo(tx + size, ty);
+            ctx.lineTo(tx + size / 2, ty + height);
+            ctx.lineTo(tx - size / 2, ty + height);
+            ctx.lineTo(tx - size, ty);
+            ctx.closePath();
+            // color
+            ctx.fillStyle = ctx.isPointInPath(core.mouse.x, core.mouse.y) ? 'wheat' : 'powderblue';
+            ctx.fill();
+            ctx.strokeStyle = ctx.isPointInPath(core.mouse.x, core.mouse.y) ? 'powderblue' : 'wheat';
+            ctx.lineWidth = core.vmin;
+            ctx.stroke();
+        }
+        // mousemove listener
+        window.addEventListener('mousemove', function (e) {
+            core.mouse.x = e.x;
+            core.mouse.y = e.y;
+        }, false);
     </script>
 </body>
 </html>
