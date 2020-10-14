@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>menu</title>
@@ -94,8 +94,8 @@
         function drawButtonOptions() {
             let size = core.vmin * 6;
             let height = size * Math.sqrt(3) / 2;
-            let tx = core.width / 2 - (size * 2.5) - core.vmin * 2;
-            let ty = core.height / 2 - height - core.vmin / 2;
+            let tx = core.width / 2 - core.vmin * 7 / 2;
+            let ty = core.height / 2 - core.vmin * 14 * Math.sqrt(3) / 2 - height;
             // path
             ctx.beginPath();
             ctx.moveTo(tx - size / 2, ty - height);
