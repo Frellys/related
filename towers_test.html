@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>towers_proto</title>
@@ -34,8 +34,8 @@
             constructor() {
                 this.buttons = [
                     new MenuButton('play', { x: core.width / 2, y: core.height / 2 }),
-                    new MenuButton('options', { x: core.width / 2, y: core.height / 2 + core.vmin * 8 }),
-                    new MenuButton('exit', { x: core.width / 2, y: core.height / 2 + core.vmin * 16 })
+                    new MenuButton('options', { x: core.width / 2, y: core.height / 2 + core.vmin * 10 }),
+                    new MenuButton('exit', { x: core.width / 2, y: core.height / 2 + core.vmin * 20 })
                 ];
             };
             render() {
@@ -51,8 +51,30 @@
             };
             render() {
                 core.ctx.beginPath();
-                core.ctx.fillStyle = core.colors.menu.fillStyle;
+                core.ctx.textBaseline = 'top';
+                core.ctx.textAlign = 'start';
                 core.ctx.font = 7.5 * core.vmin + 'px monospace';
+                core.ctx.rect(
+                    this.c.x - core.vmin,
+                    this.c.y - core.vmin,
+                    core.ctx.measureText(this.text).width + core.vmin * 2,
+                    core.vmin * 7.5 + core.vmin * 2
+                );
+                core.ctx.fillStyle = core.colors.menu[(core.ctx.isPointInPath(core.mouse.pos.x, core.mouse.pos.y)) ? 'fillStyle_sel' : 'fillStyle_uns'];
+                if (core.mouse.click && core.ctx.isPointInPath(core.mouse.pos.x, core.mouse.pos.y)) {
+                    core.mouse.click = false;
+                    switch (this.text) {
+                        case 'play': { alert(this.text); break; }
+                        case 'options': { alert(this.text); break; }
+                        case 'exit': {
+                            window.close();
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    };
+                }
                 core.ctx.fillText(this.text, this.c.x, this.c.y);
             };
         };
@@ -78,14 +100,16 @@
             this.mouse = {
                 click: false,
                 pos: {
-                    x: null,
-                    y: null
+                    x: 0,
+                    y: 0
                 }
             };
             this.colors = {
                 bg: '#323232',
                 menu: {
-                    fillStyle: 'gainsboro'
+                    fillStyle_uns: 'gainsboro',
+                    fillStyle_sel: 'wheat'
+
                 }
             };
             this.ctx = new (function (w, h) {
@@ -95,6 +119,38 @@
                 document.body.prepend(cnv);
                 return cnv.getContext('2d');
             })(this.width, this.height);
+            this.styles = new (function () {
+
+            })();
+            this.styles = {
+                base: {
+                    direction: 'ltr',
+                    fillStyle: '#000000',
+                    filter: 'none',
+                    font: '10px sans-serif',
+                    globalAlpha: 1,
+                    globalCompositeOperation: 'source-over',
+                    imageSmoothingEnabled: true,
+                    imageSmoothingQuality: 'low',
+                    lineCap: 'butt',
+                    lineDashOffset: 0,
+                    lineJoin: 'miter',
+                    lineWidth: 1,
+                    miterLimit: 10,
+                    shadowBlur: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0)',
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 0,
+                    strokeStyle: '#000000',
+                    textAlign: 'start',
+                    textBaseline: 'alphabetic'
+                },
+                reset: function () {
+                    Object.keys(core.styles.base).forEach(function (key) {
+                        core.ctx[key] = core.styles.base[key];
+                    });
+                }
+            };
         };
         window.addEventListener('load', function () {
             core.scene = new Menu();
@@ -102,8 +158,12 @@
                 core.mouse.pos.x = e.x;
                 core.mouse.pos.y = e.y;
             }, false);
+            window.addEventListener('click', function () {
+                core.mouse.click = true;
+            }, false);
             console.log(core);
             let render = setInterval(function () {
+                core.styles.reset();
                 Background.render();
                 if (core.scene) core.scene.render();
             }, 1000 / core.fps);
