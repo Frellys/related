@@ -16,9 +16,9 @@ for (let r = 1; r < img.width - 1; r += 16) {
             'l': (ctx.getImageData(c, (1 * r) + 6, 1, 1).data[1] < 155)
         };
         if (r == 1 && !cur['t']) cur['t'] = true;
-        if (r == 225 && !cur['b']) cur['b'] = true;
+        if (r == (img.width - 16) || r == (img.width - 17)) cur['b'] = true;
         if (c == 1 && !cur['l']) cur['l'] = true;
-        if (c == 225 && !cur['r']) cur['r'] = true;
+        if (c == (img.width - 16) || c == (img.width - 17)) cur['r'] = true;
         let char = '';
         if (!cur['t'] && !cur['r'] && !cur['b'] && !cur['l']) char = '0';
         if (cur['t'] && !cur['r'] && !cur['b'] && !cur['l']) char = '1';
