@@ -58,6 +58,9 @@
                 window.addEventListener('click', function () {
                     App.mouse.click = true;
                 }, false);
+                // logo
+                this.logo = new Logo();
+                this.render_queue.push(this.logo);
                 // timer
                 this.timer = new Timer();
                 this.render_queue.push(this.timer);
@@ -132,6 +135,16 @@
                 let y = App.mouse.y.toString().padStart(App.mouse.pad, '0');
                 App.ctx.fillText(x, App.vmin, App.height - App.vmin * 2.5);
                 App.ctx.fillText(y, App.vmin, App.height - App.vmin);
+            }
+        }
+        class Logo {
+            constructor() { }
+            Draw() {
+                App.ctx.font = (App.vmin * 10) + 'px monospace';
+                App.ctx.fillStyle = '#323232';
+                App.ctx.textAlign = 'center';
+                App.ctx.textBaseline = 'middle';
+                App.ctx.fillText('<sometext>', App.width / 2, App.height / 2);
             }
         }
         window.addEventListener('resize', function () {
