@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>curve_test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: gray;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let App = new (function () {
+            this.fps = 50;
+            this.width = window.innerWidth;
+            this.height = window.innerHeight;
+            this.vmax = Math.max(this.width, this.height) / 100;
+            this.vmin = Math.min(this.width, this.height) / 100;
+            this.render_queue = [];
+            this.cnv = document.createElement('canvas');
+            this.cnv.width = this.width;
+            this.cnv.height = this.height;
+            document.body.appendChild(this.cnv);
+            this.ctx = this.cnv.getContext('2d');
+            this.Start = function () {
+                // background
+                this.background = new Background();
+                this.render_queue.push(this.background);
+                // timer
+                this.timer = new Timer();
+            };
+        })();
+        class Timer {
+            constructor() {
+                this.render = setInterval(function () {
+                    App.render_queue.forEach(function (el) {
+                        el.Draw();
+                    });
+                }, 1000 / App.fps);
+            }
+        }
+        class Background {
+            constructor() {
+                this.fillStyle = 'gainsboro';
+            }
+            Draw() {
+                App.ctx.clearRect(0, 0, App.width, App.height);
+                App.ctx.fillStyle = this.fillStyle;
+                App.ctx.fillRect(0, 0, App.width, App.height);
+            }
+        }
+        window.addEventListener('resize', function () {
+            App.width = window.innerWidth;
+            App.height = window.innerHeight;
+            App.vmax = Math.max(App.width, App.height) / 100;
+            App.vmin = Math.min(App.width, App.height) / 100;
+            App.cnv.width = App.width;
+            App.cnv.height = App.height;
+        }, false);
+        window.addEventListener('load', function () {
+            App.Start();
+        }, { once: true });
+    </script>
+</body>
+</html>
