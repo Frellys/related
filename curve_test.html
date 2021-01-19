@@ -42,6 +42,12 @@
                 // menu
                 this.menu = new Menu();
                 this.render_queue.push(this.menu);
+                window.addEventListener('keyup', function (e) {
+                    if (e.key == 'Escape') {
+                        App.menu.wrap.style.display = (App.menu.isOpened) ? 'none' : 'block';
+                        App.menu.isOpened = !App.menu.isOpened;
+                    }
+                }, false);
                 // mouse
                 this.mouse = new Mouse();
                 this.render_queue.push(this.mouse);
@@ -91,6 +97,14 @@
             constructor() {
                 this.isOpened = false;
                 this.wrap = document.createElement('div');
+                this.wrap.style.display = 'none';
+                this.wrap.style.position = 'absolute';
+                this.wrap.style.top = '0';
+                this.wrap.style.left = '0';
+                this.wrap.style.width = '100vw';
+                this.wrap.style.height = '100vh';
+                this.wrap.style.backdropFilter = 'blur(5px)';
+                document.body.appendChild(this.wrap);
             }
             Draw() {
                 if (!this.isOpened) {
