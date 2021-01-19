@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>curve_test</title>
@@ -41,8 +41,10 @@
                 this.render_queue.push(this.background);
                 // menu
                 this.menu = new Menu();
+                this.render_queue.push(this.menu);
                 // mouse
                 this.mouse = new Mouse();
+                this.render_queue.push(this.mouse);
                 window.addEventListener('mousemove', function (e) {
                     App.mouse.x = e.x;
                     App.mouse.y = e.y;
@@ -52,6 +54,7 @@
                 }, false);
                 // timer
                 this.timer = new Timer();
+                this.render_queue.push(this.timer);
             };
         })();
         class Timer {
@@ -63,10 +66,20 @@
                     App.mouse.click = false;
                 }, 1000 / App.fps);
             }
+            Draw() {
+                App.ctx.font = (App.vmin * 3) + 'px monospace';
+                App.ctx.fillStyle = '#323232';
+                App.ctx.textAlign = 'end';
+                App.ctx.textBaseline = 'top';
+                let dt = new Date();
+                let hh = dt.getHours().toString().padStart(2, '0');
+                let mm = dt.getMinutes().toString().padStart(2, '0');
+                App.ctx.fillText(hh + ':' + mm, App.width - App.vmin, App.vmin);
+            }
         }
         class Background {
             constructor() {
-                this.fillStyle = 'gainsboro';
+                this.fillStyle = 'whitesmoke';
             }
             Draw() {
                 App.ctx.clearRect(0, 0, App.width, App.height);
@@ -75,14 +88,36 @@
             }
         }
         class Menu {
-            constructor() { }
-            Draw() { }
+            constructor() {
+                this.isOpened = false;
+                this.wrap = document.createElement('div');
+            }
+            Draw() {
+                if (!this.isOpened) {
+                    App.ctx.font = (App.vmin * 3) + 'px monospace';
+                    App.ctx.fillStyle = '#323232';
+                    App.ctx.textAlign = 'start';
+                    App.ctx.textBaseline = 'top';
+                    App.ctx.fillText('esc', App.vmin, App.vmin);
+                }
+            }
         }
         class Mouse {
             constructor() {
                 this.x = 0;
                 this.y = 0;
                 this.click = false;
+                this.pad = Math.max(window.screen.width, window.screen.height).toString().length;
+            }
+            Draw() {
+                App.ctx.font = (App.vmin * 1.5) + 'px monospace';
+                App.ctx.fillStyle = '#323232';
+                App.ctx.textAlign = 'start';
+                App.ctx.textBaseline = 'alphabetic';
+                let x = App.mouse.x.toString().padStart(App.mouse.pad, '0');
+                let y = App.mouse.y.toString().padStart(App.mouse.pad, '0');
+                App.ctx.fillText(x, App.vmin, App.height - App.vmin * 2.5);
+                App.ctx.fillText(y, App.vmin, App.height - App.vmin);
             }
         }
         window.addEventListener('resize', function () {
@@ -95,6 +130,7 @@
         }, false);
         window.addEventListener('load', function () {
             App.Start();
+            console.log(App);
         }, { once: true });
     </script>
 </body>
