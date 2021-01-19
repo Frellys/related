@@ -19,9 +19,36 @@
             width: 100vw;
             vertical-align: middle;
         }
+
+            body > #wrap {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                backdrop-filter: blur(5px);
+            }
+
+                body > #wrap > #left {
+                    display: inline-block;
+                    width: 30vw;
+                    height: 100vh;
+                    background-color: rgba(50, 50, 50, 0.25);
+                }
+
+                body > #wrap > #right {
+                    display: inline-block;
+                    width: 70vw;
+                    height: 100vh;
+                    background-color: rgba(102, 51, 153, 0.25);
+                }
     </style>
 </head>
 <body>
+    <div id="wrap">
+        <div id="left"></div>
+        <div id="right"></div>
+    </div>
     <script>
         let App = new (function () {
             this.fps = 50;
@@ -44,7 +71,7 @@
                 this.render_queue.push(this.menu);
                 window.addEventListener('keyup', function (e) {
                     if (e.key == 'Escape') {
-                        App.menu.wrap.style.display = (App.menu.isOpened) ? 'none' : 'block';
+                        App.menu.wrap.style.display = (App.menu.isOpened) ? 'none' : 'flex';
                         App.menu.isOpened = !App.menu.isOpened;
                     }
                 }, false);
@@ -99,15 +126,8 @@
         class Menu {
             constructor() {
                 this.isOpened = false;
-                this.wrap = document.createElement('div');
+                this.wrap = document.querySelector('body > div#wrap');
                 this.wrap.style.display = 'none';
-                this.wrap.style.position = 'absolute';
-                this.wrap.style.top = '0';
-                this.wrap.style.left = '0';
-                this.wrap.style.width = '100vw';
-                this.wrap.style.height = '100vh';
-                this.wrap.style.backdropFilter = 'blur(5px)';
-                document.body.appendChild(this.wrap);
             }
             Draw() {
                 if (!this.isOpened) {
@@ -145,6 +165,11 @@
                 App.ctx.textAlign = 'center';
                 App.ctx.textBaseline = 'middle';
                 App.ctx.fillText('<sometext>', App.width / 2, App.height / 2);
+            }
+        }
+        class Level {
+            constructor(rows, cols) {
+
             }
         }
         window.addEventListener('resize', function () {
