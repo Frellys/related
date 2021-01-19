@@ -39,6 +39,17 @@
                 // background
                 this.background = new Background();
                 this.render_queue.push(this.background);
+                // menu
+                this.menu = new Menu();
+                // mouse
+                this.mouse = new Mouse();
+                window.addEventListener('mousemove', function (e) {
+                    App.mouse.x = e.x;
+                    App.mouse.y = e.y;
+                }, false);
+                window.addEventListener('click', function () {
+                    App.mouse.click = true;
+                }, false);
                 // timer
                 this.timer = new Timer();
             };
@@ -49,6 +60,7 @@
                     App.render_queue.forEach(function (el) {
                         el.Draw();
                     });
+                    App.mouse.click = false;
                 }, 1000 / App.fps);
             }
         }
@@ -60,6 +72,17 @@
                 App.ctx.clearRect(0, 0, App.width, App.height);
                 App.ctx.fillStyle = this.fillStyle;
                 App.ctx.fillRect(0, 0, App.width, App.height);
+            }
+        }
+        class Menu {
+            constructor() { }
+            Draw() { }
+        }
+        class Mouse {
+            constructor() {
+                this.x = 0;
+                this.y = 0;
+                this.click = false;
             }
         }
         window.addEventListener('resize', function () {
