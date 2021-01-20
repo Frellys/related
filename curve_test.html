@@ -86,10 +86,30 @@
                     body > #wrap > #right > #play.cnt {
                         display: block;
                         margin: 0 auto;
-                        width: 70%;
-                        height: 50%;
+                        padding: 1vmin;
+                        width: auto;
+                        height: auto;
                         background-color: rgba(50, 50, 50, 0.5);
                     }
+
+                        body > #wrap > #right > #play.cnt > .row {
+                            display: flex;
+                        }
+
+                            body > #wrap > #right > #play.cnt > .row > div {
+                                margin: 0.5vmin;
+                                padding: 1.5vmin;
+                                display: inline-block;
+                                font-family: monospace;
+                                font-size: 3vmin;
+                                color: #323232;
+                                background-color: whitesmoke;
+                                cursor: pointer;
+                            }
+
+                                body > #wrap > #right > #play.cnt > .row > div:hover {
+                                    background-color: gainsboro;
+                                }
 
                     body > #wrap > #right > #options.cnt {
                         display: none;
@@ -142,8 +162,7 @@
             </div>
         </div>
         <div id="right">
-            <div id="play" class="cnt">
-            </div>
+            <div id="play" class="cnt"></div>
             <div id="options" class="cnt"></div>
             <div id="controls" class="cnt"></div>
             <div id="exit" class="cnt"></div>
@@ -238,6 +257,17 @@
                 // default container
                 document.querySelectorAll('body > #wrap > #right > .cnt')[0].style.display = 'block';
                 // play container
+                let play_cnt = document.querySelector('body > #wrap > #right > #play.cnt');
+                for (let r = 0; r < 5; r++) {
+                    let row = document.createElement('div');
+                    row.className = 'row';
+                    for (let c = 0; c < 10; c++) {
+                        let col = document.createElement('div');
+                        col.innerHTML = (r * 10 + (c + 1)).toString().padStart(2, '0');
+                        row.appendChild(col);
+                    }
+                    play_cnt.appendChild(row);
+                }
             }
             Draw() {
                 if (!this.isOpened) {
