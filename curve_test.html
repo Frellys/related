@@ -68,10 +68,10 @@
     <div id="wrap">
         <div id="left">
             <div id="btns_cnt">
-                <div class="btn sel">text</div>
-                <div class="btn uns">text</div>
-                <div class="btn uns">text</div>
-                <div class="btn uns">text</div>
+                <div class="btn">text</div>
+                <div class="btn">text</div>
+                <div class="btn">text</div>
+                <div id="exit" class="btn">text</div>
             </div>
         </div>
         <div id="right"></div>
@@ -155,6 +155,8 @@
                 this.isOpened = false;
                 this.wrap = document.querySelector('body > div#wrap');
                 this.wrap.style.display = 'none';
+                // exit
+                document.querySelector('body > #wrap > #left > #btns_cnt > #exit.btn').addEventListener('click', function () { alert('exit'); }, false);
             }
             Draw() {
                 if (!this.isOpened) {
