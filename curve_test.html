@@ -13,12 +13,28 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: gray;
+            background-color: whitesmoke;
             display: table-cell;
             height: 100vh;
             width: 100vw;
             vertical-align: middle;
         }
+
+            body > #logo {
+                font-family: monospace;
+                font-size: 10vmin;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: transparent;
+                text-align: center;
+                line-height: 100vh;
+                color: #323232;
+                animation-name: logo_animation;
+                animation-duration: 2s;
+            }
 
             body > #wrap {
                 position: absolute;
@@ -65,16 +81,52 @@
                     background-color: rgba(50, 50, 50, 0.1);
                 }
 
-                    body > #wrap > #right > #exit_cnt {
+                    body > #wrap > #right > #play.cnt {
+                        display: block;
                         margin: 0 auto;
                         width: 70%;
                         height: 50%;
                         background-color: rgba(50, 50, 50, 0.5);
                     }
+
+                    body > #wrap > #right > #options.cnt {
+                        display: none;
+                        margin: 0 auto;
+                        width: 70%;
+                        height: 50%;
+                        background-color: rgba(50, 50, 50, 0.5);
+                    }
+
+                    body > #wrap > #right > #controls.cnt {
+                        display: none;
+                        margin: 0 auto;
+                        width: 70%;
+                        height: 50%;
+                        background-color: rgba(50, 50, 50, 0.5);
+                    }
+
+                    body > #wrap > #right > #exit.cnt {
+                        display: none;
+                        margin: 0 auto;
+                        width: 70%;
+                        height: 50%;
+                        background-color: rgba(50, 50, 50, 0.5);
+                    }
+
+        @keyframes logo_animation {
+            0% {
+                opacity: 0.0;
+            }
+
+            100% {
+                opacity: 1.0;
+            }
+        }
     </style>
 </head>
 <body>
-    <div id="wrap">
+    <div id="logo" style="display: none;">sometext</div>
+    <div id="wrap" style="display: none;">
         <div id="left">
             <div id="btns_cnt">
                 <div id="play" class="btn">text</div>
@@ -84,7 +136,10 @@
             </div>
         </div>
         <div id="right">
-            <div id="exit_cnt"></div>
+            <div id="play" class="cnt"></div>
+            <div id="options" class="cnt"></div>
+            <div id="controls" class="cnt"></div>
+            <div id="exit" class="cnt"></div>
         </div>
     </div>
     <script>
@@ -123,9 +178,6 @@
                 window.addEventListener('click', function () {
                     App.mouse.click = true;
                 }, false);
-                // logo
-                this.logo = new Logo();
-                this.render_queue.push(this.logo);
                 // timer
                 this.timer = new Timer();
                 this.render_queue.push(this.timer);
@@ -163,11 +215,20 @@
         }
         class Menu {
             constructor() {
-                this.isOpened = false;
+                // state
+                this.isOpened = true;
+                // wrap
                 this.wrap = document.querySelector('body > div#wrap');
-                this.wrap.style.display = 'none';
-                // exit
-                document.querySelector('body > #wrap > #left > #btns_cnt > #exit.btn').addEventListener('click', function () { alert('exit'); }, false);
+                this.wrap.style.display = 'flex';
+                // buttons
+                document.querySelectorAll('body > #wrap > #left > #btns_cnt > .btn').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        document.querySelectorAll('body > #wrap > #right > .cnt').forEach((cnt) => { cnt.style.display = 'none'; });
+                        document.querySelector('body > #wrap > #right > #' + this.id + '.cnt').style.display = 'block';
+                    }, false);
+                });
+                // default container
+                document.querySelectorAll('body > #wrap > #right > .cnt')[0].style.display = 'block';
             }
             Draw() {
                 if (!this.isOpened) {
@@ -197,16 +258,6 @@
                 App.ctx.fillText(y, App.vmin, App.height - App.vmin);
             }
         }
-        class Logo {
-            constructor() { }
-            Draw() {
-                App.ctx.font = (App.vmin * 10) + 'px monospace';
-                App.ctx.fillStyle = '#323232';
-                App.ctx.textAlign = 'center';
-                App.ctx.textBaseline = 'middle';
-                App.ctx.fillText('<sometext>', App.width / 2, App.height / 2);
-            }
-        }
         class Level {
             constructor(rows, cols) {
 
@@ -221,8 +272,12 @@
             App.cnv.height = App.height;
         }, false);
         window.addEventListener('load', function () {
-            App.Start();
-            console.log(App);
+            let logo = document.querySelector('body > #logo');
+            logo.addEventListener('animationend', function () {
+                App.Start();
+                console.log(App);
+            }, { once: true });
+            logo.style.display = 'block';
         }, { once: true });
     </script>
 </body>
