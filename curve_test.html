@@ -32,7 +32,7 @@
                 text-align: center;
                 line-height: 100vh;
                 color: #323232;
-                animation-name: logo_animation;
+                animation-name: fadeIn;
                 animation-duration: 2s;
             }
 
@@ -43,6 +43,8 @@
                 width: 100vw;
                 height: 100vh;
                 backdrop-filter: blur(5px);
+                animation-name: fadeIn;
+                animation-duration: 0.5s;
             }
 
                 body > #wrap > #left {
@@ -113,9 +115,13 @@
                         background-color: rgba(50, 50, 50, 0.5);
                     }
 
-        @keyframes logo_animation {
+        @keyframes fadeIn {
             0% {
                 opacity: 0.0;
+            }
+
+            75% {
+                opacity: 1.0;
             }
 
             100% {
@@ -136,7 +142,8 @@
             </div>
         </div>
         <div id="right">
-            <div id="play" class="cnt"></div>
+            <div id="play" class="cnt">
+            </div>
             <div id="options" class="cnt"></div>
             <div id="controls" class="cnt"></div>
             <div id="exit" class="cnt"></div>
@@ -155,6 +162,7 @@
             this.cnv.height = this.height;
             document.body.appendChild(this.cnv);
             this.ctx = this.cnv.getContext('2d');
+            this.level = false;
             this.Start = function () {
                 // background
                 this.background = new Background();
@@ -163,7 +171,7 @@
                 this.menu = new Menu();
                 this.render_queue.push(this.menu);
                 window.addEventListener('keyup', function (e) {
-                    if (e.key == 'Escape') {
+                    if (e.key == 'Escape' && App.level !== false) {
                         App.menu.wrap.style.display = (App.menu.isOpened) ? 'none' : 'flex';
                         App.menu.isOpened = !App.menu.isOpened;
                     }
@@ -229,6 +237,7 @@
                 });
                 // default container
                 document.querySelectorAll('body > #wrap > #right > .cnt')[0].style.display = 'block';
+                // play container
             }
             Draw() {
                 if (!this.isOpened) {
