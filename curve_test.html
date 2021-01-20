@@ -83,7 +83,7 @@
                     background-color: rgba(50, 50, 50, 0.1);
                 }
 
-                    body > #wrap > #right > #play.cnt {
+                    body > #wrap > #right > #play_container {
                         display: block;
                         margin: 0 auto;
                         padding: 1vmin;
@@ -92,11 +92,11 @@
                         background-color: rgba(50, 50, 50, 0.5);
                     }
 
-                        body > #wrap > #right > #play.cnt > .row {
+                        body > #wrap > #right > #play_container > .row {
                             display: flex;
                         }
 
-                            body > #wrap > #right > #play.cnt > .row > div {
+                            body > #wrap > #right > #play_container > .row > div {
                                 margin: 0.5vmin;
                                 padding: 1.5vmin;
                                 display: inline-block;
@@ -105,13 +105,14 @@
                                 color: #323232;
                                 background-color: whitesmoke;
                                 cursor: pointer;
+                                box-shadow: 0 0 2px rgba(50, 50, 50, 0.75);
                             }
 
-                                body > #wrap > #right > #play.cnt > .row > div:hover {
+                                body > #wrap > #right > #play_container > .row > div:hover {
                                     background-color: gainsboro;
                                 }
 
-                    body > #wrap > #right > #options.cnt {
+                    body > #wrap > #right > #options_container {
                         display: none;
                         margin: 0 auto;
                         width: 70%;
@@ -119,7 +120,7 @@
                         background-color: rgba(50, 50, 50, 0.5);
                     }
 
-                    body > #wrap > #right > #controls.cnt {
+                    body > #wrap > #right > #controls_container {
                         display: none;
                         margin: 0 auto;
                         width: 70%;
@@ -127,13 +128,29 @@
                         background-color: rgba(50, 50, 50, 0.5);
                     }
 
-                    body > #wrap > #right > #exit.cnt {
+                    body > #wrap > #right > #exit_container {
                         display: none;
                         margin: 0 auto;
-                        width: 70%;
-                        height: 50%;
+                        padding: 5vmin;
+                        width: auto;
+                        height: auto;
                         background-color: rgba(50, 50, 50, 0.5);
+                        font-family: monospace;
+                        font-size: 5vmin;
+                        color: gainsboro;
+                        text-align: center;
+                        text-shadow: 0 0 2px rgba(50, 50, 50, 0.75);
                     }
+
+                        body > #wrap > #right > #exit_container > div > .btn {
+                            cursor: pointer;
+                            display: inline-block;
+                            padding: 1vmin 2vmin;
+                        }
+
+                            body > #wrap > #right > #exit_container > div > .btn:hover {
+                                background-color: rgba(245, 245, 245, 0.1);
+                            }
 
         @keyframes fadeIn {
             0% {
@@ -162,10 +179,9 @@
             </div>
         </div>
         <div id="right">
-            <div id="play" class="cnt"></div>
-            <div id="options" class="cnt"></div>
-            <div id="controls" class="cnt"></div>
-            <div id="exit" class="cnt"></div>
+            <div id="play_container" class="cnt"></div>
+            <div id="options_container" class="cnt"></div>
+            <div id="controls_container" class="cnt"></div>
         </div>
     </div>
     <script>
@@ -251,13 +267,22 @@
                 document.querySelectorAll('body > #wrap > #left > #btns_cnt > .btn').forEach(function (btn) {
                     btn.addEventListener('click', function () {
                         document.querySelectorAll('body > #wrap > #right > .cnt').forEach((cnt) => { cnt.style.display = 'none'; });
-                        document.querySelector('body > #wrap > #right > #' + this.id + '.cnt').style.display = 'block';
+                        switch (this.id) {
+                            case 'exit': {
+                                alert('exit');
+                                break;
+                            }
+                            default: {
+                                document.querySelector('body > #wrap > #right > #' + this.id + '_container').style.display = 'block';
+                                break;
+                            }
+                        }
                     }, false);
                 });
                 // default container
                 document.querySelectorAll('body > #wrap > #right > .cnt')[0].style.display = 'block';
                 // play container
-                let play_cnt = document.querySelector('body > #wrap > #right > #play.cnt');
+                let play_container = document.querySelector('body > #wrap > #right > #play_container');
                 for (let r = 0; r < 5; r++) {
                     let row = document.createElement('div');
                     row.className = 'row';
@@ -266,8 +291,15 @@
                         col.innerHTML = (r * 10 + (c + 1)).toString().padStart(2, '0');
                         row.appendChild(col);
                     }
-                    play_cnt.appendChild(row);
+                    play_container.appendChild(row);
                 }
+                // options container
+                let options_container = document.querySelector('body > #wrap > #right > #options_container');
+                // controls container
+                let controls_container = document.querySelector('body > #wrap > #right > #controls_container');
+                // exit container
+                //let exit_container = document.querySelector('body > #wrap > #right > #exit_container');
+                document.querySelector('body > #wrap > #right > #exit_container > div > #exit_yes').addEventListener('click', function () { window.close(); });
             }
             Draw() {
                 if (!this.isOpened) {
