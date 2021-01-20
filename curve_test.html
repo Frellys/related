@@ -57,24 +57,35 @@
                             }
 
                 body > #wrap > #right {
-                    display: inline-block;
+                    display: inline-flex;
+                    flex-direction: column;
+                    justify-content: center;
                     width: 70vw;
                     height: 100vh;
-                    background-color: rgba(102, 51, 153, 0.1);
+                    background-color: rgba(50, 50, 50, 0.1);
                 }
+
+                    body > #wrap > #right > #exit_cnt {
+                        margin: 0 auto;
+                        width: 70%;
+                        height: 50%;
+                        background-color: rgba(50, 50, 50, 0.5);
+                    }
     </style>
 </head>
 <body>
     <div id="wrap">
         <div id="left">
             <div id="btns_cnt">
-                <div class="btn">text</div>
-                <div class="btn">text</div>
-                <div class="btn">text</div>
+                <div id="play" class="btn">text</div>
+                <div id="options" class="btn">text</div>
+                <div id="controls" class="btn">text</div>
                 <div id="exit" class="btn">text</div>
             </div>
         </div>
-        <div id="right"></div>
+        <div id="right">
+            <div id="exit_cnt"></div>
+        </div>
     </div>
     <script>
         let App = new (function () {
