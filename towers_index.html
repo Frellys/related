@@ -1,0 +1,286 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: whitesmoke;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+            font-family: monospace;
+        }
+
+        #mouse_container {
+            position: absolute;
+            left: 1ch;
+            bottom: 1ch;
+            color: #323232;
+            font-size: 1.15em;
+        }
+
+        #zoom_container {
+            position: absolute;
+            right: 1ch;
+            bottom: 10ch;
+            color: #323232;
+            font-size: 1.5em;
+        }
+
+            #zoom_container > div {
+                width: 3ch;
+                height: 3ch;
+                line-height: 3ch;
+                text-align: center;
+                margin: 0.5ch;
+                border: 1px solid rgba(50, 50, 50, 0.2);
+                border-radius: 5%;
+                background-color: rgba(50, 50, 50, 0.1);
+                cursor: pointer;
+            }
+
+                #zoom_container > div:hover {
+                    background-color: #323232;
+                    color: whitesmoke;
+                }
+
+        #wrap {
+            position: absolute;
+            top: 0;
+            width: 100vw;
+            height: auto;
+            max-height: 100vh;
+        }
+
+            #wrap > header {
+                display: flex;
+                font-size: 1.5em;
+                background-color: rgba(50, 50, 50, 0.1);
+            }
+
+                #wrap > header > div {
+                    flex: 1;
+                    cursor: pointer;
+                    padding: 1ch 2ch;
+                }
+
+                    #wrap > header > div:hover {
+                        background-color: #323232;
+                        color: whitesmoke;
+                    }
+
+                #wrap > header > #bank {
+                    text-align: center;
+                }
+
+                #wrap > header > #time {
+                    text-align: end;
+                }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <div id="mouse_container">
+        <div id="mouse_x">x</div>
+        <div id="mouse_y">x</div>
+    </div>
+    <div id="zoom_container">
+        <div id="inc">+</div>
+        <div id="dec">-</div>
+    </div>
+    <div id="wrap">
+        <header>
+            <div id="menu">esc</div>
+            <div id="bank">0.0000000000000000</div>
+            <div id="time">xx:xx</div>
+        </header>
+    </div>
+    <script>
+        let core = new function () {
+            this.fps = 50;
+            this.width = document.body.clientWidth;
+            this.height = document.body.clientHeight;
+            this.vmin = Math.min(this.width, this.height) / 100;
+            this.ctx = new function (w, h) {
+                let cnv = document.querySelector('canvas');
+                cnv.width = w;
+                cnv.height = h;
+                return cnv.getContext('2d');
+            }(this.width, this.height);
+            this.colors = {
+                bg: 'whitesmoke',
+                menu: {
+                    fillStyle_uns: 'gainsboro',
+                    fillStyle_sel: 'wheat'
+                }
+            };
+            this.styles = {
+                base: {
+                    direction: 'ltr',
+                    fillStyle: '#000000',
+                    filter: 'none',
+                    font: '10px sans-serif',
+                    globalAlpha: 1,
+                    globalCompositeOperation: 'source-over',
+                    imageSmoothingEnabled: true,
+                    imageSmoothingQuality: 'low',
+                    lineCap: 'butt',
+                    lineDashOffset: 0,
+                    lineJoin: 'miter',
+                    lineWidth: 1,
+                    miterLimit: 10,
+                    shadowBlur: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0)',
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 0,
+                    strokeStyle: '#000000',
+                    textAlign: 'start',
+                    textBaseline: 'alphabetic'
+                },
+                reset: function () {
+                    Object.keys(core.styles.base).forEach(function (key) {
+                        core.ctx[key] = core.styles.base[key];
+                    });
+                }
+            };
+        };
+        class Background {
+            static render() {
+                core.ctx.clearRect(0, 0, core.width, core.height);
+                core.ctx.fillStyle = core.colors.bg;
+                core.ctx.fillRect(0, 0, core.width, core.height);
+            };
+        };
+        class Mouse {
+            static pad = Math.max(core.width.toString().length, core.height.toString().length);
+            static click = false;
+            static pos = {
+                x: 0,
+                y: 0
+            };
+            static container = {
+                x: document.querySelector('#mouse_container > #mouse_x'),
+                y: document.querySelector('#mouse_container > #mouse_y')
+            };
+            static setPos = function (e) {
+                this.pos.x = e.x;
+                this.pos.y = e.y;
+                this.container.x.innerHTML = e.x.toString().padStart(this.pad, '0');
+                this.container.y.innerHTML = e.y.toString().padStart(this.pad, '0');
+            };
+        };
+        class Bank {
+            static value = (0).toFixed(16);
+            static container = new function () {
+                let cnt = document.querySelector('#bank');
+                cnt.innerHTML = Bank.value;
+                return cnt;
+            }();
+            static Update = function () {
+                this.container.innerHTML = this.value;
+            };
+            static Add = function (val) {
+                this.value = (parseFloat(this.value) + val).toFixed(16);
+                this.Update();
+            };
+        };
+        class Time {
+            static container = new function () {
+                let cnt = document.querySelector('#time');
+                return cnt;
+            }();
+            static getTimeString(dt) {
+                return dt.getHours().toString().padStart(2, '0') + ':' + dt.getMinutes().toString().padStart(2, '0');
+            };
+            static RequestTimeString() {
+                window.chrome.webview.postMessage('time');
+            };
+            static interval = window.setInterval(function () {
+                Time.RequestTimeString();
+            }, 1000);
+        };
+        class Zoom {
+            static factor = 1.0;
+            static delta = 0.1;
+            static max = 2.0;
+            static min = 0.5;
+            static inc = function () {
+                this.factor += this.delta;
+                if (this.factor > this.max) {
+                    this.factor = this.max;
+                }
+                this.factor = parseFloat(this.factor.toFixed(1));
+            };
+            static dec = function () {
+                this.factor -= this.delta;
+                if (this.factor < this.min) {
+                    this.factor = this.min;
+                }
+                this.factor = parseFloat(this.factor.toFixed(1));
+            };
+            static container = new function () {
+                this.inc = document.querySelector('#zoom_container > #inc');
+                this.dec = document.querySelector('#zoom_container > #dec');
+                Object.values(this).forEach(function (btn) {
+                    btn.addEventListener('click', function (e) {
+                        Zoom[e.target.id]();
+                    }, false);
+                });
+                document.querySelector('canvas').addEventListener('wheel', function (e) {
+                    Zoom[(e.deltaY > 0) ? 'inc' : 'dec']();
+                }, false);
+            }();
+        };
+    </script>
+    <script>
+        // entry
+        window.addEventListener('load', function () {
+            // set mousemove listener
+            window.addEventListener('mousemove', function (e) {
+                Mouse.setPos(e);
+            }, false);
+            // set mouseclick listener
+            window.addEventListener('click', function (e) {
+                Mouse.click = true;
+                Bank.Add(0.0000000000000001);
+            }, false);
+            // set exit listener
+            window.addEventListener('keydown', function (e) {
+                if (e.ctrlKey && e.code == 'KeyQ') {
+                    window.chrome.webview.postMessage('exit');
+                }
+            });
+            // income messages listener
+            window.chrome.webview.addEventListener('message', function (e) {
+                switch (e.data.cmd) {
+                    case 'time': {
+                        Time.container.innerHTML = e.data.msg;
+                        break;
+                    }
+                    default: {
+                        alert(e.data.cmd + ' ' + e.data.msg);
+                        break;
+                    }
+                };
+            });
+            // set render
+            let render = window.setInterval(function () {
+                core.styles.reset();
+                Background.render();
+            }, core.fps / 1000);
+        }, { once: true });
+    </script>
+</body>
+</html>
