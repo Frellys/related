@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>puzzle_level</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #323232;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+
+        .wrap {
+            width: 80vmin;
+            height: auto;
+            margin: 0 auto;
+        }
+
+            .wrap > .sourceImage {
+                max-width: 100%;
+                height: auto;
+            }
+
+        .field {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        class Level {
+            //constructor(r, c) {
+            //    return (async () => {
+            //        this.rows = r;
+            //        this.cols = c;
+            //        this.wrap = this.createWrap();
+            //        this.source = await this.getSourceImage();
+            //        this.wrap.appendChild(this.source);
+            //        this.field = this.createField(this.rows, this.cols);
+            //        this.wrap.appendChild(this.field);
+            //    })();
+            //};
+            constructor(r, c) {
+                let self = this;
+                self.rows = r;
+                self.cols = c;
+                self.wrap = self.createWrap();
+                self.getSourceImage.then(result => {
+                    self.source = result;
+                    self.wrap.appendChild(self.source);
+                    self.field = self.createField(self.rows, self.cols);
+                    self.wrap.appendChild(self.field);
+                });
+            };
+            createWrap = function () {
+                let wrap = document.createElement('div');
+                wrap.className = 'wrap';
+                document.body.appendChild(wrap);
+                return wrap;
+            };
+            //getSourceImage = () => new Promise(function (resolve) {
+            //    let img = new Image();
+            //    img.className = 'sourceImage';
+            //    img.onload = resolve(img);
+            //    img.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
+            //});
+            getSourceImage = new Promise(function (resolve) {
+                let img = new Image();
+                img.className = 'sourceImage';
+                img.onload = resolve(img);
+                img.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
+            });
+            createField = function (rows, cols) {
+                let field = document.createElement('table');
+                field.className = 'field';
+                let fieldBody = document.createElement('tbody');
+                field.appendChild(fieldBody);
+                for (let r = 0; r < rows; r++) {
+                    let row = document.createElement('tr');
+                    for (let c = 0; c < cols; c++) {
+                        let cell = document.createElement('tc');
+                        cell.appendChild(new Tile(rows, cols, 90, 90));
+                        row.appendChild(cell);
+                    }
+                    fieldBody.appendChild(row);
+                }
+                return field;
+            };
+        };
+        class Tile extends Level {
+            constructor(rows, cols, w, h) {
+                let img = document.createElement('img');
+                img.style.width = `calc(80vmin / ${rows})`;
+                img.style.height = `calc(80vmin / ${cols})`;
+                let cnv = document.createElement('canvas');
+                cnv.width = w;
+                cnv.height = h;
+                document.body.appendChild(cnv);
+                let ctx = cnv.getContext('2d');
+                ctx.drawImage(document.querySelector('.sourceImage'), 0, 0);
+                img.src = cnv.toDataURL();
+                return img;
+            };
+        };
+        let level = new Level(4, 4);
+    </script>
+</body>
+</html>
