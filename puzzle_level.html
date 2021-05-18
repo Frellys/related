@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>puzzle_level</title>
+    <title>title</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -22,97 +22,116 @@
 
         .wrap {
             width: 80vmin;
-            height: auto;
+            height: calc(80vmin / 16 * 9);
             margin: 0 auto;
         }
 
-            .wrap > .sourceImage {
-                max-width: 100%;
+            .wrap > .orig {
+                width: 80vmin;
                 height: auto;
+                position: absolute;
+                display: none;
             }
 
-        .field {
-            margin-top: 1rem;
-        }
+            .wrap > .field {
+                height: calc(80vmin / 16 * 9);
+                font-size: 0;
+            }
     </style>
 </head>
 <body>
     <script>
-        class Level {
-            //constructor(r, c) {
-            //    return (async () => {
-            //        this.rows = r;
-            //        this.cols = c;
-            //        this.wrap = this.createWrap();
-            //        this.source = await this.getSourceImage();
-            //        this.wrap.appendChild(this.source);
-            //        this.field = this.createField(this.rows, this.cols);
-            //        this.wrap.appendChild(this.field);
-            //    })();
-            //};
-            constructor(r, c) {
-                let self = this;
-                self.rows = r;
-                self.cols = c;
-                self.wrap = self.createWrap();
-                self.getSourceImage.then(result => {
-                    self.source = result;
-                    self.wrap.appendChild(self.source);
-                    self.field = self.createField(self.rows, self.cols);
-                    self.wrap.appendChild(self.field);
-                });
+        class Scene {
+            constructor(name, params) {
+                return new this.CreateScene[name](params);
             };
-            createWrap = function () {
-                let wrap = document.createElement('div');
-                wrap.className = 'wrap';
-                document.body.appendChild(wrap);
-                return wrap;
-            };
-            //getSourceImage = () => new Promise(function (resolve) {
-            //    let img = new Image();
-            //    img.className = 'sourceImage';
-            //    img.onload = resolve(img);
-            //    img.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
-            //});
-            getSourceImage = new Promise(function (resolve) {
-                let img = new Image();
-                img.className = 'sourceImage';
-                img.onload = resolve(img);
-                img.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
-            });
-            createField = function (rows, cols) {
-                let field = document.createElement('table');
-                field.className = 'field';
-                let fieldBody = document.createElement('tbody');
-                field.appendChild(fieldBody);
-                for (let r = 0; r < rows; r++) {
-                    let row = document.createElement('tr');
-                    for (let c = 0; c < cols; c++) {
-                        let cell = document.createElement('tc');
-                        cell.appendChild(new Tile(rows, cols, 90, 90));
-                        row.appendChild(cell);
-                    }
-                    fieldBody.appendChild(row);
+            CreateScene = {
+                menu: function () { },
+                options: function () { },
+                level: function (num) {
+                    let rows = 4;
+                    let cols = 4;
+                    let tiles = [];
+                    // create wrap
+                    let wrap = document.createElement('div');
+                    wrap.className = 'wrap';
+                    document.body.appendChild(wrap);
+                    // load original image
+                    let orig = new Image();
+                    orig.className = 'orig';
+                    orig.crossOrigin = 'Anonymous';
+                    orig.onload = function () {
+                        wrap.appendChild(orig);
+                        // create field
+                        let field = document.createElement('div');
+                        field.className = 'field';
+                        for (let r = 0; r < rows; r++) {
+                            for (let c = 0; c < cols; c++) {
+                                let tile = document.createElement('div');
+                                tile.className = 'tile';
+                                tile.style.display = 'inline-block';
+                                tile.style.width = `calc(80vmin / ${cols})`;
+                                tile.style.height = `calc(80vmin / 16 * 9 / ${rows})`;
+                                tile.style.backgroundImage = 'url("https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg")';
+                                tile.style.backgroundRepeat = 'no-repeat';
+                                tile.style.backgroundPositionX = `calc(0px - (80vmin / ${cols} * ${c}))`;
+                                tile.style.backgroundPositionY = `calc(0px - (80vmin / 16 * 9 / ${rows} * ${r}))`;
+                                tile.style.backgroundSize = `80vmin calc(80vmin / 16 * 9)`;
+                                tile.onmousedown = function (e) {
+                                    e.target.style.position = 'absolute';
+                                    e.target.style.left = `calc(${e.x + 'px'} - 80vmin / ${cols} / 2)`;
+                                    e.target.style.top = `calc(${e.y + 'px'} - 80vmin / 16 * 9 / ${rows} / 2)`;
+                                    App.drag.enabled = true;
+                                    App.drag.element = e.target;
+                                };
+                                field.appendChild(tile);
+                                tiles.push(tile);
+                            }
+                        }
+                        wrap.appendChild(field);
+
+                    };
+                    orig.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
+                    // set vars
+                    this.rows = rows;
+                    this.cols = cols;
+                    this.tiles = tiles;
                 }
-                return field;
             };
+            Destroy = function () { };
         };
-        class Tile extends Level {
-            constructor(rows, cols, w, h) {
-                let img = document.createElement('img');
-                img.style.width = `calc(80vmin / ${rows})`;
-                img.style.height = `calc(80vmin / ${cols})`;
-                let cnv = document.createElement('canvas');
-                cnv.width = w;
-                cnv.height = h;
-                document.body.appendChild(cnv);
-                let ctx = cnv.getContext('2d');
-                ctx.drawImage(document.querySelector('.sourceImage'), 0, 0);
-                img.src = cnv.toDataURL();
-                return img;
-            };
+        /**
+         * @namespace
+         * @property {Scene} scene - current scene container
+         */
+        let App = {
+            scene: new Scene('level'),
+            drag: {
+                enabled: false,
+                element: null
+            }
         };
-        let level = new Level(4, 4);
+        window.addEventListener('mousemove', function (e) {
+            if (App.drag.enabled) {
+                App.drag.element.style.left = `calc(${e.x + 'px'} - 80vmin / ${App.scene.cols} / 2)`;
+                App.drag.element.style.top = `calc(${e.y + 'px'} - 80vmin / 16 * 9 / ${App.scene.rows} / 2)`;
+            }
+        }, false);
+        window.addEventListener('mouseup', function (e) {
+            if (App.drag.enabled) {
+                App.drag.enabled = false;
+                let tilesAtPoint = document.elementsFromPoint(e.x, e.y).filter(el => el.className == 'tile');
+                console.log(tilesAtPoint);
+                if (tilesAtPoint.length == 2) {
+                    // swap tiles
+                }
+                else {
+                    // reset
+                    App.drag.element.style.left = 'auto';
+                    App.drag.element.style.top = 'auto';
+                }
+            }
+        }, false);
     </script>
 </body>
 </html>
