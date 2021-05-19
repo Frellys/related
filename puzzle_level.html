@@ -34,9 +34,12 @@
             }
 
             .wrap > .field {
-                height: calc(80vmin / 16 * 9);
-                font-size: 0;
+                border-collapse: collapse;
             }
+
+                .wrap > .field td {
+                    padding: 0;
+                }
     </style>
 </head>
 <body>
@@ -63,13 +66,17 @@
                     orig.onload = function () {
                         wrap.appendChild(orig);
                         // create field
-                        let field = document.createElement('div');
+                        let field = document.createElement('table');
                         field.className = 'field';
+                        let tbody = document.createElement('tbody');
                         for (let r = 0; r < rows; r++) {
+                            let row = document.createElement('tr');
                             for (let c = 0; c < cols; c++) {
+                                let cell = document.createElement('td');
+                                cell.setAttribute('row', r);
+                                cell.setAttribute('col', c);
                                 let tile = document.createElement('div');
                                 tile.className = 'tile';
-                                tile.style.display = 'inline-block';
                                 tile.style.width = `calc(80vmin / ${cols})`;
                                 tile.style.height = `calc(80vmin / 16 * 9 / ${rows})`;
                                 tile.style.backgroundImage = 'url("https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg")';
@@ -77,19 +84,32 @@
                                 tile.style.backgroundPositionX = `calc(0px - (80vmin / ${cols} * ${c}))`;
                                 tile.style.backgroundPositionY = `calc(0px - (80vmin / 16 * 9 / ${rows} * ${r}))`;
                                 tile.style.backgroundSize = `80vmin calc(80vmin / 16 * 9)`;
+                                tile.setAttribute('target-row', r);
+                                tile.setAttribute('target-col', c);
                                 tile.onmousedown = function (e) {
-                                    e.target.style.position = 'absolute';
-                                    e.target.style.left = `calc(${e.x + 'px'} - 80vmin / ${cols} / 2)`;
-                                    e.target.style.top = `calc(${e.y + 'px'} - 80vmin / 16 * 9 / ${rows} / 2)`;
+                                    e.target.setDragStyles(e.x, e.y);
                                     App.drag.enabled = true;
                                     App.drag.element = e.target;
                                 };
-                                field.appendChild(tile);
-                                tiles.push(tile);
+                                tile.setDragStyles = function (x, y) {
+                                    this.style.position = 'absolute';
+                                    this.style.left = `calc(${x + 'px'} - 80vmin / ${App.scene.cols} / 2)`;
+                                    this.style.top = `calc(${y + 'px'} - 80vmin / 16 * 9 / ${App.scene.rows} / 2)`;
+                                    this.style.boxShadow = '0 0 0.5vmin whitesmoke';
+                                };
+                                tile.setDefaultStyles = function () {
+                                    this.style.position = 'static';
+                                    this.style.left = 'auto';
+                                    this.style.top = 'auto';
+                                    this.style.boxShadow = 'none';
+                                };
+                                cell.appendChild(tile);
+                                row.appendChild(cell);
                             }
+                            tbody.appendChild(row);
                         }
+                        field.appendChild(tbody);
                         wrap.appendChild(field);
-
                     };
                     orig.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
                     // set vars
@@ -97,6 +117,10 @@
                     this.cols = cols;
                     this.tiles = tiles;
                 }
+            };
+            CheckTiles = function () {
+                App.scene.tiles.forEach(function (tile) {
+                });
             };
             Destroy = function () { };
         };
@@ -111,25 +135,34 @@
                 element: null
             }
         };
+        /**
+         * passive mousemove listener
+         * works only in drag state
+         */
         window.addEventListener('mousemove', function (e) {
             if (App.drag.enabled) {
                 App.drag.element.style.left = `calc(${e.x + 'px'} - 80vmin / ${App.scene.cols} / 2)`;
                 App.drag.element.style.top = `calc(${e.y + 'px'} - 80vmin / 16 * 9 / ${App.scene.rows} / 2)`;
             }
         }, false);
+        /**
+         * passive mousemove listener to drag tiles
+         * works only in drag state
+         */
         window.addEventListener('mouseup', function (e) {
             if (App.drag.enabled) {
                 App.drag.enabled = false;
                 let tilesAtPoint = document.elementsFromPoint(e.x, e.y).filter(el => el.className == 'tile');
-                console.log(tilesAtPoint);
                 if (tilesAtPoint.length == 2) {
                     // swap tiles
+                    let cellAtPoint = document.elementsFromPoint(e.x, e.y).find(el => el.tagName == 'TD');
+                    App.drag.element.parentNode.appendChild(tilesAtPoint.pop());
+                    cellAtPoint.appendChild(App.drag.element);
                 }
-                else {
-                    // reset
-                    App.drag.element.style.left = 'auto';
-                    App.drag.element.style.top = 'auto';
-                }
+                // set default styles of drag tile
+                App.drag.element.setDefaultStyles();
+                // remove App.drag.element
+                App.drag.element = null;
             }
         }, false);
     </script>
