@@ -54,6 +54,7 @@
                 level: function (num) {
                     let rows = 4;
                     let cols = 4;
+                    let cells = [];
                     let tiles = [];
                     // create wrap
                     let wrap = document.createElement('div');
@@ -75,6 +76,16 @@
                                 let cell = document.createElement('td');
                                 cell.setAttribute('row', r);
                                 cell.setAttribute('col', c);
+                                row.appendChild(cell);
+                                cells.push(cell);
+                            }
+                            tbody.appendChild(row);
+                        }
+                        field.appendChild(tbody);
+                        wrap.appendChild(field);
+                        // create tiles
+                        for (let r = 0; r < rows; r++) {
+                            for (let c = 0; c < cols; c++) {
                                 let tile = document.createElement('div');
                                 tile.className = 'tile';
                                 tile.style.width = `calc(80vmin / ${cols})`;
@@ -103,18 +114,19 @@
                                     this.style.top = 'auto';
                                     this.style.boxShadow = 'none';
                                 };
-                                cell.appendChild(tile);
-                                row.appendChild(cell);
+                                tiles.push(tile);
                             }
-                            tbody.appendChild(row);
                         }
-                        field.appendChild(tbody);
-                        wrap.appendChild(field);
+                        // append tiles
+                        cells.forEach(function (cell, cdx) {
+                            cell.appendChild(tiles[cdx]);
+                        });
                     };
                     orig.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
                     // set vars
                     this.rows = rows;
                     this.cols = cols;
+                    this.cells = cells;
                     this.tiles = tiles;
                 }
             };
