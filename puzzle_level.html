@@ -20,24 +20,66 @@
             vertical-align: middle;
         }
 
-        .wrap {
+        .menuWrap {
+            width: 100vmin;
+            height: 100vh;
+            margin: 0 auto;
+            background-color: rgba(245, 245, 245, 0.05);
+        }
+
+            .menuWrap > .tlControls {
+                display: flex;
+                flex-direction: row;
+                position: absolute;
+                top: 1rem;
+                left: 1rem;
+                font-family: monospace;
+                font-size: 1.5rem;
+                color: whitesmoke;
+            }
+
+                .menuWrap > .tlControls > div {
+                    padding: 1rem;
+                    cursor: pointer;
+                }
+
+                    .menuWrap > .tlControls > div:hover {
+                        background-color: rgba(245, 245, 245, 0.1);
+                    }
+
+        .levelWrap {
             width: 80vmin;
             height: calc(80vmin / 16 * 9);
             margin: 0 auto;
         }
 
-            .wrap > .orig {
+            .levelWrap > .backBtn {
+                position: absolute;
+                top: 1rem;
+                left: 1rem;
+                padding: 1rem;
+                font-family: monospace;
+                font-size: 1.5rem;
+                color: whitesmoke;
+                cursor: pointer;
+            }
+
+                .levelWrap > .backBtn:hover {
+                    background-color: rgba(245, 245, 245, 0.1);
+                }
+
+            .levelWrap > .orig {
                 width: 80vmin;
                 height: auto;
                 position: absolute;
                 display: none;
             }
 
-            .wrap > .field {
+            .levelWrap > .field {
                 border-collapse: collapse;
             }
 
-                .wrap > .field td {
+                .levelWrap > .field td {
                     padding: 0;
                 }
     </style>
@@ -49,7 +91,32 @@
                 return new this.CreateScene[name](params);
             };
             CreateScene = {
-                menu: function () { },
+                menu: function () {
+                    // create wrap
+                    let wrap = document.createElement('div');
+                    wrap.className = 'menuWrap';
+                    document.body.appendChild(wrap);
+                    // create top-left controls
+                    let tlControls = document.createElement('div');
+                    tlControls.className = 'tlControls';
+                    wrap.appendChild(tlControls);
+                    // create exit button
+                    let exitBtn = document.createElement('div');
+                    exitBtn.className = 'exitBtn';
+                    exitBtn.innerHTML = 'exit';
+                    exitBtn.onclick = function () {
+                        alert('exit');
+                    };
+                    tlControls.appendChild(exitBtn);
+                    // create options button
+                    let optionsBtn = document.createElement('div');
+                    optionsBtn.className = 'optionsBtn';
+                    optionsBtn.innerHTML = 'options';
+                    optionsBtn.onclick = function () {
+                        alert('options');
+                    };
+                    tlControls.appendChild(optionsBtn);
+                },
                 options: function () { },
                 level: function (num) {
                     let rows = 4;
@@ -58,8 +125,17 @@
                     let tiles = [];
                     // create wrap
                     let wrap = document.createElement('div');
-                    wrap.className = 'wrap';
+                    wrap.className = 'levelWrap';
                     document.body.appendChild(wrap);
+                    // create back button
+                    let backBtn = document.createElement('div');
+                    backBtn.className = 'backBtn';
+                    backBtn.innerHTML = 'back';
+                    backBtn.onclick = function () {
+                        App.scene.Destroy();
+                        App.scene = new Scene('menu');
+                    };
+                    wrap.appendChild(backBtn);
                     // load original image
                     let orig = new Image();
                     orig.className = 'orig';
@@ -117,9 +193,16 @@
                                 tiles.push(tile);
                             }
                         }
+                        // generate random array
+                        let arr = new Array();
+                        for (let i = 0; i < (rows * cols); i++) {
+                            arr.push(i);
+                        }
                         // append tiles
-                        cells.forEach(function (cell, cdx) {
-                            cell.appendChild(tiles[cdx]);
+                        cells.forEach(function (cell) {
+                            let tdx = Math.floor(Math.random() * arr.length);
+                            cell.appendChild(tiles[arr[tdx]]);
+                            arr.splice(tdx, 1);
                         });
                     };
                     orig.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
@@ -128,13 +211,16 @@
                     this.cols = cols;
                     this.cells = cells;
                     this.tiles = tiles;
+                    // set methods
+                    this.Destroy = function () {
+                        document.querySelector('.levelWrap').remove();
+                    };
                 }
             };
             CheckTiles = function () {
                 App.scene.tiles.forEach(function (tile) {
                 });
             };
-            Destroy = function () { };
         };
         /**
          * @namespace
