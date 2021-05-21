@@ -55,30 +55,29 @@
                 height: calc(32vmin / 16 * 9);
                 margin: 1vmin 0;
                 cursor: pointer;
-                background-position-x: 0;
-                background-position-y: 0;
-                background-size: 32vmin calc(32vmin/ 16 * 9);
+                background-origin: border-box;
+                background-position: center;
+                background-size: 100% 100%;
                 transition: all 0.2s;
             }
 
                 .menuWrap > .levelBtn:hover {
                     box-shadow: 0 0 0.5vmin whitesmoke;
-                    background-position-x: calc(0vmin - 32vmin / 100 * 10);
-                    background-position-y: calc(0vmin - 32vmin / 100 * 10);
-                    background-size: calc(32vmin / 100 * 120) calc((32vmin / 16 * 9) / 100 * 120);
+                    background-position: center;
+                    background-size: 110% 110%;
                 }
 
                 .menuWrap > .levelBtn > .fader {
                     width: 100%;
                     height: 100%;
                     background-color: rgba(245, 245, 245, 0.0);
-                    backdrop-filter: blur(2px);
+                    backdrop-filter: blur(0px);
                     transition: all 0.1s;
                 }
 
                 .menuWrap > .levelBtn:hover > .fader {
                     background-color: rgba(245, 245, 245, 0.25);
-                    backdrop-filter: blur(0px);
+                    backdrop-filter: blur(2px);
                 }
 
         .levelWrap {
@@ -87,7 +86,7 @@
             margin: 0 auto;
         }
 
-            .levelWrap > .backBtn {
+            .levelWrap > .escBtn {
                 position: absolute;
                 top: 1rem;
                 left: 1rem;
@@ -98,7 +97,7 @@
                 cursor: pointer;
             }
 
-                .levelWrap > .backBtn:hover {
+                .levelWrap > .escBtn:hover {
                     background-color: rgba(245, 245, 245, 0.1);
                 }
 
@@ -134,14 +133,14 @@
                     let tlControls = document.createElement('div');
                     tlControls.className = 'tlControls';
                     wrap.appendChild(tlControls);
-                    // create exit button
-                    let exitBtn = document.createElement('div');
-                    exitBtn.className = 'exitBtn';
-                    exitBtn.innerHTML = 'exit';
-                    exitBtn.onclick = function () {
+                    // create esc button
+                    let escBtn = document.createElement('div');
+                    escBtn.className = 'escBtn';
+                    escBtn.innerHTML = 'exit';
+                    escBtn.onclick = function () {
                         alert('exit');
                     };
-                    tlControls.appendChild(exitBtn);
+                    tlControls.appendChild(escBtn);
                     // create options button
                     let optionsBtn = document.createElement('div');
                     optionsBtn.className = 'optionsBtn';
@@ -164,12 +163,20 @@
                         levelBtn.className = 'levelBtn';
                         levelBtn.style.backgroundImage = 'url("https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg")';
                         levelBtn.style.backgroundRepeat = 'no-repeat';
+                        levelBtn.onclick = function () {
+                            App.scene.Destroy();
+                            App.scene = new Scene('level');
+                        };
                         wrap.appendChild(levelBtn);
                         // create fader
                         let fader = document.createElement('div');
                         fader.className = 'fader';
                         levelBtn.appendChild(fader);
                     }
+                    // set methods
+                    this.Destroy = function () {
+                        document.querySelector('.menuWrap').remove();
+                    };
                 },
                 options: function () { },
                 level: function (num) {
@@ -181,15 +188,15 @@
                     let wrap = document.createElement('div');
                     wrap.className = 'levelWrap';
                     document.body.appendChild(wrap);
-                    // create back button
-                    let backBtn = document.createElement('div');
-                    backBtn.className = 'backBtn';
-                    backBtn.innerHTML = 'back';
-                    backBtn.onclick = function () {
+                    // create esc button
+                    let escBtn = document.createElement('div');
+                    escBtn.className = 'escBtn';
+                    escBtn.innerHTML = 'esc';
+                    escBtn.onclick = function () {
                         App.scene.Destroy();
                         App.scene = new Scene('menu');
                     };
-                    wrap.appendChild(backBtn);
+                    wrap.appendChild(escBtn);
                     // load original image
                     let orig = new Image();
                     orig.className = 'orig';
@@ -281,7 +288,7 @@
          * @property {Scene} scene - current scene container
          */
         let App = {
-            scene: new Scene('level'),
+            scene: new Scene('menu'),
             drag: {
                 enabled: false,
                 element: null
@@ -315,6 +322,11 @@
                 App.drag.element.setDefaultStyles();
                 // remove App.drag.element
                 App.drag.element = null;
+            }
+        }, false);
+        window.addEventListener('keyup', function (e) {
+            if (e.code == 'Escape') {
+                document.querySelector('.escBtn').click();
             }
         }, false);
     </script>
