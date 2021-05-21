@@ -21,10 +21,11 @@
         }
 
         .menuWrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
             width: 100vmin;
-            height: 100vh;
             margin: 0 auto;
-            background-color: rgba(245, 245, 245, 0.05);
         }
 
             .menuWrap > .tlControls {
@@ -41,11 +42,44 @@
                 .menuWrap > .tlControls > div {
                     padding: 1rem;
                     cursor: pointer;
+                    background-color: rgba(50, 50, 50, 0.0);
+                    transition: all 0.1s;
                 }
 
                     .menuWrap > .tlControls > div:hover {
                         background-color: rgba(245, 245, 245, 0.1);
                     }
+
+            .menuWrap > .levelBtn {
+                flex: 0 32vmin;
+                height: calc(32vmin / 16 * 9);
+                margin: 1vmin 0;
+                cursor: pointer;
+                background-position-x: 0;
+                background-position-y: 0;
+                background-size: 32vmin calc(32vmin/ 16 * 9);
+                transition: all 0.2s;
+            }
+
+                .menuWrap > .levelBtn:hover {
+                    box-shadow: 0 0 0.5vmin whitesmoke;
+                    background-position-x: calc(0vmin - 32vmin / 100 * 10);
+                    background-position-y: calc(0vmin - 32vmin / 100 * 10);
+                    background-size: calc(32vmin / 100 * 120) calc((32vmin / 16 * 9) / 100 * 120);
+                }
+
+                .menuWrap > .levelBtn > .fader {
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(245, 245, 245, 0.0);
+                    backdrop-filter: blur(2px);
+                    transition: all 0.1s;
+                }
+
+                .menuWrap > .levelBtn:hover > .fader {
+                    background-color: rgba(245, 245, 245, 0.25);
+                    backdrop-filter: blur(0px);
+                }
 
         .levelWrap {
             width: 80vmin;
@@ -116,6 +150,26 @@
                         alert('options');
                     };
                     tlControls.appendChild(optionsBtn);
+                    // create gallery button
+                    let galleryBtn = document.createElement('div');
+                    galleryBtn.className = 'galleryBtn';
+                    galleryBtn.innerHTML = 'gallery';
+                    galleryBtn.onclick = function () {
+                        alert('gallery');
+                    };
+                    tlControls.appendChild(galleryBtn);
+                    // create level buttons
+                    for (let i = 0; i < 9; i++) {
+                        let levelBtn = document.createElement('div');
+                        levelBtn.className = 'levelBtn';
+                        levelBtn.style.backgroundImage = 'url("https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg")';
+                        levelBtn.style.backgroundRepeat = 'no-repeat';
+                        wrap.appendChild(levelBtn);
+                        // create fader
+                        let fader = document.createElement('div');
+                        fader.className = 'fader';
+                        levelBtn.appendChild(fader);
+                    }
                 },
                 options: function () { },
                 level: function (num) {
