@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
 <head>
     <title>puzzle_level</title>
     <meta charset="UTF-8">
@@ -276,11 +276,16 @@
                     this.Destroy = function () {
                         document.querySelector('.levelWrap').remove();
                     };
+                    this.CheckTiles() = function () {
+                        /**
+                         * compare each cell['row' / 'col']
+                         * with its tile['target-row' / 'target-col']
+                         * then, set tiles at correct cells to inactive state
+                         */
+                        App.scene.tiles.forEach(function (tile) {
+                        });
+                    };
                 }
-            };
-            CheckTiles = function () {
-                App.scene.tiles.forEach(function (tile) {
-                });
             };
         };
         /**
@@ -324,6 +329,11 @@
                 App.drag.element = null;
             }
         }, false);
+        /**
+         * escape keyup listener - triggers .escBtn click
+         * .escBtn destroys current scene and loads menu
+         * (closes app if destroyed scene was menu)
+         */
         window.addEventListener('keyup', function (e) {
             if (e.code == 'Escape') {
                 document.querySelector('.escBtn').click();
