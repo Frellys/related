@@ -211,8 +211,10 @@
                             let row = document.createElement('tr');
                             for (let c = 0; c < cols; c++) {
                                 let cell = document.createElement('td');
-                                cell.setAttribute('row', r);
-                                cell.setAttribute('col', c);
+                                //cell.setAttribute('row', r);
+                                //cell.setAttribute('col', c);
+                                cell.row = r;
+                                cell.col = c;
                                 row.appendChild(cell);
                                 cells.push(cell);
                             }
@@ -224,7 +226,9 @@
                         for (let r = 0; r < rows; r++) {
                             for (let c = 0; c < cols; c++) {
                                 let tile = document.createElement('div');
-                                tile.className = 'tile';
+                                //tile.className = 'tile active';
+                                tile.classList.add('tile');
+                                tile.classList.add('active');
                                 tile.style.width = `calc(80vmin / ${cols})`;
                                 tile.style.height = `calc(80vmin / 16 * 9 / ${rows})`;
                                 tile.style.backgroundImage = 'url("https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg")';
@@ -232,12 +236,16 @@
                                 tile.style.backgroundPositionX = `calc(0px - (80vmin / ${cols} * ${c}))`;
                                 tile.style.backgroundPositionY = `calc(0px - (80vmin / 16 * 9 / ${rows} * ${r}))`;
                                 tile.style.backgroundSize = `80vmin calc(80vmin / 16 * 9)`;
-                                tile.setAttribute('target-row', r);
-                                tile.setAttribute('target-col', c);
+                                //tile.setAttribute('target-row', r);
+                                //tile.setAttribute('target-col', c);
+                                tile.targetRow = r;
+                                tile.targetCol = c;
                                 tile.onmousedown = function (e) {
-                                    e.target.setDragStyles(e.x, e.y);
-                                    App.drag.enabled = true;
-                                    App.drag.element = e.target;
+                                    if (this.classList.contains('active')) {
+                                        e.target.setDragStyles(e.x, e.y);
+                                        App.drag.enabled = true;
+                                        App.drag.element = e.target;
+                                    }
                                 };
                                 tile.setDragStyles = function (x, y) {
                                     this.style.position = 'absolute';
@@ -276,13 +284,19 @@
                     this.Destroy = function () {
                         document.querySelector('.levelWrap').remove();
                     };
-                    this.CheckTiles() = function () {
+                    this.CheckTiles = function () {
                         /**
                          * compare each cell['row' / 'col']
                          * with its tile['target-row' / 'target-col']
                          * then, set tiles at correct cells to inactive state
                          */
                         App.scene.tiles.forEach(function (tile) {
+                            if (tile.classList.contains('active')) {
+                                let cell = tile.parentNode;
+                                if (cell.row == tile.targetRow && cell.col == tile.targetCol) {
+                                    tile.classList.replace('active', 'inactive');
+                                }
+                            }
                         });
                     };
                 }
