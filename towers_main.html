@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>towers_main</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: whitesmoke;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+
+        .field {
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+            border: none;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+            .field td {
+                padding: 0;
+            }
+    </style>
+</head>
+<body>
+    <script>
+        window.onload = function () {
+            this.App = new function () {
+                this.width = screen.width;
+                this.height = screen.height;
+                this.vmin = Math.floor(Math.min(this.width, this.height) / 100);
+                this.zoomFactor = 1;
+                this.field = [
+                    [0, 0, 0],
+                    [0, 0, 0],
+                    [0, 0, 0]
+                ];
+                this.tileSize = (5 * this.vmin);
+            };
+            this.UI = new function () {
+                this.field = new Field();
+            };
+        };
+        function Field() {
+            let el = document.createElement('table');
+            el.classList.add('field');
+            el.tiles = [];
+            let tbody = document.createElement('tbody');
+            App.field.forEach(function (row, rdx) {
+                let tr = document.createElement('tr');
+                row.forEach(function (col, cdx) {
+                    let td = document.createElement('td');
+                    let tile = new Tile();
+                    el.tiles.push(tile);
+                    td.appendChild(tile);
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            el.appendChild(tbody);
+            document.body.appendChild(el);
+            return el;
+        };
+        function Tile() {
+            let el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            el.classList.add('tile');
+            el.style.display = 'block';
+            el.style.backgroundColor = '#323232';
+            el.setAttribute('viewBox', '0 0 100 100');
+            el.setAttribute('width', App.tileSize);
+            return el;
+        };
+    </script>
+</body>
+</html>
