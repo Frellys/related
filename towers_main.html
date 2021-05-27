@@ -20,66 +20,194 @@
             vertical-align: middle;
         }
 
-        .field {
-            width: auto;
-            height: auto;
-            margin: 0 auto;
-            border: none;
-            border-collapse: collapse;
-            border-spacing: 0;
+        svg {
+            pointer-events: none;
         }
 
-            .field td {
-                padding: 0;
+            svg g {
+                cursor: pointer;
+                pointer-events: all;
             }
+
+        svg g .outline {
+            fill: transparent;
+            transition: all 0.3s;
+        }
+
+        svg g:hover .outline {
+            fill: rgba(50, 50, 50, 0.1);
+        }
+
+        .enemy {
+            fill: red;
+            animation: move 4s linear;
+        }
+
+        @keyframes move {
+            0% {
+                x: 50;
+                y: 50;
+            }
+            25% {
+                x: 160;
+                y: 50;
+            }
+            50% {
+                x: 160;
+                y: 160;
+            }
+            75% {
+                x: 160;
+                y: 270;
+            }
+            100% {
+                x: 270;
+                y: 270;
+            }
+        }
     </style>
 </head>
 <body>
     <script>
         window.onload = function () {
             this.App = new function () {
+                this.xmlns = 'http://www.w3.org/2000/svg';
                 this.width = screen.width;
                 this.height = screen.height;
                 this.vmin = Math.floor(Math.min(this.width, this.height) / 100);
                 this.zoomFactor = 1;
                 this.field = [
-                    [0, 0, 0],
-                    [0, 0, 0],
-                    [0, 0, 0]
+                    [
+                        { type: 'road', rid: 0 },
+                        { type: 'road', rid: 1 },
+                        { type: 'empty' },
+                        { type: 'add' }
+                    ],
+                    [
+                        { type: 'empty' },
+                        { type: 'road', rid: 2 },
+                        { type: 'empty' }
+                    ],
+                    [
+                        { type: 'empty' },
+                        { type: 'road', rid: 3 },
+                        { type: 'road', rid: 4 }
+                    ]
                 ];
-                this.tileSize = (5 * this.vmin);
+                this.road = {
+                    path: {},
+                    coords: [
+                        { x: 50, y: 50 },
+                        { x: 50, y: 0 },
+                        { x: 100, y: 50 },
+                        { x: 50, y: 100 },
+                        { x: 0, y: 50 }
+                    ]
+                };
+                this.tileSize = (10 * this.vmin);
             };
             this.UI = new function () {
                 this.field = new Field();
+                let enemy = new Enemy();
+                this.field.appendChild(enemy);
             };
         };
         function Field() {
-            let el = document.createElement('table');
-            el.classList.add('field');
+            let el = document.createElementNS(App.xmlns, 'svg');
             el.tiles = [];
-            let tbody = document.createElement('tbody');
+            el.style.display = 'block';
+            el.style.margin = '0 auto';
+            el.setAttribute('width', App.field[0].length * (App.tileSize + App.vmin) + App.vmin + 'px');
+            el.setAttribute('height', App.field.length * (App.tileSize + App.vmin) + App.vmin + 'px');
+            el.setAttribute('viewbox', `0 0 ${App.field[0].length * (App.tileSize + App.vmin) + App.vmin} ${App.field.length * (App.tileSize + App.vmin) + App.vmin}`);
+            /*el.setAttribute('shape-rendering', 'optimizespeed');*/
+            el.setAttribute('perserveAspectRatio', 'none');
             App.field.forEach(function (row, rdx) {
-                let tr = document.createElement('tr');
                 row.forEach(function (col, cdx) {
-                    let td = document.createElement('td');
-                    let tile = new Tile();
+                    let tile = new Tile(col, rdx, cdx);
                     el.tiles.push(tile);
-                    td.appendChild(tile);
-                    tr.appendChild(td);
+                    el.appendChild(tile);
+                    if (col.type == 'road') {
+                        App.road.path[col.rid] = {
+                            x: tile.data.x + (App.tileSize / 2),
+                            y: tile.data.y + (App.tileSize / 2)
+                        };
+                    }
                 });
-                tbody.appendChild(tr);
             });
-            el.appendChild(tbody);
+            let road = new Road();
+            el.road = road;
+            el.appendChild(road);
             document.body.appendChild(el);
             return el;
         };
-        function Tile() {
-            let el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            el.classList.add('tile');
-            el.style.display = 'block';
-            el.style.backgroundColor = '#323232';
-            el.setAttribute('viewBox', '0 0 100 100');
-            el.setAttribute('width', App.tileSize);
+        function Tile(cnt, row, col) {
+            let el = document.createElementNS(App.xmlns, 'g');
+            el.data = {
+                x: col * (App.tileSize + App.vmin) + App.vmin,
+                y: row * (App.tileSize + App.vmin) + App.vmin
+            };
+            {
+                /**
+                 * outline
+                 */
+                let rect = document.createElementNS(App.xmlns, 'rect');
+                rect.setAttribute('class', 'outline');
+                rect.setAttribute('x', el.data.x);
+                rect.setAttribute('y', el.data.y);
+                rect.setAttribute('width', App.tileSize);
+                rect.setAttribute('height', App.tileSize);
+                rect.style.stroke = '#323232';
+                rect.style.strokeWidth = '1';
+                el.appendChild(rect);
+            }
+            {
+                /**
+                 * rc-text
+                 */
+                let text = document.createElementNS(App.xmlns, 'text');
+                text.innerHTML = 'r' + row + 'c' + col;
+                text.setAttribute('x', el.data.x + App.vmin / 2);
+                text.setAttribute('y', el.data.y + App.vmin / 2);
+                text.setAttribute('dominant-baseline', 'hanging');
+                text.style.fontFamily = 'monospace';
+                text.style.fontSize = App.vmin + 'px';
+                text.style.fill = '#323232';
+                el.appendChild(text);
+            }
+            if (cnt.type == 'add') {
+                let plus = document.createElementNS(App.xmlns, 'path');
+                plus.setAttribute('d', `M ${el.data.x + 25}, ${el.data.y + 50} L ${el.data.x + App.tileSize - 25}, ${el.data.y + 50} M ${el.data.x + 50}, ${el.data.y + 25} L ${el.data.x + 50}, ${el.data.y + App.tileSize - 25}`);
+                plus.style.fill = 'transparent';
+                plus.style.stroke = '#323232';
+                plus.style.strokeWidth = App.vmin / 2;
+                el.appendChild(plus);
+            }
+            return el;
+        };
+        function Road() {
+            let el = document.createElementNS(App.xmlns, 'path');
+            let d = [];
+            for (let i = 0; i < Object.keys(App.road.path).length; i++) {
+                d.push((i ? 'L' : 'M') + ' ' + App.road.path[i].x + ', ' + App.road.path[i].y);
+            }
+            el.setAttribute('d', d.join(' '));
+            el.setAttribute('pointer-events', 'none');
+            el.style.fill = 'transparent';
+            el.style.stroke = '#323232';
+            el.style.strokeWidth = App.vmin / 2;
+            return el;
+        };
+        function Enemy() {
+            let el = document.createElementNS(App.xmlns, 'rect');
+            el.setAttribute('class', 'enemy');
+            el.setAttribute('x', App.road.path[0].x - App.vmin);
+            el.setAttribute('y', App.road.path[0].y - App.vmin);
+            el.setAttribute('width', App.vmin * 2);
+            el.setAttribute('height', App.vmin * 2);
+            el.addEventListener('animationend', function () {
+                console.log('lost');
+            }, false);
             return el;
         };
     </script>
