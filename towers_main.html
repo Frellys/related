@@ -59,6 +59,7 @@
             left: 1rem;
             font-family: monospace;
             font-size: 0.75rem;
+            font-weight: bold;
             color: rgba(50, 50, 50, 0.5);
         }
 
@@ -83,38 +84,6 @@
         .enemy {
             fill: red;
         }
-
-        /*.enemy {
-            fill: red;
-            animation: move 4s linear;
-        }
-
-        @keyframes move {
-            0% {
-                x: 50;
-                y: 50;
-            }
-
-            25% {
-                x: 160;
-                y: 50;
-            }
-
-            50% {
-                x: 160;
-                y: 160;
-            }
-
-            75% {
-                x: 160;
-                y: 270;
-            }
-
-            100% {
-                x: 270;
-                y: 270;
-            }
-        }*/
     </style>
 </head>
 <body>
@@ -160,21 +129,27 @@
             this.UI = new function () {
                 this.header = new Header();
                 this.field = new Field();
-                this.enemy = new Enemy();
-                this.field.appendChild(this.enemy);
                 this.mouse = new MousePos();
                 this.lastFrame = new Date().getTime();
                 this.render = window.requestAnimationFrame(Render);
             };
+            this.wave = new Wave(0);
+            console.log(this.App);
+            console.log(this.UI);
+            console.log(this.wave);
         };
         function Field() {
             let el = document.createElementNS(App.xmlns, 'svg');
+            el.data = {
+                width: App.field[0].length * (App.tileSize + App.vmin) + App.vmin,
+                height: App.field.length * (App.tileSize + App.vmin) + App.vmin
+            };
             el.tiles = [];
             el.style.display = 'block';
             el.style.margin = '0 auto';
-            el.setAttribute('width', App.field[0].length * (App.tileSize + App.vmin) + App.vmin + 'px');
-            el.setAttribute('height', App.field.length * (App.tileSize + App.vmin) + App.vmin + 'px');
-            el.setAttribute('viewbox', `0 0 ${App.field[0].length * (App.tileSize + App.vmin) + App.vmin} ${App.field.length * (App.tileSize + App.vmin) + App.vmin}`);
+            el.setAttribute('width', el.data.width + 'px');
+            el.setAttribute('height', el.data.height + 'px');
+            el.setAttribute('viewbox', `0 0 ${el.data.width} ${el.data.height}`);
             el.setAttribute('shape-rendering', 'optimizespeed');
             el.setAttribute('perserveAspectRatio', 'none');
             App.field.forEach(function (row, rdx) {
@@ -185,8 +160,8 @@
                     if (col.type == 'road') {
                         App.road.length++;
                         App.road.path[col.rid] = {
-                            x: tile.data.x + (App.tileSize / 2),
-                            y: tile.data.y + (App.tileSize / 2)
+                            x: tile.data.pos.mid.x,
+                            y: tile.data.pos.mid.y
                         };
                     }
                 });
@@ -205,8 +180,16 @@
                 cnt: cnt,
                 row: row,
                 col: col,
-                x: col * (App.tileSize + App.vmin) + App.vmin,
-                y: row * (App.tileSize + App.vmin) + App.vmin
+                pos: {
+                    mid: {
+                        x: col * (App.tileSize + App.vmin) + App.vmin + (App.tileSize / 2),
+                        y: row * (App.tileSize + App.vmin) + App.vmin + (App.tileSize / 2)
+                    },
+                    tlc: {
+                        x: col * (App.tileSize + App.vmin) + App.vmin,
+                        y: row * (App.tileSize + App.vmin) + App.vmin
+                    }
+                }
             };
             {
                 /**
@@ -214,8 +197,8 @@
                  */
                 let rect = document.createElementNS(App.xmlns, 'rect');
                 rect.setAttribute('class', 'outline');
-                rect.setAttribute('x', el.data.x);
-                rect.setAttribute('y', el.data.y);
+                rect.setAttribute('x', el.data.pos.tlc.x);
+                rect.setAttribute('y', el.data.pos.tlc.y);
                 rect.setAttribute('width', App.tileSize);
                 rect.setAttribute('height', App.tileSize);
                 rect.style.stroke = '#323232';
@@ -228,17 +211,29 @@
                  */
                 let text = document.createElementNS(App.xmlns, 'text');
                 text.innerHTML = 'r' + row + 'c' + col;
-                text.setAttribute('x', el.data.x + App.vmin / 2);
-                text.setAttribute('y', el.data.y + App.vmin / 2);
+                text.setAttribute('x', el.data.pos.tlc.x + App.vmin / 2);
+                text.setAttribute('y', el.data.pos.tlc.y + App.vmin / 2);
                 text.setAttribute('dominant-baseline', 'hanging');
                 text.style.fontFamily = 'monospace';
                 text.style.fontSize = App.vmin + 'px';
-                text.style.fill = '#323232';
+                text.style.fontWeight = 'bold';
+                text.style.fill = 'rgba(50, 50, 50, 0.75)';
                 el.appendChild(text);
             }
             if (cnt.type == 'add') {
                 let plus = document.createElementNS(App.xmlns, 'path');
-                plus.setAttribute('d', `M ${el.data.x + 30}, ${el.data.y + 50} L ${el.data.x + App.tileSize - 30}, ${el.data.y + 50} M ${el.data.x + 50}, ${el.data.y + 30} L ${el.data.x + 50}, ${el.data.y + App.tileSize - 30}`);
+                let offset = App.vmin * 2;
+                let pt = {
+                    x: el.data.pos.mid.x,
+                    y: el.data.pos.mid.y
+                };
+                let pts = {
+                    l: { x: pt.x - offset, y: pt.y },
+                    r: { x: pt.x + offset, y: pt.y },
+                    t: { x: pt.x, y: pt.y - offset },
+                    b: { x: pt.x, y: pt.y + offset }
+                };
+                plus.setAttribute('d', `M ${pts.l.x}, ${pts.l.y} L ${pts.r.x}, ${pts.r.y} M ${pts.t.x}, ${pts.t.y} L ${pts.b.x}, ${pts.b.y}`);
                 plus.style.fill = 'transparent';
                 plus.style.stroke = '#323232';
                 plus.style.strokeWidth = App.vmin / 2;
@@ -281,9 +276,6 @@
             el.setAttribute('y', el.pos.y - App.enemySize / 2);
             el.setAttribute('width', App.vmin * 2);
             el.setAttribute('height', App.vmin * 2);
-            //el.addEventListener('animationend', function () {
-            //    console.log('lost');
-            //}, false);
             return el;
         };
         function Header() {
@@ -364,8 +356,8 @@
         function Fin(field) {
             let fTile = field.tiles.find(t => t.data.cnt.type == 'road' && t.data.cnt.rid == (App.road.length - 1));
             let outer = document.createElementNS(App.xmlns, 'rect');
-            outer.setAttribute('x', fTile.data.x + App.tileSize / 2 - App.vmin * 2);
-            outer.setAttribute('y', fTile.data.y + App.tileSize / 2 - App.vmin * 2);
+            outer.setAttribute('x', fTile.data.pos.mid.x - App.vmin * 2);
+            outer.setAttribute('y', fTile.data.pos.mid.y - App.vmin * 2);
             outer.setAttribute('width', App.vmin * 4);
             outer.setAttribute('height', App.vmin * 4);
             outer.style.fill = 'cyan';
@@ -373,8 +365,8 @@
             outer.style.strokeWidth = App.vmin / 4;
             fTile.appendChild(outer);
             let inner = document.createElementNS(App.xmlns, 'rect');
-            inner.setAttribute('x', fTile.data.x + App.tileSize / 2 - App.vmin);
-            inner.setAttribute('y', fTile.data.y + App.tileSize / 2 - App.vmin);
+            inner.setAttribute('x', fTile.data.pos.mid.x - App.vmin);
+            inner.setAttribute('y', fTile.data.pos.mid.y - App.vmin);
             inner.setAttribute('width', App.vmin * 2);
             inner.setAttribute('height', App.vmin * 2);
             inner.style.fill = '#323232';
@@ -384,11 +376,19 @@
         function Render() {
             let ts = new Date().getTime();
             let delta = ts - UI.lastFrame;
-            //let dst = UI.enemy.speed / (delta * 1000);
-            //UI.enemy.pos.x += dst;
-            //UI.enemy.setAttribute('x', UI.enemy.pos.x - App.enemySize / 2);
+            //wave.enemies.forEach(function (enemy) {
+            //    let dst = enemy.speed / (delta * 1000);
+            //    enemy.pos.x += dst;
+            //    enemy.setAttribute('x', enemy.pos.x - App.enemySize / 2);
+            //});
             UI.lastFrame = ts;
             UI.render = window.requestAnimationFrame(Render);
+        };
+        function Wave(num) {
+            this.enemies = [
+                new Enemy()
+            ];
+            this.enemies.forEach(e => UI.field.appendChild(e));
         };
     </script>
 </body>
