@@ -265,7 +265,7 @@
             };
             el.speed = 10 * 1000;
             el.track = [];
-            for (let i = 0; i < App.road.length; i++) {
+            for (let i = 1; i < App.road.length; i++) {
                 el.track.push({
                     x: App.road.path[i].x,
                     y: App.road.path[i].y
@@ -376,11 +376,27 @@
         function Render() {
             let ts = new Date().getTime();
             let delta = ts - UI.lastFrame;
-            //wave.enemies.forEach(function (enemy) {
-            //    let dst = enemy.speed / (delta * 1000);
-            //    enemy.pos.x += dst;
-            //    enemy.setAttribute('x', enemy.pos.x - App.enemySize / 2);
-            //});
+            wave.enemies.forEach(function (enemy) {
+                if (enemy.track.length) {
+                    let axis = (enemy.pos.x == enemy.track[0].x) ? 'y' : 'x';
+                    let dst = enemy.speed / (delta * 1000);
+                    if (enemy.pos[axis] < enemy.track[0][axis]) {
+                        enemy.pos[axis] += dst;
+                        if (enemy.pos[axis] > enemy.track[0][axis]) {
+                            enemy.pos[axis] = enemy.track[0][axis];
+                            enemy.track.splice(0, 1);
+                        }
+                    }
+                    else {
+                        enemy.pos[axis] -= dst;
+                        if (enemy.pos[axis] < enemy.track[0][axis]) {
+                            enemy.pos[axis] = enemy.track[0][axis];
+                            enemy.track.splice(0, 1);
+                        }
+                    }
+                    enemy.setAttribute(axis, enemy.pos[axis] - App.enemySize / 2);
+                }
+            });
             UI.lastFrame = ts;
             UI.render = window.requestAnimationFrame(Render);
         };
