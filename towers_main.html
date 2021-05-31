@@ -104,7 +104,7 @@
                     [
                         { type: 'empty' },
                         { type: 'road', rid: 2 },
-                        { type: 'empty' }
+                        { type: 'tower' }
                     ],
                     [
                         { type: 'empty' },
@@ -130,7 +130,7 @@
                 this.header = new Header();
                 this.field = new Field();
                 this.mouse = new MousePos();
-                this.lastFrame = new Date().getTime();
+                this.lastFrame = performance.now();
                 this.render = window.requestAnimationFrame(Render);
             };
             this.wave = new Wave(0);
@@ -177,6 +177,7 @@
         function Tile(cnt, row, col) {
             let el = document.createElementNS(App.xmlns, 'g');
             el.data = {
+                tower: false,
                 cnt: cnt,
                 row: row,
                 col: col,
@@ -239,9 +240,72 @@
                 plus.style.strokeWidth = App.vmin / 2;
                 el.appendChild(plus);
             }
+            if (cnt.type == 'tower') {
+                el.pad = new Pad(el);
+                el.appendChild(el.pad);
+                el.tower = new Tower(el);
+                el.appendChild(el.tower);
+                el.barrel = new Barrel(el);
+                el.appendChild(el.barrel);
+            }
             el.onclick = function () {
                 console.log(this.data);
             };
+            return el;
+        };
+        function Pad(tile) {
+            let el = document.createElementNS(App.xmlns, 'circle');
+            el.data = {
+                pos: {
+                    x: tile.data.pos.mid.x,
+                    y: tile.data.pos.mid.y
+                }
+            };
+            el.setAttribute('cx', el.data.pos.x);
+            el.setAttribute('cy', el.data.pos.y);
+            el.setAttribute('r', App.vmin * 1.5);
+            el.style.fill = 'cyan';
+            el.style.stroke = '#323232';
+            el.style.strokeWidth = '2';
+            el.style.shapeRendering = 'geometricprecision';
+            return el;
+        };
+        function Tower(tile) {
+            let el = document.createElementNS(App.xmlns, 'circle');
+            el.data = {
+                pos: {
+                    x: tile.data.pos.mid.x,
+                    y: tile.data.pos.mid.y
+                }
+            };
+            el.setAttribute('cx', el.data.pos.x);
+            el.setAttribute('cy', el.data.pos.y);
+            el.setAttribute('r', App.vmin);
+            el.style.fill = 'whitesmoke';
+            el.style.stroke = '#323232';
+            el.style.strokeWidth = '2';
+            el.style.shapeRendering = 'geometricprecision';
+            return el;
+        };
+        function Barrel(tile) {
+            let el = document.createElementNS(App.xmlns, 'line');
+            el.data = {
+                rot: 0,
+                pts: {
+                    x1: tile.data.pos.mid.x,
+                    y1: tile.data.pos.mid.y,
+                    x2: tile.data.pos.mid.x,
+                    y2: tile.data.pos.mid.y - (App.vmin * 2.5)
+                }
+            };
+            el.setAttribute('x1', el.data.pts.x1);
+            el.setAttribute('y1', el.data.pts.y1);
+            el.setAttribute('x2', el.data.pts.x2);
+            el.setAttribute('y2', el.data.pts.y2);
+            el.setAttribute('transform', `rotate(${el.data.rot},${el.data.pts.x1},${el.data.pts.y1})`);
+            el.style.stroke = '#323232';
+            el.style.strokeWidth = App.vmin / 2.5;
+            el.style.shapeRendering = 'geometricprecision';
             return el;
         };
         function Road() {
@@ -374,7 +438,7 @@
             return fTile;
         };
         function Render() {
-            let ts = new Date().getTime();
+            let ts = performance.now();
             let delta = ts - UI.lastFrame;
             wave.enemies.forEach(function (enemy) {
                 if (enemy.track.length) {
@@ -384,17 +448,24 @@
                         enemy.pos[axis] += dst;
                         if (enemy.pos[axis] > enemy.track[0][axis]) {
                             enemy.pos[axis] = enemy.track[0][axis];
-                            enemy.track.splice(0, 1);
                         }
                     }
                     else {
                         enemy.pos[axis] -= dst;
                         if (enemy.pos[axis] < enemy.track[0][axis]) {
                             enemy.pos[axis] = enemy.track[0][axis];
-                            enemy.track.splice(0, 1);
                         }
                     }
+                    if (enemy.pos[axis] == enemy.track[0][axis]) {
+                        enemy.track.splice(0, 1);
+                    }
                     enemy.setAttribute(axis, enemy.pos[axis] - App.enemySize / 2);
+                }
+            });
+            UI.field.tiles.forEach(function (tile) {
+                if (tile.tower) {
+                    tile.barrel.data.rot += 0.5;
+                    tile.barrel.setAttribute('transform', `rotate(${tile.barrel.data.rot},${tile.barrel.data.pts.x1},${tile.barrel.data.pts.y1})`);
                 }
             });
             UI.lastFrame = ts;
