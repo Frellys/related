@@ -380,7 +380,7 @@
                 el.time = time;
                 el.appendChild(time);
                 window.setInterval(function () {
-                    let dt = new Date();
+                    let dt = new Date(performance.timing.navigationStart + performance.now());
                     UI.header.time.innerHTML = `${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}`;
                 }, 1000);
                 function Time() {
