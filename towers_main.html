@@ -116,7 +116,6 @@
                     length: 0,
                     path: {}
                 };
-                this.enemySize = (2 * this.vmin);
                 this.tileSize = (10 * this.vmin);
                 this.mouse = {
                     pad: Math.max(this.width, this.height).toString().length,
@@ -310,10 +309,9 @@
         };
         function Road() {
             let el = document.createElementNS(App.xmlns, 'path');
-            let d = [];
-            for (let i = 0; i < Object.keys(App.road.path).length; i++) {
-                d.push((i ? 'L' : 'M') + ' ' + App.road.path[i].x + ', ' + App.road.path[i].y);
-            }
+            let d = Object.values(App.road.path).map(function (p, pdx) {
+                return (pdx ? 'L' : 'M') + ' ' + p.x + ', ' + p.y;
+            });
             el.setAttribute('d', d.join(' '));
             el.setAttribute('pointer-events', 'none');
             el.style.fill = 'transparent';
@@ -321,25 +319,21 @@
             el.style.strokeWidth = App.vmin / 2;
             return el;
         };
-        function Enemy() {
+        function Enemy({ health, size, speed }) {
             let el = document.createElementNS(App.xmlns, 'rect');
             el.pos = {
                 x: App.road.path[0].x,
                 y: App.road.path[0].y
             };
-            el.speed = 10 * 1000;
-            el.track = [];
-            for (let i = 1; i < App.road.length; i++) {
-                el.track.push({
-                    x: App.road.path[i].x,
-                    y: App.road.path[i].y
-                });
-            }
+            el.health = health;
+            el.size = size;
+            el.speed = speed * 1000;
+            el.track = Object.values(App.road.path).slice(1);
             el.setAttribute('class', 'enemy');
-            el.setAttribute('x', el.pos.x - App.enemySize / 2);
-            el.setAttribute('y', el.pos.y - App.enemySize / 2);
-            el.setAttribute('width', App.vmin * 2);
-            el.setAttribute('height', App.vmin * 2);
+            el.setAttribute('x', el.pos.x - el.size / 2);
+            el.setAttribute('y', el.pos.y - el.size / 2);
+            el.setAttribute('width', el.size);
+            el.setAttribute('height', el.size);
             return el;
         };
         function Header() {
@@ -459,7 +453,7 @@
                     if (enemy.pos[axis] == enemy.track[0][axis]) {
                         enemy.track.splice(0, 1);
                     }
-                    enemy.setAttribute(axis, enemy.pos[axis] - App.enemySize / 2);
+                    enemy.setAttribute(axis, enemy.pos[axis] - enemy.size / 2);
                 }
             });
             UI.field.tiles.forEach(function (tile) {
@@ -473,7 +467,11 @@
         };
         function Wave(num) {
             this.enemies = [
-                new Enemy()
+                new Enemy({
+                    health: 1,
+                    size: (2 * App.vmin),
+                    speed: 10
+                })
             ];
             this.enemies.forEach(e => UI.field.appendChild(e));
         };
