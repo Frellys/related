@@ -330,7 +330,7 @@
         window.addEventListener('mouseup', function (e) {
             if (App.drag.enabled) {
                 App.drag.enabled = false;
-                let tilesAtPoint = document.elementsFromPoint(e.x, e.y).filter(el => el.className == 'tile');
+                let tilesAtPoint = document.elementsFromPoint(e.x, e.y).filter(el => el.classList.contains('tile'));
                 if (tilesAtPoint.length == 2) {
                     // swap tiles
                     let cellAtPoint = document.elementsFromPoint(e.x, e.y).find(el => el.tagName == 'TD');
