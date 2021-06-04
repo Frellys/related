@@ -226,7 +226,6 @@
                         for (let r = 0; r < rows; r++) {
                             for (let c = 0; c < cols; c++) {
                                 let tile = document.createElement('div');
-                                //tile.className = 'tile active';
                                 tile.classList.add('tile');
                                 tile.classList.add('active');
                                 tile.style.width = `calc(80vmin / ${cols})`;
@@ -236,8 +235,6 @@
                                 tile.style.backgroundPositionX = `calc(0px - (80vmin / ${cols} * ${c}))`;
                                 tile.style.backgroundPositionY = `calc(0px - (80vmin / 16 * 9 / ${rows} * ${r}))`;
                                 tile.style.backgroundSize = `80vmin calc(80vmin / 16 * 9)`;
-                                //tile.setAttribute('target-row', r);
-                                //tile.setAttribute('target-col', c);
                                 tile.targetRow = r;
                                 tile.targetCol = c;
                                 tile.onmousedown = function (e) {
@@ -249,8 +246,8 @@
                                 };
                                 tile.setDragStyles = function (x, y) {
                                     this.style.position = 'absolute';
-                                    this.style.left = `calc(${x + 'px'} - 80vmin / ${App.scene.cols} / 2)`;
-                                    this.style.top = `calc(${y + 'px'} - 80vmin / 16 * 9 / ${App.scene.rows} / 2)`;
+                                    this.style.left = `calc(${x}px - 80vmin / ${App.scene.cols} / 2)`;
+                                    this.style.top = `calc(${y}px - 80vmin / 16 * 9 / ${App.scene.rows} / 2)`;
                                     this.style.boxShadow = '0 0 0.5vmin whitesmoke';
                                 };
                                 tile.setDefaultStyles = function () {
@@ -263,10 +260,7 @@
                             }
                         }
                         // generate random array
-                        let arr = new Array();
-                        for (let i = 0; i < (rows * cols); i++) {
-                            arr.push(i);
-                        }
+                        let arr = Array.from(new Array(rows * cols).keys());
                         // append tiles
                         cells.forEach(function (cell) {
                             let tdx = Math.floor(Math.random() * arr.length);
@@ -293,7 +287,7 @@
                         App.scene.tiles.forEach(function (tile) {
                             if (tile.classList.contains('active')) {
                                 let cell = tile.parentNode;
-                                if (cell.row == tile.targetRow && cell.col == tile.targetCol) {
+                                if (cell.row == tile.r && cell.col == tile.c) {
                                     tile.classList.replace('active', 'inactive');
                                 }
                             }
