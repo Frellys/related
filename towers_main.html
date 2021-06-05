@@ -81,6 +81,15 @@
                     fill: rgba(50, 50, 50, 0.1);
                 }
 
+                svg g .radius {
+                    pointer-events: none;
+                    display: none;
+                }
+
+                svg g:hover .radius {
+                    display: block;
+                }
+
         .enemy {
             fill: red;
         }
@@ -240,6 +249,8 @@
                 el.appendChild(plus);
             }
             if (cnt.type == 'tower') {
+                el.radius = new Radius(el);
+                el.appendChild(el.radius);
                 el.pad = new Pad(el);
                 el.appendChild(el.pad);
                 el.tower = new Tower(el);
@@ -304,6 +315,18 @@
             el.setAttribute('transform', `rotate(${el.data.rot},${el.data.pts.x1},${el.data.pts.y1})`);
             el.style.stroke = '#323232';
             el.style.strokeWidth = App.vmin / 2.5;
+            el.style.shapeRendering = 'geometricprecision';
+            return el;
+        };
+        function Radius(tile) {
+            let el = document.createElementNS(App.xmlns, 'circle');
+            el.setAttribute('class', 'radius');
+            el.setAttribute('cx', tile.data.pos.mid.x);
+            el.setAttribute('cy', tile.data.pos.mid.y);
+            el.setAttribute('r', App.tileSize * 1.5);
+            el.style.fill = 'rgba(50, 50, 50, 0.1)';
+            el.style.stroke = 'cyan';
+            el.style.strokeWidth = '2';
             el.style.shapeRendering = 'geometricprecision';
             return el;
         };
@@ -458,7 +481,7 @@
             });
             UI.field.tiles.forEach(function (tile) {
                 if (tile.tower) {
-                    tile.barrel.data.rot += 0.5;
+                    tile.barrel.data.rot = (tile.barrel.data.rot + 0.5) % 360;
                     tile.barrel.setAttribute('transform', `rotate(${tile.barrel.data.rot},${tile.barrel.data.pts.x1},${tile.barrel.data.pts.y1})`);
                 }
             });
