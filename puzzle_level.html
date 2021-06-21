@@ -88,10 +88,9 @@
                 }
 
         .optionsWrap {
-            width: 80vmin;
-            height: calc(80vmin / 16 * 9);
+            width: 40vmin;
+            height: auto;
             margin: 0 auto;
-            background-color: rgba(245, 245, 245, 0.1);
         }
 
             .optionsWrap > .escBtn {
@@ -107,6 +106,35 @@
 
                 .optionsWrap > .escBtn:hover {
                     background-color: rgba(245, 245, 245, 0.1);
+                }
+
+            .optionsWrap > .bgmRow {
+                display: flex;
+                flex-direction: row;
+                gap: 1ch;
+                font-family: monospace;
+                font-size: 1.5rem;
+                color: whitesmoke;
+                margin: 1ch 0;
+            }
+
+                .optionsWrap > .bgmRow > .bgmSlider {
+                    flex: 1;
+                    width: 100%;
+                }
+
+            .optionsWrap > .sfxRow {
+                display: flex;
+                flex-direction: row;
+                gap: 1ch;
+                font-family: monospace;
+                font-size: 1.5rem;
+                color: whitesmoke;
+            }
+
+                .optionsWrap > .sfxRow > .sfxSlider {
+                    flex: 1;
+                    width: 100%;
                 }
 
         .galleryWrap {
@@ -255,6 +283,73 @@
                         App.scene = new Scene('menu');
                     };
                     wrap.appendChild(escBtn);
+                    // create bgm settings
+                    let bgmRow = document.createElement('div');
+                    bgmRow.className = 'bgmRow';
+                    wrap.appendChild(bgmRow);
+                    let bgmLabel = document.createElement('div');
+                    bgmLabel.className = 'bgmLabel';
+                    bgmLabel.innerHTML = 'BGM (<span class="bgmVal">50%</span>):';
+                    bgmRow.appendChild(bgmLabel);
+                    let bgmSlider = document.createElement('input');
+                    bgmSlider.className = 'bgmSlider';
+                    bgmSlider.type = 'range';
+                    bgmSlider.min = 0;
+                    bgmSlider.max = 100;
+                    bgmSlider.value = 50;
+                    bgmSlider.step = 10;
+                    bgmSlider.oninput = function () {
+                        let valStr = '';
+                        switch (this.value) {
+                            case '0': {
+                                valStr = 'off';
+                                break;
+                            }
+                            case '100': {
+                                valStr = 'max';
+                                break;
+                            }
+                            default: {
+                                valStr = this.value + '%';
+                                break;
+                            }
+                        }
+                        document.querySelector('.bgmVal').innerHTML = valStr;
+                    };
+                    bgmRow.appendChild(bgmSlider);
+                    let sfxRow = document.createElement('div');
+                    sfxRow.className = 'sfxRow';
+                    wrap.appendChild(sfxRow);
+                    let sfxLabel = document.createElement('div');
+                    sfxLabel.className = 'sfxLabel';
+                    sfxLabel.innerHTML = 'SFX (<span class="sfxVal">50%</span>):';
+                    sfxRow.appendChild(sfxLabel);
+                    let sfxSlider = document.createElement('input');
+                    sfxSlider.className = 'sfxSlider';
+                    sfxSlider.type = 'range';
+                    sfxSlider.min = 0;
+                    sfxSlider.max = 100;
+                    sfxSlider.value = 50;
+                    sfxSlider.step = 10;
+                    sfxSlider.oninput = function () {
+                        let valStr = '';
+                        switch (this.value) {
+                            case '0': {
+                                valStr = 'off';
+                                break;
+                            }
+                            case '100': {
+                                valStr = 'max';
+                                break;
+                            }
+                            default: {
+                                valStr = this.value + '%';
+                                break;
+                            }
+                        }
+                        document.querySelector('.sfxVal').innerHTML = valStr;
+                    };
+                    sfxRow.appendChild(sfxSlider);
                     // set methods
                     this.Destroy = function () {
                         document.querySelector('.optionsWrap').remove();
