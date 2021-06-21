@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        :root {
+            --menu-cols: 3;
+            --menu-rows: 3;
+            --menu-margin: 2vmin;
+        }
+
         html {
             user-select: none;
             overflow: hidden;
@@ -51,12 +57,13 @@
                     }
 
             .menuWrap > .levelBtn {
-                flex: 0 32vmin;
-                height: calc(32vmin / 16 * 9);
-                margin: 1vmin 0;
+                flex: 0 calc((100vmin - (var(--menu-cols) - 1) * var(--menu-margin)) / var(--menu-cols));
+                height: calc(calc(100vmin / var(--menu-cols)) / 16 * 9);
+                margin: calc(var(--menu-margin) / 2) 0;
                 cursor: pointer;
                 background-origin: border-box;
                 background-position: center;
+                background-repeat: no-repeat;
                 background-size: 100% 100%;
                 transition: all 0.2s;
             }
@@ -78,6 +85,28 @@
                 .menuWrap > .levelBtn:hover > .fader {
                     background-color: rgba(245, 245, 245, 0.25);
                     backdrop-filter: blur(2px);
+                }
+
+        .optionsWrap {
+            width: 80vmin;
+            height: calc(80vmin / 16 * 9);
+            margin: 0 auto;
+            background-color: rgba(245, 245, 245, 0.1);
+        }
+
+            .optionsWrap > .escBtn {
+                position: absolute;
+                top: 1rem;
+                left: 1rem;
+                padding: 1rem;
+                font-family: monospace;
+                font-size: 1.5rem;
+                color: whitesmoke;
+                cursor: pointer;
+            }
+
+                .optionsWrap > .escBtn:hover {
+                    background-color: rgba(245, 245, 245, 0.1);
                 }
 
         .levelWrap {
@@ -119,17 +148,6 @@
 </head>
 <body>
     <script>
-        let image_links = [
-            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
-            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
-            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
-            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
-            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
-            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
-            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
-            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
-            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg'
-        ];
         class Scene {
             constructor(name, params) {
                 return new this.CreateScene[name](params);
@@ -157,7 +175,8 @@
                     optionsBtn.className = 'optionsBtn';
                     optionsBtn.innerHTML = 'options';
                     optionsBtn.onclick = function () {
-                        alert('options');
+                        App.scene.Destroy();
+                        App.scene = new Scene('options');
                     };
                     tlControls.appendChild(optionsBtn);
                     // create gallery button
@@ -169,29 +188,45 @@
                     };
                     tlControls.appendChild(galleryBtn);
                     // create level buttons
-                    image_links.forEach(function (image, index) {
+                    for (let i = 0; i < 9; i++) {
                         let levelBtn = document.createElement('div');
                         levelBtn.className = 'levelBtn';
-                        levelBtn.style.backgroundImage = `url("${image}")`;
-                        levelBtn.style.backgroundRepeat = 'no-repeat';
+                        levelBtn.style.backgroundImage = 'url("https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg")';
                         levelBtn.onclick = function () {
                             App.scene.Destroy();
-                            App.scene = new Scene('level', index);
+                            App.scene = new Scene('level');
                         };
                         wrap.appendChild(levelBtn);
                         // create fader
                         let fader = document.createElement('div');
                         fader.className = 'fader';
                         levelBtn.appendChild(fader);
-                    });
+                    }
                     // set methods
                     this.Destroy = function () {
                         document.querySelector('.menuWrap').remove();
                     };
                 },
-                options: function () { },
+                options: function () {
+                    // create wrap
+                    let wrap = document.createElement('div');
+                    wrap.className = 'optionsWrap';
+                    document.body.appendChild(wrap);
+                    // create esc button
+                    let escBtn = document.createElement('div');
+                    escBtn.className = 'escBtn';
+                    escBtn.innerHTML = 'esc';
+                    escBtn.onclick = function () {
+                        App.scene.Destroy();
+                        App.scene = new Scene('menu');
+                    };
+                    wrap.appendChild(escBtn);
+                    // set methods
+                    this.Destroy = function () {
+                        document.querySelector('.optionsWrap').remove();
+                    };
+                },
                 level: function (num) {
-                    alert(num);
                     let rows = 4;
                     let cols = 4;
                     let cells = [];
@@ -223,8 +258,6 @@
                             let row = document.createElement('tr');
                             for (let c = 0; c < cols; c++) {
                                 let cell = document.createElement('td');
-                                //cell.setAttribute('row', r);
-                                //cell.setAttribute('col', c);
                                 cell.row = r;
                                 cell.col = c;
                                 row.appendChild(cell);
@@ -272,7 +305,10 @@
                             }
                         }
                         // generate random array
-                        let arr = Array.from(new Array(rows * cols).keys());
+                        let arr = new Array();
+                        for (let i = 0; i < (rows * cols); i++) {
+                            arr.push(i);
+                        }
                         // append tiles
                         cells.forEach(function (cell) {
                             let tdx = Math.floor(Math.random() * arr.length);
@@ -299,7 +335,7 @@
                         App.scene.tiles.forEach(function (tile) {
                             if (tile.classList.contains('active')) {
                                 let cell = tile.parentNode;
-                                if (cell.row == tile.r && cell.col == tile.c) {
+                                if (cell.row == tile.targetRow && cell.col == tile.targetCol) {
                                     tile.classList.replace('active', 'inactive');
                                 }
                             }
@@ -325,8 +361,8 @@
          */
         window.addEventListener('mousemove', function (e) {
             if (App.drag.enabled) {
-                App.drag.element.style.left = `calc(${e.x + 'px'} - 80vmin / ${App.scene.cols} / 2)`;
-                App.drag.element.style.top = `calc(${e.y + 'px'} - 80vmin / 16 * 9 / ${App.scene.rows} / 2)`;
+                App.drag.element.style.left = `calc(${e.x}px - 80vmin / ${App.scene.cols} / 2)`;
+                App.drag.element.style.top = `calc(${e.y}px - 80vmin / 16 * 9 / ${App.scene.rows} / 2)`;
             }
         }, false);
         /**
