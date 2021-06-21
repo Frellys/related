@@ -109,6 +109,28 @@
                     background-color: rgba(245, 245, 245, 0.1);
                 }
 
+        .galleryWrap {
+            width: 80vmin;
+            height: calc(80vmin / 16 * 9);
+            margin: 0 auto;
+            background-color: rgba(245, 245, 245, 0.1);
+        }
+
+            .galleryWrap > .escBtn {
+                position: absolute;
+                top: 1rem;
+                left: 1rem;
+                padding: 1rem;
+                font-family: monospace;
+                font-size: 1.5rem;
+                color: whitesmoke;
+                cursor: pointer;
+            }
+
+                .galleryWrap > .escBtn:hover {
+                    background-color: rgba(245, 245, 245, 0.1);
+                }
+
         .levelWrap {
             width: 80vmin;
             height: calc(80vmin / 16 * 9);
@@ -148,9 +170,20 @@
 </head>
 <body>
     <script>
+        let imageLinks = [
+            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
+            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
+            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
+            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
+            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
+            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
+            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
+            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg',
+            'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg'
+        ];
         class Scene {
-            constructor(name, params) {
-                return new this.CreateScene[name](params);
+            constructor(name, param) {
+                return new this.CreateScene[name](param);
             };
             CreateScene = {
                 menu: function () {
@@ -184,17 +217,18 @@
                     galleryBtn.className = 'galleryBtn';
                     galleryBtn.innerHTML = 'gallery';
                     galleryBtn.onclick = function () {
-                        alert('gallery');
+                        App.scene.Destroy();
+                        App.scene = new Scene('gallery');
                     };
                     tlControls.appendChild(galleryBtn);
                     // create level buttons
                     for (let i = 0; i < 9; i++) {
                         let levelBtn = document.createElement('div');
                         levelBtn.className = 'levelBtn';
-                        levelBtn.style.backgroundImage = 'url("https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg")';
+                        levelBtn.style.backgroundImage = `url(${imageLinks[i]})`;
                         levelBtn.onclick = function () {
                             App.scene.Destroy();
-                            App.scene = new Scene('level');
+                            App.scene = new Scene('level', i);
                         };
                         wrap.appendChild(levelBtn);
                         // create fader
@@ -224,6 +258,25 @@
                     // set methods
                     this.Destroy = function () {
                         document.querySelector('.optionsWrap').remove();
+                    };
+                },
+                gallery: function () {
+                    // create wrap
+                    let wrap = document.createElement('div');
+                    wrap.className = 'galleryWrap';
+                    document.body.appendChild(wrap);
+                    // create esc button
+                    let escBtn = document.createElement('div');
+                    escBtn.className = 'escBtn';
+                    escBtn.innerHTML = 'esc';
+                    escBtn.onclick = function () {
+                        App.scene.Destroy();
+                        App.scene = new Scene('menu');
+                    };
+                    wrap.appendChild(escBtn);
+                    // set methods
+                    this.Destroy = function () {
+                        document.querySelector('.galleryWrap').remove();
                     };
                 },
                 level: function (num) {
@@ -275,7 +328,7 @@
                                 tile.classList.add('active');
                                 tile.style.width = `calc(80vmin / ${cols})`;
                                 tile.style.height = `calc(80vmin / 16 * 9 / ${rows})`;
-                                tile.style.backgroundImage = 'url("https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg")';
+                                tile.style.backgroundImage = `url(${imageLinks[num]})`;
                                 tile.style.backgroundRepeat = 'no-repeat';
                                 tile.style.backgroundPositionX = `calc(0px - (80vmin / ${cols} * ${c}))`;
                                 tile.style.backgroundPositionY = `calc(0px - (80vmin / 16 * 9 / ${rows} * ${r}))`;
@@ -305,10 +358,7 @@
                             }
                         }
                         // generate random array
-                        let arr = new Array();
-                        for (let i = 0; i < (rows * cols); i++) {
-                            arr.push(i);
-                        }
+                        let arr = Array.from(new Array(rows * cols).keys());
                         // append tiles
                         cells.forEach(function (cell) {
                             let tdx = Math.floor(Math.random() * arr.length);
@@ -316,7 +366,7 @@
                             arr.splice(tdx, 1);
                         });
                     };
-                    orig.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
+                    orig.src = imageLinks[num];
                     // set vars
                     this.rows = rows;
                     this.cols = cols;
