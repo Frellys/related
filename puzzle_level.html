@@ -131,8 +131,8 @@
                 }
 
         .galleryWrap {
-            width: 80vmin;
-            height: calc(80vmin / 16 * 9);
+            width: 100vmin;
+            height: calc(100vmin / 16 * 9);
             margin: 0 auto;
             background-color: rgba(245, 245, 245, 0.1);
         }
@@ -166,6 +166,30 @@
                 font-size: 1.5rem;
                 color: whitesmoke;
             }
+
+            .galleryWrap > .controls {
+                display: flex;
+                flex-direction: row;
+                gap: 1ch;
+                position: absolute;
+                bottom: 1rem;
+                left: 50%;
+                transform: translate(-50%, 0);
+                font-family: monospace;
+                font-size: 1.5rem;
+                color: whitesmoke;
+            }
+
+                .galleryWrap > .controls > .prev,
+                .galleryWrap > .controls > .next {
+                    cursor: pointer;
+                    padding: 1rem;
+                }
+
+                    .galleryWrap > .controls > .prev:hover,
+                    .galleryWrap > .controls > .next:hover {
+                        background-color: rgba(245, 245, 245, 0.1);
+                    }
 
         .levelWrap {
             width: 80vmin;
@@ -236,28 +260,32 @@
             }
             document.querySelector(cname).innerHTML = valStr;
         };
+        let galleryChangeImage = function (next) {
+            if (next) {
+                App.scene.currentImage++;
+                if (App.scene.currentImage >= App.scene.images.length) {
+                    App.scene.currentImage = 0;
+                }
+            }
+            else {
+                App.scene.currentImage--;
+                if (App.scene.currentImage < 0) {
+                    App.scene.currentImage = (App.scene.images.length - 1);
+                }
+            }
+            App.scene.counter.innerHTML = `${App.scene.currentImage + 1}&nbsp;/&nbsp;${imageLinks.length}`;
+            App.scene.images.forEach(function (image, idx) {
+                image.style.display = (idx == App.scene.currentImage) ? 'block' : 'none';
+            });
+        };
         let galleryInputListener = function (e) {
             switch (e.code) {
                 case 'ArrowRight': {
-                    App.scene.currentImage++;
-                    if (App.scene.currentImage >= App.scene.images.length) {
-                        App.scene.currentImage = 0;
-                    }
-                    App.scene.counter.innerHTML = `${App.scene.currentImage + 1}&nbsp;/&nbsp;${imageLinks.length}`;
-                    App.scene.images.forEach(function (image, idx) {
-                        image.style.display = (idx == App.scene.currentImage) ? 'block' : 'none';
-                    });
+                    galleryChangeImage(true);
                     break;
                 }
                 case 'ArrowLeft': {
-                    App.scene.currentImage--;
-                    if (App.scene.currentImage < 0) {
-                        App.scene.currentImage = (App.scene.images.length - 1);
-                    }
-                    App.scene.counter.innerHTML = `${App.scene.currentImage + 1}&nbsp;/&nbsp;${imageLinks.length}`;
-                    App.scene.images.forEach(function (image, idx) {
-                        image.style.display = (idx == App.scene.currentImage) ? 'block' : 'none';
-                    });
+                    galleryChangeImage(false);
                     break;
                 }
                 default: {
@@ -406,6 +434,20 @@
                     this.counter.innerHTML = `${this.currentImage + 1}&nbsp;/&nbsp;${imageLinks.length}`;
                     wrap.appendChild(this.counter);
                     // controls
+                    this.controls = document.createElement('div');
+                    this.controls.className = 'controls';
+                    wrap.appendChild(this.controls);
+                    this.prev = document.createElement('div');
+                    this.prev.className = 'prev';
+                    this.prev.innerHTML = '&larr;&nbsp;prev';
+                    this.prev.onclick = function () { galleryChangeImage(false); };
+                    this.controls.appendChild(this.prev);
+                    this.next = document.createElement('div');
+                    this.next.className = 'next';
+                    this.next.innerHTML = 'next&nbsp;&rarr;';
+                    this.next.onclick = function () { galleryChangeImage(true); };
+                    this.controls.appendChild(this.next);
+                    // input listener
                     window.addEventListener('keyup', galleryInputListener, false);
                     // set methods
                     this.Destroy = function () {
