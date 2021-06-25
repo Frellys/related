@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>vn_narrator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: whitesmoke;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+            transition: all 0.25s;
+        }
+
+        .narrator {
+            position: relative;
+            width: 80vmin;
+            padding: 2rem 2rem 4rem 2rem;
+            margin: 0 auto;
+            background-color: powderblue;
+            color: rgba(50, 50, 50, 0.85);
+            font-family: monospace;
+            font-size: 1.25rem;
+            box-shadow: 0 0 0.1rem #323232;
+            border-radius: 0.1rem;
+        }
+
+            .narrator > .logo {
+                margin-top: 0;
+            }
+
+            .narrator > .brclick {
+                position: absolute;
+                bottom: 2rem;
+                right: 2rem;
+                opacity: 0.5;
+            }
+    </style>
+</head>
+<body>
+    <script>
+        let text = [
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+            'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+            'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+        ].map(str => str + ((str[str.length - 1] == ' ') ? '' : ' '));
+        window.narrator = new function () {
+            let narrator = document.createElement('div');
+            narrator.className = 'narrator';
+            narrator.logo = new function () {
+                let h1 = document.createElement('h1');
+                h1.className = 'logo';
+                h1.innerHTML = 'narrator';
+                narrator.appendChild(h1);
+                return h1;
+            };
+            narrator.brclick = new function () {
+                let brclick = document.createElement('div');
+                brclick.className = 'brclick';
+                brclick.innerHTML = 'click';
+                narrator.appendChild(brclick);
+                return brclick;
+            };
+            document.body.appendChild(narrator);
+            return narrator;
+        };
+        window.narrator.addEventListener('click', function () {
+            if (window.narrator.textBlock && window.narrator.textBlock.chars.length) {
+                window.clearInterval(window.narrator.textBlock.interval);
+                window.narrator.textBlock.innerHTML += window.narrator.textBlock.chars.join('');
+                delete window.narrator.textBlock;
+            }
+            else {
+                createTextBlock();
+            }
+        }, false);
+        function textBlock(str) {
+            let el = document.createElement('span');
+            el.className = 'textBlock';
+            el.skip = false;
+            el.chars = str.split('');
+            el.interval = window.setInterval(function () {
+                if (el.chars.length) {
+                    el.innerHTML += el.chars.shift();
+                }
+                else {
+                    window.clearInterval(el.interval);
+                }
+            }, 50);
+            return el;
+        };
+        function createTextBlock() {
+            let ret = undefined;
+            if (text.length) {
+                ret = new textBlock(text.shift());
+                window.narrator.textBlock = ret;
+                window.narrator.appendChild(ret);
+            }
+            return ret;
+        };
+    </script>
+</body>
+</html>
