@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jigsaw_level</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: gray;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let rows = 9;
+        let cols = 16;
+        let field = Array.from(new Array(rows).fill(), () => new Array(cols).fill(0));
+        let tile = field[0][0];
+        let orig = new Image();
+        orig.addEventListener('load', function () {
+            orig.style.width = orig.width + 'px';
+            orig.style.height = orig.height + 'px';
+            document.body.appendChild(orig);
+            field = field.map(function (row, rdx) {
+                return row.map(function (col, cdx) {
+                    return new Tile(rdx, cdx);
+                });
+            });
+            console.log(field);
+        });
+        orig.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
+        function Tile(row, col) {
+            this.size = new function size() {
+                this.visible = Math.min(orig.width, orig.height) / Math.min(rows, cols);
+                this.delta = this.visible / 10;
+                this.actual = this.visible + this.delta * 2;
+            };
+            this.pos = new function pos(size) {
+                this.x = row * size.visible + size.visible / 2;
+                this.y = col * size.visible + size.visible / 2;
+            }(this.size);
+            this.cnv = document.createElement('canvas');
+            document.body.appendChild(this.cnv);
+            this.cnv.width = this.size.actual;
+            this.cnv.height = this.size.actual;
+            this.ctx = this.cnv.getContext('2d');
+            this.ctx.fillRect(0, 0, this.size.actual, this.size.actual);
+            this.ctx.drawImage(
+                orig,
+                col * this.size.visible,
+                row * this.size.visible,
+                this.size.visible,
+                this.size.visible,
+                this.size.delta,
+                this.size.delta,
+                this.size.visible,
+                this.size.visible
+            );
+        }
+    </script>
+</body>
+</html>
