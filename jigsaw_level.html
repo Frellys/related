@@ -7,7 +7,7 @@
     <style>
         html {
             user-select: none;
-            overflow: hidden;
+            /*overflow: hidden;*/
         }
 
         body {
@@ -31,41 +31,135 @@
         orig.addEventListener('load', function () {
             orig.style.width = orig.width + 'px';
             orig.style.height = orig.height + 'px';
-            document.body.appendChild(orig);
             field = field.map(function (row, rdx) {
                 return row.map(function (col, cdx) {
                     return new Tile(rdx, cdx);
                 });
             });
-            console.log(field);
+            field.forEach(function (row) {
+                let cnt = document.createElement('div');
+                cnt.style.width = 'fit-content';
+                cnt.style.margin = '0 auto';
+                row.forEach(function (tile) {
+                    cnt.appendChild(tile.cnv);
+                });
+                document.body.appendChild(cnt);
+            });
         });
         orig.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
         function Tile(row, col) {
             this.size = new function size() {
                 this.visible = Math.min(orig.width, orig.height) / Math.min(rows, cols);
-                this.delta = this.visible / 10;
+                this.delta = this.visible / 2;
                 this.actual = this.visible + this.delta * 2;
+            };
+            this.pt = {
+                tl: {
+                    x: this.size.delta,
+                    y: this.size.delta
+                },
+                bl: {
+                    x: this.size.delta,
+                    y: this.size.delta + this.size.visible
+                },
+                br: {
+                    x: this.size.delta + this.size.visible,
+                    y: this.size.delta + this.size.visible
+                },
+                tr: {
+                    x: this.size.delta + this.size.visible,
+                    y: this.size.delta
+                }
+            };
+            this.side = {
+                l: {
+                    a: this.pt.tl,
+                    b: this.pt.bl,
+                    bridge: (col != 0) && {
+                        width: 20,
+                        length: 20
+                    }
+                },
+                b: {
+                    a: this.pt.bl,
+                    b: this.pt.br,
+                    bridge: (row + 1 != rows) && {
+                        width: 20,
+                        length: 20
+                    }
+                },
+                r: {
+                    a: this.pt.br,
+                    b: this.pt.tr,
+                    bridge: (col + 1 != cols) && {
+                        width: 20,
+                        length: 20
+                    }
+                },
+                t: {
+                    a: this.pt.tr,
+                    b: this.pt.tl,
+                    bridge: (row != 0) && {
+                        width: 20,
+                        length: 20
+                    }
+                }
             };
             this.pos = new function pos(size) {
                 this.x = row * size.visible + size.visible / 2;
                 this.y = col * size.visible + size.visible / 2;
             }(this.size);
             this.cnv = document.createElement('canvas');
-            document.body.appendChild(this.cnv);
             this.cnv.width = this.size.actual;
             this.cnv.height = this.size.actual;
             this.ctx = this.cnv.getContext('2d');
-            this.ctx.fillRect(0, 0, this.size.actual, this.size.actual);
+            {
+                // draw path
+                this.ctx.beginPath();
+                // tl
+                this.ctx.moveTo(this.pt.tl.x, this.pt.tl.y);
+                // bl
+                this.ctx.lineTo(this.pt.bl.x, this.pt.bl.y);
+                // br
+                if (this.side.b.bridge) {
+                    this.ctx.lineTo(this.size.delta + this.size.visible / 2 - this.side.b.bridge.width / 2, this.size.delta + this.size.visible);
+                    this.ctx.bezierCurveTo(
+                        this.size.delta + this.size.visible / 2,
+                        this.size.delta + this.size.visible,
+                        this.size.delta + this.size.visible / 2 - this.side.b.bridge.width,
+                        this.size.delta + this.size.visible + this.side.b.bridge.width,
+                        this.size.delta + this.size.visible / 2,
+                        this.size.delta + this.size.visible + this.side.b.bridge.width
+                    );
+                    this.ctx.bezierCurveTo(
+                        this.size.delta + this.size.visible / 2 + this.side.b.bridge.width,
+                        this.size.delta + this.size.visible + this.side.b.bridge.width,
+                        this.size.delta + this.size.visible / 2,
+                        this.size.delta + this.size.visible,
+                        this.size.delta + this.size.visible / 2 + this.side.b.bridge.width / 2,
+                        this.size.delta + this.size.visible
+                    );
+                }
+                this.ctx.lineTo(this.size.delta + this.size.visible, this.size.delta + this.size.visible);
+                // tr
+                this.ctx.lineTo(this.size.delta + this.size.visible, this.size.delta);
+                this.ctx.closePath();
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = '#323232';
+                this.ctx.stroke();
+                this.ctx.clip();
+            }
+            // draw actual
             this.ctx.drawImage(
                 orig,
-                col * this.size.visible,
-                row * this.size.visible,
-                this.size.visible,
-                this.size.visible,
-                this.size.delta,
-                this.size.delta,
-                this.size.visible,
-                this.size.visible
+                col * this.size.visible - this.size.delta,
+                row * this.size.visible - this.size.delta,
+                this.size.visible + this.size.delta * 2,
+                this.size.visible + this.size.delta * 2,
+                0,
+                0,
+                this.size.actual,
+                this.size.actual
             );
         }
     </script>
