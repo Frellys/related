@@ -76,36 +76,36 @@
                     a: this.pt.tl,
                     b: this.pt.bl,
                     bridge: (col != 0) && {
+                        type: 0,
                         outward: !field[row][col - 1].side.r.bridge.outward,
-                        width: 20,
-                        length: 20
+                        width: field[row][col - 1].side.r.bridge.width
                     }
                 },
                 b: {
                     a: this.pt.bl,
                     b: this.pt.br,
                     bridge: (row + 1 != rows) && {
+                        type: 0,
                         outward: !!Math.floor(Math.random() * 2),
-                        width: 20,
-                        length: 20
+                        width: Math.floor(Math.random() * 11) + 15
                     }
                 },
                 r: {
                     a: this.pt.br,
                     b: this.pt.tr,
                     bridge: (col + 1 != cols) && {
+                        type: 0,
                         outward: !!Math.floor(Math.random() * 2),
-                        width: 20,
-                        length: 20
+                        width: Math.floor(Math.random() * 11) + 15
                     }
                 },
                 t: {
                     a: this.pt.tr,
                     b: this.pt.tl,
                     bridge: (row != 0) && {
+                        type: 0,
                         outward: !field[row - 1][col].side.b.bridge.outward,
-                        width: 20,
-                        length: 20
+                        width: field[row - 1][col].side.b.bridge.width
                     }
                 }
             };
