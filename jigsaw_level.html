@@ -87,7 +87,7 @@
                     bridge: (row + 1 != rows) && {
                         type: 0,
                         outward: !!Math.floor(Math.random() * 2),
-                        width: Math.floor(Math.random() * 11) + 15
+                        width: Math.floor(Math.random() * (this.size.delta / 4 + 1)) + (this.size.delta / 4 * 1.5)
                     }
                 },
                 r: {
@@ -96,7 +96,7 @@
                     bridge: (col + 1 != cols) && {
                         type: 0,
                         outward: !!Math.floor(Math.random() * 2),
-                        width: Math.floor(Math.random() * 11) + 15
+                        width: Math.floor(Math.random() * (this.size.delta / 4 + 1)) + (this.size.delta / 4 * 1.5)
                     }
                 },
                 t: {
@@ -110,8 +110,8 @@
                 }
             };
             this.pos = new function pos(size) {
-                this.x = row * size.visible + size.visible / 2;
-                this.y = col * size.visible + size.visible / 2;
+                this.x = row * size.visible - size.delta;
+                this.y = col * size.visible - size.delta;
             }(this.size);
             this.cnv = document.createElement('canvas');
             this.cnv.width = this.size.actual;
