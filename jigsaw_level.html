@@ -116,101 +116,101 @@
             this.cnv = document.createElement('canvas');
             this.cnv.width = this.size.actual;
             this.cnv.height = this.size.actual;
+            if (row) this.cnv.style.marginTop = `-${this.size.delta}px`;
+            if (col) this.cnv.style.marginLeft = `-${this.size.delta}px`;
             this.ctx = this.cnv.getContext('2d');
-            {
-                // draw path
-                this.ctx.beginPath();
-                this.ctx.moveTo(this.pt.tl.x, this.pt.tl.y);
-                // left
-                if (this.side.l.bridge) {
-                    this.ctx.lineTo(this.pt.tl.x, this.pt.tl.y + this.size.visible / 2 - this.side.l.bridge.width / 2);
-                    this.ctx.bezierCurveTo(
-                        this.pt.tl.x,
-                        this.pt.tl.y + this.size.visible / 2,
-                        (this.side.l.bridge.outward) ? this.pt.tl.x - this.side.l.bridge.width : this.pt.tl.x + this.side.l.bridge.width,
-                        this.pt.tl.y + this.size.visible / 2 - this.side.l.bridge.width,
-                        (this.side.l.bridge.outward) ? this.pt.tl.x - this.side.l.bridge.width : this.pt.tl.x + this.side.l.bridge.width,
-                        this.pt.tl.y + this.size.visible / 2
-                    );
-                    this.ctx.bezierCurveTo(
-                        (this.side.l.bridge.outward) ? this.pt.tl.x - this.side.l.bridge.width : this.pt.tl.x + this.side.l.bridge.width,
-                        this.pt.tl.y + this.size.visible / 2 + this.side.l.bridge.width,
-                        this.pt.tl.x,
-                        this.pt.tl.y + this.size.visible / 2,
-                        this.pt.tl.x,
-                        this.pt.tl.y + this.size.visible / 2 + this.side.l.bridge.width / 2
-                    );
-                }
-                this.ctx.lineTo(this.pt.bl.x, this.pt.bl.y);
-                // bottom
-                if (this.side.b.bridge) {
-                    this.ctx.lineTo(this.pt.bl.x + this.size.visible / 2 - this.side.b.bridge.width / 2, this.pt.bl.y);
-                    this.ctx.bezierCurveTo(
-                        this.pt.bl.x + this.size.visible / 2,
-                        this.pt.bl.y,
-                        this.pt.bl.x + this.size.visible / 2 - this.side.b.bridge.width,
-                        (this.side.b.bridge.outward) ? this.pt.bl.y + this.side.b.bridge.width : this.pt.bl.y - this.side.b.bridge.width,
-                        this.pt.bl.x + this.size.visible / 2,
-                        (this.side.b.bridge.outward) ? this.pt.bl.y + this.side.b.bridge.width : this.pt.bl.y - this.side.b.bridge.width
-                    );
-                    this.ctx.bezierCurveTo(
-                        this.pt.bl.x + this.size.visible / 2 + this.side.b.bridge.width,
-                        (this.side.b.bridge.outward) ? this.pt.bl.y + this.side.b.bridge.width : this.pt.bl.y - this.side.b.bridge.width,
-                        this.pt.bl.x + this.size.visible / 2,
-                        this.pt.bl.y,
-                        this.pt.bl.x + this.size.visible / 2 + this.side.b.bridge.width / 2,
-                        this.pt.bl.y
-                    );
-                }
-                this.ctx.lineTo(this.pt.br.x, this.pt.br.y);
-                // right
-                if (this.side.r.bridge) {
-                    this.ctx.lineTo(this.pt.tr.x, this.pt.tr.y + this.size.visible / 2 + this.side.r.bridge.width / 2);
-                    this.ctx.bezierCurveTo(
-                        this.pt.tr.x,
-                        this.pt.tr.y + this.size.visible / 2,
-                        (this.side.r.bridge.outward) ? this.pt.tr.x + this.side.r.bridge.width : this.pt.tr.x - this.side.r.bridge.width,
-                        this.pt.tr.y + this.size.visible / 2 + this.side.r.bridge.width,
-                        (this.side.r.bridge.outward) ? this.pt.tr.x + this.side.r.bridge.width : this.pt.tr.x - this.side.r.bridge.width,
-                        this.pt.tr.y + this.size.visible / 2
-                    );
-                    this.ctx.bezierCurveTo(
-                        (this.side.r.bridge.outward) ? this.pt.tr.x + this.side.r.bridge.width : this.pt.tr.x - this.side.r.bridge.width,
-                        this.pt.tr.y + this.size.visible / 2 - this.side.r.bridge.width,
-                        this.pt.tr.x,
-                        this.pt.tr.y + this.size.visible / 2,
-                        this.pt.tr.x,
-                        this.pt.tr.y + this.size.visible / 2 - this.side.r.bridge.width / 2
-                    );
-                }
-                this.ctx.lineTo(this.pt.tr.x, this.pt.tr.y);
-                // top
-                if (this.side.t.bridge) {
-                    this.ctx.lineTo(this.pt.tl.x + this.size.visible / 2 + this.side.t.bridge.width / 2, this.pt.tl.y);
-                    this.ctx.bezierCurveTo(
-                        this.pt.tl.x + this.size.visible / 2,
-                        this.pt.tl.y,
-                        this.pt.tl.x + this.size.visible / 2 + this.side.t.bridge.width,
-                        (this.side.t.bridge.outward) ? this.pt.tl.y - this.side.t.bridge.width : this.pt.tl.y + this.side.t.bridge.width,
-                        this.pt.tl.x + this.size.visible / 2,
-                        (this.side.t.bridge.outward) ? this.pt.tl.y - this.side.t.bridge.width : this.pt.tl.y + this.side.t.bridge.width
-                    );
-                    this.ctx.bezierCurveTo(
-                        this.pt.tl.x + this.size.visible / 2 - this.side.t.bridge.width,
-                        (this.side.t.bridge.outward) ? this.pt.tl.y - this.side.t.bridge.width : this.pt.tl.y + this.side.t.bridge.width,
-                        this.pt.tl.x + this.size.visible / 2,
-                        this.pt.tl.y,
-                        this.pt.tl.x + this.size.visible / 2 - this.side.t.bridge.width / 2,
-                        this.pt.tl.y
-                    );
-                }
-                this.ctx.lineTo(this.pt.tl.x, this.pt.tl.y);
-                this.ctx.closePath();
-                //this.ctx.lineWidth = 4;
-                //this.ctx.strokeStyle = '#323232';
-                //this.ctx.stroke();
-                this.ctx.clip();
+            // draw path
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.pt.tl.x, this.pt.tl.y);
+            // left
+            if (this.side.l.bridge) {
+                this.ctx.lineTo(this.pt.tl.x, this.pt.tl.y + this.size.visible / 2 - this.side.l.bridge.width / 2);
+                this.ctx.bezierCurveTo(
+                    this.pt.tl.x,
+                    this.pt.tl.y + this.size.visible / 2,
+                    (this.side.l.bridge.outward) ? this.pt.tl.x - this.side.l.bridge.width : this.pt.tl.x + this.side.l.bridge.width,
+                    this.pt.tl.y + this.size.visible / 2 - this.side.l.bridge.width,
+                    (this.side.l.bridge.outward) ? this.pt.tl.x - this.side.l.bridge.width : this.pt.tl.x + this.side.l.bridge.width,
+                    this.pt.tl.y + this.size.visible / 2
+                );
+                this.ctx.bezierCurveTo(
+                    (this.side.l.bridge.outward) ? this.pt.tl.x - this.side.l.bridge.width : this.pt.tl.x + this.side.l.bridge.width,
+                    this.pt.tl.y + this.size.visible / 2 + this.side.l.bridge.width,
+                    this.pt.tl.x,
+                    this.pt.tl.y + this.size.visible / 2,
+                    this.pt.tl.x,
+                    this.pt.tl.y + this.size.visible / 2 + this.side.l.bridge.width / 2
+                );
             }
+            this.ctx.lineTo(this.pt.bl.x, this.pt.bl.y);
+            // bottom
+            if (this.side.b.bridge) {
+                this.ctx.lineTo(this.pt.bl.x + this.size.visible / 2 - this.side.b.bridge.width / 2, this.pt.bl.y);
+                this.ctx.bezierCurveTo(
+                    this.pt.bl.x + this.size.visible / 2,
+                    this.pt.bl.y,
+                    this.pt.bl.x + this.size.visible / 2 - this.side.b.bridge.width,
+                    (this.side.b.bridge.outward) ? this.pt.bl.y + this.side.b.bridge.width : this.pt.bl.y - this.side.b.bridge.width,
+                    this.pt.bl.x + this.size.visible / 2,
+                    (this.side.b.bridge.outward) ? this.pt.bl.y + this.side.b.bridge.width : this.pt.bl.y - this.side.b.bridge.width
+                );
+                this.ctx.bezierCurveTo(
+                    this.pt.bl.x + this.size.visible / 2 + this.side.b.bridge.width,
+                    (this.side.b.bridge.outward) ? this.pt.bl.y + this.side.b.bridge.width : this.pt.bl.y - this.side.b.bridge.width,
+                    this.pt.bl.x + this.size.visible / 2,
+                    this.pt.bl.y,
+                    this.pt.bl.x + this.size.visible / 2 + this.side.b.bridge.width / 2,
+                    this.pt.bl.y
+                );
+            }
+            this.ctx.lineTo(this.pt.br.x, this.pt.br.y);
+            // right
+            if (this.side.r.bridge) {
+                this.ctx.lineTo(this.pt.tr.x, this.pt.tr.y + this.size.visible / 2 + this.side.r.bridge.width / 2);
+                this.ctx.bezierCurveTo(
+                    this.pt.tr.x,
+                    this.pt.tr.y + this.size.visible / 2,
+                    (this.side.r.bridge.outward) ? this.pt.tr.x + this.side.r.bridge.width : this.pt.tr.x - this.side.r.bridge.width,
+                    this.pt.tr.y + this.size.visible / 2 + this.side.r.bridge.width,
+                    (this.side.r.bridge.outward) ? this.pt.tr.x + this.side.r.bridge.width : this.pt.tr.x - this.side.r.bridge.width,
+                    this.pt.tr.y + this.size.visible / 2
+                );
+                this.ctx.bezierCurveTo(
+                    (this.side.r.bridge.outward) ? this.pt.tr.x + this.side.r.bridge.width : this.pt.tr.x - this.side.r.bridge.width,
+                    this.pt.tr.y + this.size.visible / 2 - this.side.r.bridge.width,
+                    this.pt.tr.x,
+                    this.pt.tr.y + this.size.visible / 2,
+                    this.pt.tr.x,
+                    this.pt.tr.y + this.size.visible / 2 - this.side.r.bridge.width / 2
+                );
+            }
+            this.ctx.lineTo(this.pt.tr.x, this.pt.tr.y);
+            // top
+            if (this.side.t.bridge) {
+                this.ctx.lineTo(this.pt.tl.x + this.size.visible / 2 + this.side.t.bridge.width / 2, this.pt.tl.y);
+                this.ctx.bezierCurveTo(
+                    this.pt.tl.x + this.size.visible / 2,
+                    this.pt.tl.y,
+                    this.pt.tl.x + this.size.visible / 2 + this.side.t.bridge.width,
+                    (this.side.t.bridge.outward) ? this.pt.tl.y - this.side.t.bridge.width : this.pt.tl.y + this.side.t.bridge.width,
+                    this.pt.tl.x + this.size.visible / 2,
+                    (this.side.t.bridge.outward) ? this.pt.tl.y - this.side.t.bridge.width : this.pt.tl.y + this.side.t.bridge.width
+                );
+                this.ctx.bezierCurveTo(
+                    this.pt.tl.x + this.size.visible / 2 - this.side.t.bridge.width,
+                    (this.side.t.bridge.outward) ? this.pt.tl.y - this.side.t.bridge.width : this.pt.tl.y + this.side.t.bridge.width,
+                    this.pt.tl.x + this.size.visible / 2,
+                    this.pt.tl.y,
+                    this.pt.tl.x + this.size.visible / 2 - this.side.t.bridge.width / 2,
+                    this.pt.tl.y
+                );
+            }
+            this.ctx.lineTo(this.pt.tl.x, this.pt.tl.y);
+            this.ctx.closePath();
+            //this.ctx.lineWidth = 2;
+            //this.ctx.strokeStyle = '#323232';
+            //this.ctx.stroke();
+            this.ctx.clip();
             // draw actual
             this.ctx.drawImage(
                 orig,
