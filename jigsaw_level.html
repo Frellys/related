@@ -26,6 +26,8 @@
         let tile = false;
         let rows = 9;
         let cols = 16;
+        let fwidth = Math.min(screen.width, screen.height) / 100 * 80;
+        let fheight = fwidth / 16 * 9;
         let field = Array.from(new Array(rows).fill(), () => new Array(cols).fill(0));
         let orig = new Image();
         orig.addEventListener('load', function () {
@@ -42,12 +44,14 @@
                 });
             });
         });
-        orig.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
+        //orig.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
+        orig.src = 'https://i3.ytimg.com/vi/IMnlSqOVyi0/maxresdefault.jpg';
         function Tile(row, col) {
             this.row = row;
             this.col = col;
             this.size = new function size() {
-                this.visible = Math.min(orig.width, orig.height) / Math.min(rows, cols);
+                //this.visible = Math.min(orig.width, orig.height) / Math.min(rows, cols);
+                this.visible = fheight / Math.min(rows, cols);
                 this.delta = this.visible / 2;
                 this.actual = this.visible + this.delta * 2;
             };
@@ -206,17 +210,18 @@
             }
             this.path.lineTo(this.pt.tl.x, this.pt.tl.y);
             this.path.closePath();
-            //this.ctx.lineWidth = 2;
-            //this.ctx.strokeStyle = '#323232';
-            //this.ctx.stroke();
+            //this.path.lineWidth = 2;
+            //this.path.strokeStyle = '#323232';
+            //this.ctx.stroke(this.path);
+            //this.ctx.clip(this.path);
             this.ctx.clip(this.path);
             // draw actual
             this.ctx.drawImage(
                 orig,
-                col * this.size.visible - this.size.delta,
-                row * this.size.visible - this.size.delta,
-                this.size.visible + this.size.delta * 2,
-                this.size.visible + this.size.delta * 2,
+                col * (orig.naturalWidth / cols) - (orig.naturalWidth / cols) / 2,
+                row * (orig.naturalHeight / rows) - (orig.naturalHeight / rows) / 2,
+                (orig.naturalWidth / cols) + (orig.naturalWidth / cols),
+                (orig.naturalHeight / rows) + (orig.naturalHeight / rows),
                 0,
                 0,
                 this.size.actual,
