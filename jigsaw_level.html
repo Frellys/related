@@ -7,18 +7,31 @@
     <style>
         html {
             user-select: none;
-            /*overflow: hidden;*/
+            overflow: hidden;
         }
 
         body {
             margin: 0;
             padding: 0;
-            background-color: gray;
+            background-color: whitesmoke;
             display: table-cell;
             height: 100vh;
             width: 100vw;
             vertical-align: middle;
         }
+
+        .container {
+            margin: 0 auto;
+            width: 80vmin;
+            height: calc(80vmin / 16 * 9);
+            background-color: #323232;
+        }
+            .container > .layer {
+                width: 80vmin;
+                height: calc(80vmin / 16 * 9);
+                filter: grayscale(1) blur(1vmin);
+                opacity: 0.25;
+            }
     </style>
 </head>
 <body>
@@ -29,6 +42,14 @@
         let fwidth = Math.min(screen.width, screen.height) / 100 * 80;
         let fheight = fwidth / 16 * 9;
         let field = Array.from(new Array(rows).fill(), () => new Array(cols).fill(0));
+        let container = document.createElement('div');
+        container.classList.add('container');
+        document.body.appendChild(container);
+        let layer = document.createElement('img');
+        layer.classList.add('layer');
+        layer.src = 'https://i3.ytimg.com/vi/IMnlSqOVyi0/maxresdefault.jpg';
+        //layer.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
+        container.appendChild(layer);
         let orig = new Image();
         orig.addEventListener('load', function () {
             orig.style.width = orig.width + 'px';
@@ -44,13 +65,11 @@
                 });
             });
         });
-        //orig.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
-        orig.src = 'https://i3.ytimg.com/vi/IMnlSqOVyi0/maxresdefault.jpg';
+        orig.src = layer.src;
         function Tile(row, col) {
             this.row = row;
             this.col = col;
             this.size = new function size() {
-                //this.visible = Math.min(orig.width, orig.height) / Math.min(rows, cols);
                 this.visible = fheight / Math.min(rows, cols);
                 this.delta = this.visible / 2;
                 this.actual = this.visible + this.delta * 2;
@@ -111,16 +130,26 @@
                     }
                 }
             };
-            this.pos = new function pos(size) {
-                this.x = col * (size.actual - size.delta);
-                this.y = row * (size.actual - size.delta);
-            }(this.size);
+            //this.pos = {
+            //    x: col * (this.size.actual - this.size.delta),
+            //    y: row * (this.size.actual - this.size.delta)
+            //};
+            this.pos = {
+                x: (screen.width - fwidth) / 2 - this.size.delta + col * this.size.visible,
+                y: (screen.height - fheight) / 2 - this.size.delta + row * this.size.visible
+            };
+            this.target = {
+                x: (screen.width - fwidth) / 2 - this.size.delta + col * this.size.visible,
+                y: (screen.height - fheight) / 2 - this.size.delta + row * this.size.visible
+            };
             this.cnv = document.createElement('canvas');
             this.cnv.width = this.size.actual;
             this.cnv.height = this.size.actual;
             this.cnv.style.position = 'absolute';
-            this.cnv.style.top = this.pos.y + 'px';
-            this.cnv.style.left = this.pos.x + 'px';
+            //this.cnv.style.top = this.pos.y + 'px';
+            //this.cnv.style.left = this.pos.x + 'px';
+            this.cnv.style.top = this.target.y + 'px';
+            this.cnv.style.left = this.target.x + 'px';
             this.ctx = this.cnv.getContext('2d');
             // draw path
             this.path = new Path2D();
@@ -249,6 +278,8 @@
                     });
                 });
             }
+            //console.log(e.x);
+            //console.log(e.y);
         }, false);
         window.addEventListener('mousemove', function (e) {
             if (window.tile) {
