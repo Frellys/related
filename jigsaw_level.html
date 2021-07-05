@@ -23,10 +23,10 @@
 </head>
 <body>
     <script>
+        let tile = false;
         let rows = 9;
         let cols = 16;
         let field = Array.from(new Array(rows).fill(), () => new Array(cols).fill(0));
-        let tile = field[0][0];
         let orig = new Image();
         orig.addEventListener('load', function () {
             orig.style.width = orig.width + 'px';
@@ -37,17 +37,15 @@
                 });
             });
             field.forEach(function (row) {
-                let cnt = document.createElement('div');
-                cnt.style.width = 'fit-content';
-                cnt.style.margin = '0 auto';
                 row.forEach(function (tile) {
-                    cnt.appendChild(tile.cnv);
+                    document.body.appendChild(tile.cnv);
                 });
-                document.body.appendChild(cnt);
             });
         });
         orig.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
         function Tile(row, col) {
+            this.row = row;
+            this.col = col;
             this.size = new function size() {
                 this.visible = Math.min(orig.width, orig.height) / Math.min(rows, cols);
                 this.delta = this.visible / 2;
@@ -110,22 +108,23 @@
                 }
             };
             this.pos = new function pos(size) {
-                this.x = row * size.visible - size.delta;
-                this.y = col * size.visible - size.delta;
+                this.x = col * (size.actual - size.delta);
+                this.y = row * (size.actual - size.delta);
             }(this.size);
             this.cnv = document.createElement('canvas');
             this.cnv.width = this.size.actual;
             this.cnv.height = this.size.actual;
-            if (row) this.cnv.style.marginTop = `-${this.size.delta}px`;
-            if (col) this.cnv.style.marginLeft = `-${this.size.delta}px`;
+            this.cnv.style.position = 'absolute';
+            this.cnv.style.top = this.pos.y + 'px';
+            this.cnv.style.left = this.pos.x + 'px';
             this.ctx = this.cnv.getContext('2d');
             // draw path
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.pt.tl.x, this.pt.tl.y);
+            this.path = new Path2D();
+            this.path.moveTo(this.pt.tl.x, this.pt.tl.y);
             // left
             if (this.side.l.bridge) {
-                this.ctx.lineTo(this.pt.tl.x, this.pt.tl.y + this.size.visible / 2 - this.side.l.bridge.width / 2);
-                this.ctx.bezierCurveTo(
+                this.path.lineTo(this.pt.tl.x, this.pt.tl.y + this.size.visible / 2 - this.side.l.bridge.width / 2);
+                this.path.bezierCurveTo(
                     this.pt.tl.x,
                     this.pt.tl.y + this.size.visible / 2,
                     (this.side.l.bridge.outward) ? this.pt.tl.x - this.side.l.bridge.width : this.pt.tl.x + this.side.l.bridge.width,
@@ -133,7 +132,7 @@
                     (this.side.l.bridge.outward) ? this.pt.tl.x - this.side.l.bridge.width : this.pt.tl.x + this.side.l.bridge.width,
                     this.pt.tl.y + this.size.visible / 2
                 );
-                this.ctx.bezierCurveTo(
+                this.path.bezierCurveTo(
                     (this.side.l.bridge.outward) ? this.pt.tl.x - this.side.l.bridge.width : this.pt.tl.x + this.side.l.bridge.width,
                     this.pt.tl.y + this.size.visible / 2 + this.side.l.bridge.width,
                     this.pt.tl.x,
@@ -142,11 +141,11 @@
                     this.pt.tl.y + this.size.visible / 2 + this.side.l.bridge.width / 2
                 );
             }
-            this.ctx.lineTo(this.pt.bl.x, this.pt.bl.y);
+            this.path.lineTo(this.pt.bl.x, this.pt.bl.y);
             // bottom
             if (this.side.b.bridge) {
-                this.ctx.lineTo(this.pt.bl.x + this.size.visible / 2 - this.side.b.bridge.width / 2, this.pt.bl.y);
-                this.ctx.bezierCurveTo(
+                this.path.lineTo(this.pt.bl.x + this.size.visible / 2 - this.side.b.bridge.width / 2, this.pt.bl.y);
+                this.path.bezierCurveTo(
                     this.pt.bl.x + this.size.visible / 2,
                     this.pt.bl.y,
                     this.pt.bl.x + this.size.visible / 2 - this.side.b.bridge.width,
@@ -154,7 +153,7 @@
                     this.pt.bl.x + this.size.visible / 2,
                     (this.side.b.bridge.outward) ? this.pt.bl.y + this.side.b.bridge.width : this.pt.bl.y - this.side.b.bridge.width
                 );
-                this.ctx.bezierCurveTo(
+                this.path.bezierCurveTo(
                     this.pt.bl.x + this.size.visible / 2 + this.side.b.bridge.width,
                     (this.side.b.bridge.outward) ? this.pt.bl.y + this.side.b.bridge.width : this.pt.bl.y - this.side.b.bridge.width,
                     this.pt.bl.x + this.size.visible / 2,
@@ -163,11 +162,11 @@
                     this.pt.bl.y
                 );
             }
-            this.ctx.lineTo(this.pt.br.x, this.pt.br.y);
+            this.path.lineTo(this.pt.br.x, this.pt.br.y);
             // right
             if (this.side.r.bridge) {
-                this.ctx.lineTo(this.pt.tr.x, this.pt.tr.y + this.size.visible / 2 + this.side.r.bridge.width / 2);
-                this.ctx.bezierCurveTo(
+                this.path.lineTo(this.pt.tr.x, this.pt.tr.y + this.size.visible / 2 + this.side.r.bridge.width / 2);
+                this.path.bezierCurveTo(
                     this.pt.tr.x,
                     this.pt.tr.y + this.size.visible / 2,
                     (this.side.r.bridge.outward) ? this.pt.tr.x + this.side.r.bridge.width : this.pt.tr.x - this.side.r.bridge.width,
@@ -175,7 +174,7 @@
                     (this.side.r.bridge.outward) ? this.pt.tr.x + this.side.r.bridge.width : this.pt.tr.x - this.side.r.bridge.width,
                     this.pt.tr.y + this.size.visible / 2
                 );
-                this.ctx.bezierCurveTo(
+                this.path.bezierCurveTo(
                     (this.side.r.bridge.outward) ? this.pt.tr.x + this.side.r.bridge.width : this.pt.tr.x - this.side.r.bridge.width,
                     this.pt.tr.y + this.size.visible / 2 - this.side.r.bridge.width,
                     this.pt.tr.x,
@@ -184,11 +183,11 @@
                     this.pt.tr.y + this.size.visible / 2 - this.side.r.bridge.width / 2
                 );
             }
-            this.ctx.lineTo(this.pt.tr.x, this.pt.tr.y);
+            this.path.lineTo(this.pt.tr.x, this.pt.tr.y);
             // top
             if (this.side.t.bridge) {
-                this.ctx.lineTo(this.pt.tl.x + this.size.visible / 2 + this.side.t.bridge.width / 2, this.pt.tl.y);
-                this.ctx.bezierCurveTo(
+                this.path.lineTo(this.pt.tl.x + this.size.visible / 2 + this.side.t.bridge.width / 2, this.pt.tl.y);
+                this.path.bezierCurveTo(
                     this.pt.tl.x + this.size.visible / 2,
                     this.pt.tl.y,
                     this.pt.tl.x + this.size.visible / 2 + this.side.t.bridge.width,
@@ -196,7 +195,7 @@
                     this.pt.tl.x + this.size.visible / 2,
                     (this.side.t.bridge.outward) ? this.pt.tl.y - this.side.t.bridge.width : this.pt.tl.y + this.side.t.bridge.width
                 );
-                this.ctx.bezierCurveTo(
+                this.path.bezierCurveTo(
                     this.pt.tl.x + this.size.visible / 2 - this.side.t.bridge.width,
                     (this.side.t.bridge.outward) ? this.pt.tl.y - this.side.t.bridge.width : this.pt.tl.y + this.side.t.bridge.width,
                     this.pt.tl.x + this.size.visible / 2,
@@ -205,12 +204,12 @@
                     this.pt.tl.y
                 );
             }
-            this.ctx.lineTo(this.pt.tl.x, this.pt.tl.y);
-            this.ctx.closePath();
+            this.path.lineTo(this.pt.tl.x, this.pt.tl.y);
+            this.path.closePath();
             //this.ctx.lineWidth = 2;
             //this.ctx.strokeStyle = '#323232';
             //this.ctx.stroke();
-            this.ctx.clip();
+            this.ctx.clip(this.path);
             // draw actual
             this.ctx.drawImage(
                 orig,
@@ -224,6 +223,34 @@
                 this.size.actual
             );
         }
+        window.addEventListener('click', function (e) {
+            if (window.tile) {
+                window.tile.pos = {
+                    x: e.x - (window.tile.size.actual / 2),
+                    y: e.y - (window.tile.size.actual / 2)
+                };
+                window.tile = false;
+            }
+            else {
+                field.forEach(function (row) {
+                    row.forEach(function (tile) {
+                        let x = e.x - tile.pos.x;
+                        let y = e.y - tile.pos.y;
+                        if (tile.ctx.isPointInPath(tile.path, x, y)) {
+                            window.tile = tile;
+                            window.tile.cnv.style.top = e.y - (window.tile.size.actual / 2) + 'px';
+                            window.tile.cnv.style.left = e.x - (window.tile.size.actual / 2) + 'px';
+                        }
+                    });
+                });
+            }
+        }, false);
+        window.addEventListener('mousemove', function (e) {
+            if (window.tile) {
+                window.tile.cnv.style.top = e.y - (window.tile.size.actual / 2) + 'px';
+                window.tile.cnv.style.left = e.x - (window.tile.size.actual / 2) + 'px';
+            }
+        }, false);
     </script>
 </body>
 </html>
