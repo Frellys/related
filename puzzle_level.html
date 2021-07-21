@@ -297,6 +297,7 @@
             constructor(name, param) {
                 return new this.CreateScene[name](param);
             };
+
             CreateScene = {
                 menu: function () {
                     // create wrap
@@ -334,20 +335,20 @@
                     };
                     tlControls.appendChild(galleryBtn);
                     // create level buttons
-                    for (let i = 0; i < 9; i++) {
+                    imageLinks.forEach(function (link, ldx) {
                         let levelBtn = document.createElement('div');
                         levelBtn.className = 'levelBtn';
-                        levelBtn.style.backgroundImage = `url(${imageLinks[i]})`;
+                        levelBtn.style.backgroundImage = `url(${link})`;
                         levelBtn.onclick = function () {
                             App.scene.Destroy();
-                            App.scene = new Scene('level', i);
+                            App.scene = new Scene('level', ldx);
                         };
                         wrap.appendChild(levelBtn);
                         // create fader
                         let fader = document.createElement('div');
                         fader.className = 'fader';
                         levelBtn.appendChild(fader);
-                    }
+                    });
                     // set methods
                     this.Destroy = function () {
                         document.querySelector('.menuWrap').remove();
@@ -456,10 +457,10 @@
                     };
                 },
                 level: function (num) {
-                    let rows = 4;
-                    let cols = 4;
-                    let cells = [];
-                    let tiles = [];
+                    this.rows = 5;
+                    this.cols = 5;
+                    this.cells = [];
+                    this.tiles = [];
                     // create wrap
                     let wrap = document.createElement('div');
                     wrap.className = 'levelWrap';
@@ -482,31 +483,31 @@
                         let field = document.createElement('table');
                         field.className = 'field';
                         let tbody = document.createElement('tbody');
-                        for (let r = 0; r < rows; r++) {
+                        for (let r = 0; r < App.scene.rows; r++) {
                             let row = document.createElement('tr');
-                            for (let c = 0; c < cols; c++) {
+                            for (let c = 0; c < App.scene.cols; c++) {
                                 let cell = document.createElement('td');
                                 cell.row = r;
                                 cell.col = c;
                                 row.appendChild(cell);
-                                cells.push(cell);
+                                App.scene.cells.push(cell);
                             }
                             tbody.appendChild(row);
                         }
                         field.appendChild(tbody);
                         wrap.appendChild(field);
                         // create tiles
-                        for (let r = 0; r < rows; r++) {
-                            for (let c = 0; c < cols; c++) {
+                        for (let r = 0; r < App.scene.rows; r++) {
+                            for (let c = 0; c < App.scene.cols; c++) {
                                 let tile = document.createElement('div');
                                 tile.classList.add('tile');
                                 tile.classList.add('active');
-                                tile.style.width = `calc(80vmin / ${cols})`;
-                                tile.style.height = `calc(80vmin / 16 * 9 / ${rows})`;
+                                tile.style.width = `calc(80vmin / ${App.scene.cols})`;
+                                tile.style.height = `calc(80vmin / 16 * 9 / ${App.scene.rows})`;
                                 tile.style.backgroundImage = `url(${imageLinks[num]})`;
                                 tile.style.backgroundRepeat = 'no-repeat';
-                                tile.style.backgroundPositionX = `calc(0px - (80vmin / ${cols} * ${c}))`;
-                                tile.style.backgroundPositionY = `calc(0px - (80vmin / 16 * 9 / ${rows} * ${r}))`;
+                                tile.style.backgroundPositionX = `calc(0px - (80vmin / ${App.scene.cols} * ${c}))`;
+                                tile.style.backgroundPositionY = `calc(0px - (80vmin / 16 * 9 / ${App.scene.rows} * ${r}))`;
                                 tile.style.backgroundSize = `80vmin calc(80vmin / 16 * 9)`;
                                 tile.targetRow = r;
                                 tile.targetCol = c;
@@ -529,24 +530,21 @@
                                     this.style.top = 'auto';
                                     this.style.boxShadow = 'none';
                                 };
-                                tiles.push(tile);
+                                App.scene.tiles.push(tile);
                             }
                         }
-                        // generate random array
-                        let arr = Array.from(new Array(rows * cols).keys());
+                        // generate mask for random tile distribution
+                        let mask = Array.from(new Array(App.scene.rows * App.scene.cols).keys());
                         // append tiles
-                        cells.forEach(function (cell) {
-                            let tdx = Math.floor(Math.random() * arr.length);
-                            cell.appendChild(tiles[arr[tdx]]);
-                            arr.splice(tdx, 1);
+                        App.scene.cells.forEach(function (cell) {
+                            let tdx = Math.floor(Math.random() * mask.length);
+                            cell.appendChild(App.scene.tiles[mask[tdx]]);
+                            mask.splice(tdx, 1);
                         });
+                        // check tiles
+                        App.scene.CheckTiles();
                     };
                     orig.src = imageLinks[num];
-                    // set vars
-                    this.rows = rows;
-                    this.cols = cols;
-                    this.cells = cells;
-                    this.tiles = tiles;
                     // set methods
                     this.Destroy = function () {
                         document.querySelector('.levelWrap').remove();
@@ -570,8 +568,10 @@
             };
         };
         /**
-         * @namespace
+         * main game object
+         * @namespace App
          * @property {Scene} scene - current scene container
+         * @property {object} drag - info about the tile, being dragged
          */
         let App = {
             scene: new Scene('menu'),
@@ -597,7 +597,7 @@
         window.addEventListener('mouseup', function (e) {
             if (App.drag.enabled) {
                 App.drag.enabled = false;
-                let tilesAtPoint = document.elementsFromPoint(e.x, e.y).filter(el => el.classList.contains('tile'));
+                let tilesAtPoint = document.elementsFromPoint(e.x, e.y).filter(el => el.classList.contains('tile') && el.classList.contains('active'));
                 if (tilesAtPoint.length == 2) {
                     // swap tiles
                     let cellAtPoint = document.elementsFromPoint(e.x, e.y).find(el => el.tagName == 'TD');
@@ -608,6 +608,8 @@
                 App.drag.element.setDefaultStyles();
                 // remove App.drag.element
                 App.drag.element = null;
+                // check tiles
+                App.scene.CheckTiles();
             }
         }, false);
         /**
