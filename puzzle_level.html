@@ -524,12 +524,14 @@
                                     this.style.left = `calc(${x}px - 80vmin / ${App.scene.cols} / 2)`;
                                     this.style.top = `calc(${y}px - 80vmin / 16 * 9 / ${App.scene.rows} / 2)`;
                                     this.style.boxShadow = '0 0 0.5vmin whitesmoke';
+                                    this.style.zIndex = '1';
                                 };
                                 tile.setDefaultStyles = function () {
                                     this.style.position = 'static';
                                     this.style.left = 'auto';
                                     this.style.top = 'auto';
                                     this.style.boxShadow = 'none';
+                                    this.style.zIndex = '0';
                                 };
                                 App.scene.tiles.push(tile);
                             }
