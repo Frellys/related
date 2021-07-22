@@ -313,7 +313,8 @@
                     escBtn.className = 'escBtn';
                     escBtn.innerHTML = 'exit';
                     escBtn.onclick = function () {
-                        alert('exit');
+                        window.close();
+                        //alert('exit');
                     };
                     tlControls.appendChild(escBtn);
                     // create options button
@@ -560,6 +561,7 @@
                                 let cell = tile.parentNode;
                                 if (cell.row == tile.targetRow && cell.col == tile.targetCol) {
                                     tile.classList.replace('active', 'inactive');
+                                    tile.style.opacity = 0.75;
                                 }
                             }
                         });
