@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>generateLabyrinth</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: whitesmoke;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const params = new function () {
+            let searchParams = window.location.search.substring(1).split('&');
+            return Object.fromEntries(searchParams.map(p => { let [k, v] = p.split('='); return [k, +v]; }));
+        };
+        const Level = function ({ w = 25, h = 25, x1 = Math.floor(Math.random() * 15), y1 = Math.floor(Math.random() * 15) }) {
+            this.width = w;
+            this.height = h;
+            this.start = { x: x1, y: y1 };
+            this.field = Array.from(new Array(this.height).fill(), () => new Array(this.width).fill(true));
+            this.field[y1][x1] = {
+                links: []
+            };
+            this.path = [];
+            let curPath = [];
+            let pos = { x: x1, y: y1 };
+            while (this.field.some(row => row.some(el => el === true))) {
+                let routes = {
+                    t: (pos.y > 0 && this.field[pos.y - 1][pos.x] === true),
+                    r: (pos.x < this.width - 1 && this.field[pos.y][pos.x + 1] === true),
+                    b: (pos.y < this.height - 1 && this.field[pos.y + 1][pos.x] === true),
+                    l: (pos.x > 0 && this.field[pos.y][pos.x - 1] === true)
+                };
+                let cap = Object.keys(routes).filter(key => routes[key]).length;
+                if (cap) {
+                    if (this.path.length < curPath.push({ x: pos.x, y: pos.y })) {
+                        this.path = JSON.parse(JSON.stringify(curPath));
+                    }
+                    let val = +(window.crypto.getRandomValues(new Uint32Array(1))[0].toString()[0]) % 4;
+                    console.log(val);
+                    //let val = Math.floor(Math.random() * (cap - 1));
+                    let dir = Object.keys(routes).filter(key => routes[key])[val];
+                    //let dir = Object.keys(routes).filter(key => routes[key])[Math.floor(Math.random() * (cap - 1))];
+                    switch (dir) {
+                        case 't': {
+                            this.field[pos.y][pos.x].links.push('t');
+                            pos.y -= 1;
+                            this.field[pos.y][pos.x] = { links: ['b'] };
+                            break;
+                        }
+                        case 'r': {
+                            this.field[pos.y][pos.x].links.push('r');
+                            pos.x += 1;
+                            this.field[pos.y][pos.x] = { links: ['l'] };
+                            break;
+                        }
+                        case 'b': {
+                            this.field[pos.y][pos.x].links.push('b');
+                            pos.y += 1;
+                            this.field[pos.y][pos.x] = { links: ['t'] };
+                            break;
+                        }
+                        case 'l': {
+                            this.field[pos.y][pos.x].links.push('l');
+                            pos.x -= 1;
+                            this.field[pos.y][pos.x] = { links: ['r'] };
+                            break;
+                        }
+                    };
+                }
+                else {
+                    pos = curPath.pop();
+                }
+            }
+            this.xmlns = 'http://www.w3.org/2000/svg';
+            this.vmin = Math.floor(Math.min(screen.width, screen.height) / 100);
+            this.svg = (() => {
+                let svg = document.createElementNS(this.xmlns, 'svg');
+                svg.style.display = 'block';
+                svg.style.margin = '0 auto';
+                svg.setAttribute('shape-rendering', 'optimizespeed');
+                svg.setAttribute('viewbox', `0 0 ${this.width} ${this.height}`);
+                svg.setAttribute('width', `${this.vmin * 80 + 2}`);
+                svg.setAttribute('height', `${this.vmin * 80 + 2}`);
+                document.body.appendChild(svg);
+                return svg;
+            })();
+            this.tileSize = this.vmin * 80 / this.width;
+            this.field.forEach((row, rdx) => {
+                row.forEach((col, cdx) => {
+                    this.svg.appendChild(((rect) => {
+                        rect.style.fill = 'rgba(50, 50, 50, 0.1)';
+                        rect.style.stroke = 'rgba(50, 50, 50, 0.9)';
+                        rect.style.strokeWidth = 2;
+                        rect.setAttribute('x', cdx * this.tileSize + 1);
+                        rect.setAttribute('y', rdx * this.tileSize + 1);
+                        rect.setAttribute('width', `${this.tileSize}`);
+                        rect.setAttribute('height', `${this.tileSize}`);
+                        return rect;
+                    })(document.createElementNS(this.xmlns, 'rect')));
+                });
+            });
+            this.track = document.createElementNS(this.xmlns, 'polyline');
+            this.track.setAttribute('points', this.path.map(p => {
+                return [p.x * this.tileSize + this.tileSize / 2 + 1, p.y * this.tileSize + this.tileSize / 2 + 1].join(',');
+            }).join(' '));
+            this.track.style.fill = 'none';
+            this.track.style.stroke = 'hotpink';
+            this.track.style.strokeWidth = this.vmin;
+            this.svg.appendChild(this.track);
+        };
+        console.log(new Level(params));
+    </script>
+</body>
+</html>
