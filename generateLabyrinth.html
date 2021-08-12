@@ -51,36 +51,16 @@
                         this.path = JSON.parse(JSON.stringify(curPath));
                     }
                     let val = +(window.crypto.getRandomValues(new Uint32Array(1))[0].toString()[0]) % 4;
-                    console.log(val);
-                    //let val = Math.floor(Math.random() * (cap - 1));
                     let dir = Object.keys(routes).filter(key => routes[key])[val];
-                    //let dir = Object.keys(routes).filter(key => routes[key])[Math.floor(Math.random() * (cap - 1))];
+                    this.field[pos.y][pos.x].links.push(dir);
                     switch (dir) {
-                        case 't': {
-                            this.field[pos.y][pos.x].links.push('t');
-                            pos.y -= 1;
-                            this.field[pos.y][pos.x] = { links: ['b'] };
-                            break;
-                        }
-                        case 'r': {
-                            this.field[pos.y][pos.x].links.push('r');
-                            pos.x += 1;
-                            this.field[pos.y][pos.x] = { links: ['l'] };
-                            break;
-                        }
-                        case 'b': {
-                            this.field[pos.y][pos.x].links.push('b');
-                            pos.y += 1;
-                            this.field[pos.y][pos.x] = { links: ['t'] };
-                            break;
-                        }
-                        case 'l': {
-                            this.field[pos.y][pos.x].links.push('l');
-                            pos.x -= 1;
-                            this.field[pos.y][pos.x] = { links: ['r'] };
-                            break;
-                        }
+                        case 't': { pos.y -= 1; this.field[pos.y][pos.x] = { links: ['b'] }; break; }
+                        case 'r': { pos.x += 1; this.field[pos.y][pos.x] = { links: ['l'] }; break; }
+                        case 'b': { pos.y += 1; this.field[pos.y][pos.x] = { links: ['t'] }; break; }
+                        case 'l': { pos.x -= 1; this.field[pos.y][pos.x] = { links: ['r'] }; break; }
                     };
+                    // this.field[pos.y][pos.x] = { links: ['b'] }; - old
+                    //this.field[pos.y][pos.x] = { links: ['trbl'[('trbl'.indexOf(dir) + 2) % 4]] };
                 }
                 else {
                     pos = curPath.pop();
@@ -104,14 +84,59 @@
                 row.forEach((col, cdx) => {
                     this.svg.appendChild(((rect) => {
                         rect.style.fill = 'rgba(50, 50, 50, 0.1)';
-                        rect.style.stroke = 'rgba(50, 50, 50, 0.9)';
-                        rect.style.strokeWidth = 2;
+                        //rect.style.stroke = 'rgba(50, 50, 50, 0.9)';
+                        rect.style.stroke = 'transparent';
+                        //rect.style.strokeWidth = 2;
                         rect.setAttribute('x', cdx * this.tileSize + 1);
                         rect.setAttribute('y', rdx * this.tileSize + 1);
                         rect.setAttribute('width', `${this.tileSize}`);
                         rect.setAttribute('height', `${this.tileSize}`);
                         return rect;
                     })(document.createElementNS(this.xmlns, 'rect')));
+                    if (this.field[rdx][cdx].links.includes('t') === false) {
+                        this.svg.appendChild(((line) => {
+                            line.style.stroke = 'rgba(50, 50, 50, 0.9)';
+                            line.style.strokeWidth = 2;
+                            line.setAttribute('x1', cdx * this.tileSize + 1);
+                            line.setAttribute('y1', rdx * this.tileSize + 1);
+                            line.setAttribute('x2', (cdx + 1) * this.tileSize + 1);
+                            line.setAttribute('y2', (rdx) * this.tileSize + 1);
+                            return line;
+                        })(document.createElementNS(this.xmlns, 'line')));
+                    }
+                    if (this.field[rdx][cdx].links.includes('b') === false) {
+                        this.svg.appendChild(((line) => {
+                            line.style.stroke = 'rgba(50, 50, 50, 0.9)';
+                            line.style.strokeWidth = 2;
+                            line.setAttribute('x1', cdx * this.tileSize + 1);
+                            line.setAttribute('y1', (rdx + 1) * this.tileSize + 1);
+                            line.setAttribute('x2', (cdx + 1) * this.tileSize + 1);
+                            line.setAttribute('y2', (rdx + 1) * this.tileSize + 1);
+                            return line;
+                        })(document.createElementNS(this.xmlns, 'line')));
+                    }
+                    if (this.field[rdx][cdx].links.includes('r') === false) {
+                        this.svg.appendChild(((line) => {
+                            line.style.stroke = 'rgba(50, 50, 50, 0.9)';
+                            line.style.strokeWidth = 2;
+                            line.setAttribute('x1', (cdx + 1) * this.tileSize + 1);
+                            line.setAttribute('y1', (rdx) * this.tileSize + 1);
+                            line.setAttribute('x2', (cdx + 1) * this.tileSize + 1);
+                            line.setAttribute('y2', (rdx + 1) * this.tileSize + 1);
+                            return line;
+                        })(document.createElementNS(this.xmlns, 'line')));
+                    }
+                    if (this.field[rdx][cdx].links.includes('l') === false) {
+                        this.svg.appendChild(((line) => {
+                            line.style.stroke = 'rgba(50, 50, 50, 0.9)';
+                            line.style.strokeWidth = 2;
+                            line.setAttribute('x1', (cdx) * this.tileSize + 1);
+                            line.setAttribute('y1', (rdx) * this.tileSize + 1);
+                            line.setAttribute('x2', (cdx) * this.tileSize + 1);
+                            line.setAttribute('y2', (rdx + 1) * this.tileSize + 1);
+                            return line;
+                        })(document.createElementNS(this.xmlns, 'line')));
+                    }
                 });
             });
             this.track = document.createElementNS(this.xmlns, 'polyline');
