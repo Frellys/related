@@ -24,20 +24,34 @@
 <body>
     <script>
         const params = new function () {
-            let searchParams = window.location.search.substring(1).split('&');
-            return Object.fromEntries(searchParams.map(p => { let [k, v] = p.split('='); return [k, +v]; }));
+            let defaults = new function () {
+                this.w = 25;
+                this.h = 25;
+            };
+            let searchStr = window.location.search.substring(1);
+            return (searchStr === '') ? defaults : Object.fromEntries(searchStr.split('&').map(p => { let [k, v] = p.split('='); return [k, +v]; }));
         };
-        const Level = function ({ w = 25, h = 25, x1 = Math.floor(Math.random() * 15), y1 = Math.floor(Math.random() * 15) }) {
+        const Level = function ({ w, h }) {
             this.width = w;
             this.height = h;
-            this.start = { x: x1, y: y1 };
+            this.dirs = 'trdl';
+            this.start = { x: Math.floor(Math.random() * this.width), y: Math.floor(Math.random() * this.height) };
             this.field = Array.from(new Array(this.height).fill(), () => new Array(this.width).fill(true));
-            this.field[y1][x1] = {
+            this.field[this.start.y][this.start.x] = {
                 links: []
+            };
+            this.styles = {
+                tile: {
+                    size: Math.floor(80 * App.vmin / this.width)
+                },
+                border: {
+                    width: 2,
+                    color: 'rgba(50, 50, 50, 0.9)'
+                }
             };
             this.path = [];
             let curPath = [];
-            let pos = { x: x1, y: y1 };
+            let pos = { x: this.start.x, y: this.start.y };
             while (this.field.some(row => row.some(el => el === true))) {
                 let routes = {
                     t: (pos.y > 0 && this.field[pos.y - 1][pos.x] === true),
@@ -45,13 +59,13 @@
                     b: (pos.y < this.height - 1 && this.field[pos.y + 1][pos.x] === true),
                     l: (pos.x > 0 && this.field[pos.y][pos.x - 1] === true)
                 };
-                let cap = Object.keys(routes).filter(key => routes[key]).length;
-                if (cap) {
+                let avail = Object.keys(routes).filter(key => routes[key]);
+                if (avail.length) {
                     if (this.path.length < curPath.push({ x: pos.x, y: pos.y })) {
                         this.path = JSON.parse(JSON.stringify(curPath));
                     }
                     let val = +(window.crypto.getRandomValues(new Uint32Array(1))[0].toString()[0]) % 4;
-                    let dir = Object.keys(routes).filter(key => routes[key])[val];
+                    let dir = avail[val];
                     this.field[pos.y][pos.x].links.push(dir);
                     switch (dir) {
                         case 't': { pos.y -= 1; this.field[pos.y][pos.x] = { links: ['b'] }; break; }
@@ -59,81 +73,75 @@
                         case 'b': { pos.y += 1; this.field[pos.y][pos.x] = { links: ['t'] }; break; }
                         case 'l': { pos.x -= 1; this.field[pos.y][pos.x] = { links: ['r'] }; break; }
                     };
-                    // this.field[pos.y][pos.x] = { links: ['b'] }; - old
-                    //this.field[pos.y][pos.x] = { links: ['trbl'[('trbl'.indexOf(dir) + 2) % 4]] };
                 }
                 else {
                     pos = curPath.pop();
                 }
             }
             this.xmlns = 'http://www.w3.org/2000/svg';
-            this.vmin = Math.floor(Math.min(screen.width, screen.height) / 100);
             this.svg = (() => {
                 let svg = document.createElementNS(this.xmlns, 'svg');
                 svg.style.display = 'block';
                 svg.style.margin = '0 auto';
                 svg.setAttribute('shape-rendering', 'optimizespeed');
                 svg.setAttribute('viewbox', `0 0 ${this.width} ${this.height}`);
-                svg.setAttribute('width', `${this.vmin * 80 + 2}`);
-                svg.setAttribute('height', `${this.vmin * 80 + 2}`);
+                svg.setAttribute('width', `${App.vmin * 80 + 2}`);
+                svg.setAttribute('height', `${App.vmin * 80 + 2}`);
                 document.body.appendChild(svg);
                 return svg;
             })();
-            this.tileSize = this.vmin * 80 / this.width;
             this.field.forEach((row, rdx) => {
                 row.forEach((col, cdx) => {
                     this.svg.appendChild(((rect) => {
                         rect.style.fill = 'rgba(50, 50, 50, 0.1)';
-                        //rect.style.stroke = 'rgba(50, 50, 50, 0.9)';
                         rect.style.stroke = 'transparent';
-                        //rect.style.strokeWidth = 2;
-                        rect.setAttribute('x', cdx * this.tileSize + 1);
-                        rect.setAttribute('y', rdx * this.tileSize + 1);
-                        rect.setAttribute('width', `${this.tileSize}`);
-                        rect.setAttribute('height', `${this.tileSize}`);
+                        rect.setAttribute('x', cdx * this.styles.tile.size + 1);
+                        rect.setAttribute('y', rdx * this.styles.tile.size + 1);
+                        rect.setAttribute('width', `${this.styles.tile.size}`);
+                        rect.setAttribute('height', `${this.styles.tile.size}`);
                         return rect;
                     })(document.createElementNS(this.xmlns, 'rect')));
                     if (this.field[rdx][cdx].links.includes('t') === false) {
                         this.svg.appendChild(((line) => {
-                            line.style.stroke = 'rgba(50, 50, 50, 0.9)';
-                            line.style.strokeWidth = 2;
-                            line.setAttribute('x1', cdx * this.tileSize + 1);
-                            line.setAttribute('y1', rdx * this.tileSize + 1);
-                            line.setAttribute('x2', (cdx + 1) * this.tileSize + 1);
-                            line.setAttribute('y2', (rdx) * this.tileSize + 1);
+                            line.style.stroke = this.styles.border.color;
+                            line.style.strokeWidth = this.styles.border.width;
+                            line.setAttribute('x1', cdx * this.styles.tile.size + 1);
+                            line.setAttribute('y1', rdx * this.styles.tile.size + 1);
+                            line.setAttribute('x2', (cdx + 1) * this.styles.tile.size + 1);
+                            line.setAttribute('y2', (rdx) * this.styles.tile.size + 1);
                             return line;
                         })(document.createElementNS(this.xmlns, 'line')));
                     }
                     if (this.field[rdx][cdx].links.includes('b') === false) {
                         this.svg.appendChild(((line) => {
-                            line.style.stroke = 'rgba(50, 50, 50, 0.9)';
-                            line.style.strokeWidth = 2;
-                            line.setAttribute('x1', cdx * this.tileSize + 1);
-                            line.setAttribute('y1', (rdx + 1) * this.tileSize + 1);
-                            line.setAttribute('x2', (cdx + 1) * this.tileSize + 1);
-                            line.setAttribute('y2', (rdx + 1) * this.tileSize + 1);
+                            line.style.stroke = this.styles.border.color;
+                            line.style.strokeWidth = this.styles.border.width;
+                            line.setAttribute('x1', cdx * this.styles.tile.size + 1);
+                            line.setAttribute('y1', (rdx + 1) * this.styles.tile.size + 1);
+                            line.setAttribute('x2', (cdx + 1) * this.styles.tile.size + 1);
+                            line.setAttribute('y2', (rdx + 1) * this.styles.tile.size + 1);
                             return line;
                         })(document.createElementNS(this.xmlns, 'line')));
                     }
                     if (this.field[rdx][cdx].links.includes('r') === false) {
                         this.svg.appendChild(((line) => {
-                            line.style.stroke = 'rgba(50, 50, 50, 0.9)';
-                            line.style.strokeWidth = 2;
-                            line.setAttribute('x1', (cdx + 1) * this.tileSize + 1);
-                            line.setAttribute('y1', (rdx) * this.tileSize + 1);
-                            line.setAttribute('x2', (cdx + 1) * this.tileSize + 1);
-                            line.setAttribute('y2', (rdx + 1) * this.tileSize + 1);
+                            line.style.stroke = this.styles.border.color;
+                            line.style.strokeWidth = this.styles.border.width;
+                            line.setAttribute('x1', (cdx + 1) * this.styles.tile.size + 1);
+                            line.setAttribute('y1', (rdx) * this.styles.tile.size + 1);
+                            line.setAttribute('x2', (cdx + 1) * this.styles.tile.size + 1);
+                            line.setAttribute('y2', (rdx + 1) * this.styles.tile.size + 1);
                             return line;
                         })(document.createElementNS(this.xmlns, 'line')));
                     }
                     if (this.field[rdx][cdx].links.includes('l') === false) {
                         this.svg.appendChild(((line) => {
-                            line.style.stroke = 'rgba(50, 50, 50, 0.9)';
-                            line.style.strokeWidth = 2;
-                            line.setAttribute('x1', (cdx) * this.tileSize + 1);
-                            line.setAttribute('y1', (rdx) * this.tileSize + 1);
-                            line.setAttribute('x2', (cdx) * this.tileSize + 1);
-                            line.setAttribute('y2', (rdx + 1) * this.tileSize + 1);
+                            line.style.stroke = this.styles.border.color;
+                            line.style.strokeWidth = this.styles.border.width;
+                            line.setAttribute('x1', (cdx) * this.styles.tile.size + 1);
+                            line.setAttribute('y1', (rdx) * this.styles.tile.size + 1);
+                            line.setAttribute('x2', (cdx) * this.styles.tile.size + 1);
+                            line.setAttribute('y2', (rdx + 1) * this.styles.tile.size + 1);
                             return line;
                         })(document.createElementNS(this.xmlns, 'line')));
                     }
@@ -141,14 +149,23 @@
             });
             this.track = document.createElementNS(this.xmlns, 'polyline');
             this.track.setAttribute('points', this.path.map(p => {
-                return [p.x * this.tileSize + this.tileSize / 2 + 1, p.y * this.tileSize + this.tileSize / 2 + 1].join(',');
+                return [p.x * this.styles.tile.size + this.styles.tile.size / 2 + 1, p.y * this.styles.tile.size + this.styles.tile.size / 2 + 1].join(',');
             }).join(' '));
             this.track.style.fill = 'none';
             this.track.style.stroke = 'hotpink';
-            this.track.style.strokeWidth = this.vmin;
+            this.track.style.strokeWidth = App.vmin;
             this.svg.appendChild(this.track);
         };
-        console.log(new Level(params));
+        window.addEventListener('load', function () {
+            window.App = new function () {
+                this.width = screen.width;
+                this.height = screen.height;
+                this.vmin = Math.floor(Math.min(this.width, this.height) / 100);
+            };
+            App.level = new Level(params);
+            console.log(App);
+            console.log(App.level);
+        }, false);
     </script>
 </body>
 </html>
