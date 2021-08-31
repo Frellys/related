@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --color-active: rgba(245, 245, 245, 0.9);
+            --color-hover: rgba(245, 245, 245, 0.75);
+            --color-main: rgba(245, 245, 245, 0.6);
+        }
+
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #323232;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+            font-family: monospace;
+        }
+
+        main {
+            width: fit-content;
+            height: auto;
+            margin: 0 auto;
+        }
+
+            main > header {
+                display: flex;
+                flex-direction: row;
+            }
+
+                main > header > div {
+                    width: 10ch;
+                    text-align: center;
+                    padding: 0.5ch 0;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                }
+
+                    main > header > div.sel {
+                        color: var(--color-active);
+                        border-bottom: 0.25rem solid var(--color-active);
+                    }
+
+                    main > header > div:not(.sel) {
+                        color: var(--color-main);
+                        border-bottom: 0.25rem solid transparent;
+                    }
+
+                        main > header > div:not(.sel):hover {
+                            color: var(--color-hover);
+                        }
+
+            main > section {
+                min-height: 30ch;
+                padding: 1ch;
+            }
+
+                main > section.sel {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-evenly;
+                }
+
+                main > section:not(.sel) {
+                    display: none;
+                }
+
+                main > section:nth-of-type(1) > .wrap-slider {
+                    display: flex;
+                    flex-direction: column;
+                    font-size: 1.1rem;
+                    color: var(--color-active);
+                }
+
+                    main > section:nth-of-type(1) > .wrap-slider > input {
+                        -webkit-appearance: none;
+                        width: 100%;
+                        height: 1.5ch;
+                        border-radius: 1.5ch;
+                    }
+                        main > section:nth-of-type(1) > .wrap-slider > input#width {
+                            background: linear-gradient(to right, var(--color-active) var(--value-width), var(--color-main) var(--value-width) 100%);
+                        }
+                        main > section:nth-of-type(1) > .wrap-slider > input#height {
+                            background: linear-gradient(to right, var(--color-active) var(--value-height), var(--color-main) var(--value-height) 100%);
+                        }
+
+                        main > section:nth-of-type(1) > .wrap-slider > input::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            width: 2.5ch;
+                            height: 2.5ch;
+                            background: red;
+                            border-radius: 50%;
+                        }
+
+                main > section:nth-of-type(1) > .wrap-run > #run {
+                    width: fit-content;
+                    padding: 0.5ch 2ch;
+                    font-size: 1.25rem;
+                    color: var(--color-active);
+                    border: 0.25ch solid var(--color-active);
+                    border-radius: 1ch;
+                    cursor: pointer;
+                }
+
+                    main > section:nth-of-type(1) > .wrap-run > #run:hover {
+                        background-color: var(--color-active);
+                        color: #323232;
+                    }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <div data-section="0" class="sel">PLAY</div>
+            <div data-section="1">OPTIONS</div>
+            <div data-section="2">EXIT</div>
+        </header>
+        <section class="sel">
+            <div class="wrap-slider">
+                <div>width:&nbsp;<label for="width">50</label></div>
+                <input type="range" id="width" name="width" min="10" max="99" value="50" step="1">
+            </div>
+            <div class="wrap-slider">
+                <div>height:&nbsp;<label for="height">50</label></div>
+                <input type="range" id="height" name="height" min="10" max="99" value="50" step="1">
+            </div>
+            <div class="wrap-run">
+                <div id="run">START</div>
+            </div>
+        </section>
+        <section></section>
+        <section></section>
+    </main>
+    <script>
+        let params = {
+            width: { min: 10, max: 99, value: 50 },
+            height: { min: 10, max: 99, value: 50 }
+        };
+        ['width', 'height'].forEach(function (el) {
+            document.body.querySelector(`main > section:nth-of-type(1) > .wrap-slider > div > label[for="${el}"]`).innerHTML = params[el].value;
+            document.documentElement.style.setProperty(`--value-${el}`, (params[el].max + params[el].min) / 100 * params[el].value - params[el].min + '%');
+        });
+        let selectors = document.body.querySelectorAll('main > header > div');
+        let sections = document.body.querySelectorAll('main > section');
+        selectors.forEach(function (sel) {
+            sel.addEventListener('click', function () {
+                selectors.forEach(el => el.classList.remove('sel'));
+                sections.forEach(el => el.classList.remove('sel'));
+                this.classList.add('sel');
+                sections[this.dataset.section].classList.add('sel');
+            }, false);
+        });
+        document.body.querySelectorAll('main > section:nth-of-type(1) > .wrap-slider > input').forEach(function (input) {
+            input.addEventListener('input', function () {
+                document.body.querySelector(`main > section:nth-of-type(1) > .wrap-slider > div > label[for="${this.id}"]`).innerHTML = this.value;
+                document.documentElement.style.setProperty(`--value-${this.id}`, (params[this.id].max + params[this.id].min) / 100 * this.value - params[this.id].min + '%');
+            }, false);
+        });
+    </script>
+</body>
+</html>
