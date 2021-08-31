@@ -68,55 +68,93 @@
                 main > section.sel {
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-evenly;
                 }
 
                 main > section:not(.sel) {
                     display: none;
                 }
 
-                main > section:nth-of-type(1) > .wrap-slider {
-                    display: flex;
-                    flex-direction: column;
-                    font-size: 1.1rem;
-                    color: var(--color-active);
+                main > section:nth-of-type(1) {
+                    justify-content: space-evenly;
                 }
 
-                    main > section:nth-of-type(1) > .wrap-slider > input {
-                        -webkit-appearance: none;
-                        width: 100%;
-                        height: 1.5ch;
-                        border-radius: 1.5ch;
+                    main > section:nth-of-type(1) > .wrap-slider {
+                        display: flex;
+                        flex-direction: column;
+                        font-size: 1.1rem;
+                        color: var(--color-active);
                     }
-                        main > section:nth-of-type(1) > .wrap-slider > input#width {
-                            background: linear-gradient(to right, var(--color-active) var(--value-width), var(--color-main) var(--value-width) 100%);
-                        }
-                        main > section:nth-of-type(1) > .wrap-slider > input#height {
-                            background: linear-gradient(to right, var(--color-active) var(--value-height), var(--color-main) var(--value-height) 100%);
-                        }
 
-                        main > section:nth-of-type(1) > .wrap-slider > input::-webkit-slider-thumb {
+                        main > section:nth-of-type(1) > .wrap-slider > input {
                             -webkit-appearance: none;
-                            width: 2.5ch;
-                            height: 2.5ch;
-                            background: red;
-                            border-radius: 50%;
+                            width: 100%;
+                            height: 1.5ch;
+                            border-radius: 1.5ch;
                         }
 
-                main > section:nth-of-type(1) > .wrap-run > #run {
-                    width: fit-content;
-                    padding: 0.5ch 2ch;
-                    font-size: 1.25rem;
-                    color: var(--color-active);
-                    border: 0.25ch solid var(--color-active);
-                    border-radius: 1ch;
-                    cursor: pointer;
+                            main > section:nth-of-type(1) > .wrap-slider > input#width {
+                                background: linear-gradient(to right, var(--color-active) var(--value-width), var(--color-main) var(--value-width) 100%);
+                            }
+
+                            main > section:nth-of-type(1) > .wrap-slider > input#height {
+                                background: linear-gradient(to right, var(--color-active) var(--value-height), var(--color-main) var(--value-height) 100%);
+                            }
+
+                            main > section:nth-of-type(1) > .wrap-slider > input::-webkit-slider-thumb {
+                                -webkit-appearance: none;
+                                width: 2.5ch;
+                                height: 2.5ch;
+                                background: red;
+                                border-radius: 50%;
+                            }
+
+                    main > section:nth-of-type(1) > .wrap-run > #run {
+                        width: fit-content;
+                        padding: 0.5ch 2ch;
+                        font-size: 1.25rem;
+                        color: var(--color-active);
+                        border: 0.25ch solid var(--color-active);
+                        border-radius: 1ch;
+                        cursor: pointer;
+                    }
+
+                        main > section:nth-of-type(1) > .wrap-run > #run:hover {
+                            background-color: var(--color-active);
+                            color: #323232;
+                        }
+
+                main > section:nth-of-type(3) {
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--color-main);
                 }
 
-                    main > section:nth-of-type(1) > .wrap-run > #run:hover {
-                        background-color: var(--color-active);
-                        color: #323232;
+                    main > section:nth-of-type(3) > label {
+                        font-size: 2.5rem;
+                        margin-bottom: 0.25ch;
                     }
+
+                    main > section:nth-of-type(3) > .wrap {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                    }
+
+                        main > section:nth-of-type(3) > .wrap > div {
+                            width: fit-content;
+                            padding: 0.5ch 2ch;
+                            font-size: 1.25rem;
+                            color: var(--color-main);
+                            border: 0.25ch solid var(--color-main);
+                            border-radius: 1ch;
+                            cursor: pointer;
+                        }
+
+                            main > section:nth-of-type(3) > .wrap > div:hover {
+                                color: #323232;
+                                background-color: var(--color-active);
+                                border: 0.25ch solid var(--color-active);
+                            }
     </style>
 </head>
 <body>
@@ -140,7 +178,14 @@
             </div>
         </section>
         <section></section>
-        <section></section>
+        <section>
+            <label>SURE?</label>
+            <div class="wrap">
+                <div id="y">yes</div>
+                <span>&nbsp;/&nbsp;</span>
+                <div id="n">no</div>
+            </div>
+        </section>
     </main>
     <script>
         let params = {
@@ -167,6 +212,12 @@
                 document.documentElement.style.setProperty(`--value-${this.id}`, (params[this.id].max + params[this.id].min) / 100 * this.value - params[this.id].min + '%');
             }, false);
         });
+        document.body.querySelector('main > section:nth-of-type(3) > .wrap > #y').addEventListener('click', function () {
+            window.close();
+        }, false);
+        document.body.querySelector('main > section:nth-of-type(3) > .wrap > #n').addEventListener('click', function () {
+            selectors[0].click();
+        }, false);
     </script>
 </body>
 </html>
