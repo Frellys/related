@@ -104,7 +104,8 @@
                                 -webkit-appearance: none;
                                 width: 2.5ch;
                                 height: 2.5ch;
-                                background: red;
+                                background: whitesmoke;
+                                box-shadow: 0 0 0.5ch #323232;
                                 border-radius: 50%;
                             }
 
@@ -122,6 +123,41 @@
                             background-color: var(--color-active);
                             color: #323232;
                         }
+
+                main > section:nth-of-type(2) {
+                    justify-content: space-evenly;
+                }
+
+                    main > section:nth-of-type(2) > .wrap-slider {
+                        display: flex;
+                        flex-direction: column;
+                        font-size: 1.1rem;
+                        color: var(--color-active);
+                    }
+
+                        main > section:nth-of-type(2) > .wrap-slider > input {
+                            -webkit-appearance: none;
+                            width: 100%;
+                            height: 1.5ch;
+                            border-radius: 1.5ch;
+                        }
+
+                            main > section:nth-of-type(2) > .wrap-slider > input#bgm {
+                                background: linear-gradient(to right, var(--color-active) var(--value-bgm), var(--color-main) var(--value-bgm) 100%);
+                            }
+
+                            main > section:nth-of-type(2) > .wrap-slider > input#sfx {
+                                background: linear-gradient(to right, var(--color-active) var(--value-sfx), var(--color-main) var(--value-sfx) 100%);
+                            }
+
+                            main > section:nth-of-type(2) > .wrap-slider > input::-webkit-slider-thumb {
+                                -webkit-appearance: none;
+                                width: 2.5ch;
+                                height: 2.5ch;
+                                background: whitesmoke;
+                                box-shadow: 0 0 0.5ch #323232;
+                                border-radius: 50%;
+                            }
 
                 main > section:nth-of-type(3) {
                     align-items: center;
@@ -177,7 +213,16 @@
                 <div id="run">START</div>
             </div>
         </section>
-        <section></section>
+        <section>
+            <div class="wrap-slider">
+                <div>BGM:&nbsp;<label for="bgm">50</label></div>
+                <input type="range" id="bgm" name="bgm" min="0" max="100" value="50" step="1">
+            </div>
+            <div class="wrap-slider">
+                <div>SFX:&nbsp;<label for="sfx">50</label></div>
+                <input type="range" id="sfx" name="sfx" min="0" max="100" value="50" step="1">
+            </div>
+        </section>
         <section>
             <label>SURE?</label>
             <div class="wrap">
@@ -188,14 +233,6 @@
         </section>
     </main>
     <script>
-        let params = {
-            width: { min: 10, max: 99, value: 50 },
-            height: { min: 10, max: 99, value: 50 }
-        };
-        ['width', 'height'].forEach(function (el) {
-            document.body.querySelector(`main > section:nth-of-type(1) > .wrap-slider > div > label[for="${el}"]`).innerHTML = params[el].value;
-            document.documentElement.style.setProperty(`--value-${el}`, (params[el].max + params[el].min) / 100 * params[el].value - params[el].min + '%');
-        });
         let selectors = document.body.querySelectorAll('main > header > div');
         let sections = document.body.querySelectorAll('main > section');
         selectors.forEach(function (sel) {
@@ -206,10 +243,32 @@
                 sections[this.dataset.section].classList.add('sel');
             }, false);
         });
+        let params = {
+            width: { min: 10, max: 99, value: 50 },
+            height: { min: 10, max: 99, value: 50 }
+        };
+        ['width', 'height'].forEach(function (el) {
+            document.body.querySelector(`main > section:nth-of-type(1) > .wrap-slider > div > label[for="${el}"]`).innerHTML = params[el].value;
+            document.documentElement.style.setProperty(`--value-${el}`, (params[el].max + params[el].min) / 100 * params[el].value - params[el].min + '%');
+        });
         document.body.querySelectorAll('main > section:nth-of-type(1) > .wrap-slider > input').forEach(function (input) {
             input.addEventListener('input', function () {
                 document.body.querySelector(`main > section:nth-of-type(1) > .wrap-slider > div > label[for="${this.id}"]`).innerHTML = this.value;
                 document.documentElement.style.setProperty(`--value-${this.id}`, (params[this.id].max + params[this.id].min) / 100 * this.value - params[this.id].min + '%');
+            }, false);
+        });
+        let options = {
+            bgm: { min: 0, max: 100, value: 50 },
+            sfx: { min: 0, max: 100, value: 50 }
+        };
+        ['bgm', 'sfx'].forEach(function (el) {
+            document.body.querySelector(`main > section:nth-of-type(2) > .wrap-slider > div > label[for="${el}"]`).innerHTML = options[el].value;
+            document.documentElement.style.setProperty(`--value-${el}`, (options[el].max + options[el].min) / 100 * options[el].value - options[el].min + '%');
+        });
+        document.querySelectorAll('main > section:nth-of-type(2) > .wrap-slider > input').forEach(function (input) {
+            input.addEventListener('input', function () {
+                document.body.querySelector(`main > section:nth-of-type(2) > .wrap-slider > div > label[for="${this.id}"]`).innerHTML = this.value;
+                document.documentElement.style.setProperty(`--value-${this.id}`, (options[this.id].max + options[this.id].min) / 100 * this.value - options[this.id].min + '%');
             }, false);
         });
         document.body.querySelector('main > section:nth-of-type(3) > .wrap > #y').addEventListener('click', function () {
