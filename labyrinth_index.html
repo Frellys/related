@@ -257,6 +257,9 @@
                 document.documentElement.style.setProperty(`--value-${this.id}`, (params[this.id].max + params[this.id].min) / 100 * this.value - params[this.id].min + '%');
             }, false);
         });
+        document.body.querySelector('main > section:nth-of-type(1) > .wrap-run > #run').addEventListener('click', function () {
+            generateLabyrinth();
+        }, false);
         let options = {
             bgm: { min: 0, max: 100, value: 50 },
             sfx: { min: 0, max: 100, value: 50 }
@@ -277,6 +280,50 @@
         document.body.querySelector('main > section:nth-of-type(3) > .wrap > #n').addEventListener('click', function () {
             selectors[0].click();
         }, false);
+        /**
+         * genereates labyrynth
+         */
+        let generateLabyrinth = function () {
+            let width = parseInt(document.body.querySelector('main > section:nth-of-type(1) > .wrap-slider > #width').value);
+            let height = parseInt(document.body.querySelector('main > section:nth-of-type(1) > .wrap-slider > #height').value);
+            let path = [];
+            let curPath = [];
+            let pos = {
+                x: Math.floor(Math.random() * width),
+                y: Math.floor(Math.random() * height)
+            };
+            let field = Array.from(new Array(height).fill(), () => new Array(width).fill(true));
+            field[pos.y][pos.x] = {
+                links: []
+            };
+            while (field.some(row => row.some(el => el === true))) {
+                let routes = {
+                    t: (pos.y > 0 && field[pos.y - 1][pos.x] === true),
+                    r: (pos.x < width - 1 && field[pos.y][pos.x + 1] === true),
+                    b: (pos.y < height - 1 && field[pos.y + 1][pos.x] === true),
+                    l: (pos.x > 0 && field[pos.y][pos.x - 1] === true)
+                };
+                let cap = Object.keys(routes).filter(key => routes[key]).length;
+                if (cap) {
+                    if (path.length < curPath.push({ x: pos.x, y: pos.y })) {
+                        path = JSON.parse(JSON.stringify(curPath));
+                    }
+                    let val = +(window.crypto.getRandomValues(new Uint32Array(1))[0].toString()[0]) % 4;
+                    let dir = Object.keys(routes).filter(key => routes[key])[val];
+                    field[pos.y][pos.x].links.push(dir);
+                    switch (dir) {
+                        case 't': { pos.y -= 1; field[pos.y][pos.x] = { links: ['b'] }; break; }
+                        case 'r': { pos.x += 1; field[pos.y][pos.x] = { links: ['l'] }; break; }
+                        case 'b': { pos.y += 1; field[pos.y][pos.x] = { links: ['t'] }; break; }
+                        case 'l': { pos.x -= 1; field[pos.y][pos.x] = { links: ['r'] }; break; }
+                    };
+                }
+                else {
+                    pos = curPath.pop();
+                }
+            }
+            console.log(field);
+        };
     </script>
 </body>
 </html>
