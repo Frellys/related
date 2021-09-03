@@ -191,6 +191,29 @@
                                 background-color: var(--color-active);
                                 border: 0.25ch solid var(--color-active);
                             }
+
+        #esc {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 1ch 2ch;
+            font-size: 2rem;
+            color: var(--color-main);
+            cursor: pointer;
+        }
+
+            #esc:hover {
+                color: var(--color-hover);
+            }
+
+        svg {
+            display: block;
+            margin: 0 auto;
+            shape-rendering: optimizeSpeed;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -232,7 +255,18 @@
             </div>
         </section>
     </main>
+    <svg></svg>
+    <div id="esc">esc</div>
     <script>
+        let app = {
+            scene: 'main'
+        };
+        let setDisplay = function (scene) {
+            app.scene = scene;
+            document.body.querySelector('main').style.display = (app.scene == 'main') ? 'block' : 'none';
+            document.body.querySelector('#esc').style.display = (app.scene == 'main') ? 'none' : 'block';
+            document.body.querySelector('svg').style.display = (app.scene == 'main') ? 'none' : 'block';
+        };
         let selectors = document.body.querySelectorAll('main > header > div');
         let sections = document.body.querySelectorAll('main > section');
         selectors.forEach(function (sel) {
@@ -258,7 +292,8 @@
             }, false);
         });
         document.body.querySelector('main > section:nth-of-type(1) > .wrap-run > #run').addEventListener('click', function () {
-            generateLabyrinth();
+            let field = generateLabyrinth();
+            drawLabyrinth(field);
         }, false);
         let options = {
             bgm: { min: 0, max: 100, value: 50 },
@@ -279,6 +314,15 @@
         }, false);
         document.body.querySelector('main > section:nth-of-type(3) > .wrap > #n').addEventListener('click', function () {
             selectors[0].click();
+        }, false);
+        setDisplay('main');
+        document.body.querySelector('#esc').addEventListener('click', function () {
+            setDisplay('main');
+        }, false);
+        window.addEventListener('keyup', function (e) {
+            if (e.code === 'Escape' && app.scene == 'level') {
+                setDisplay('main');
+            }
         }, false);
         /**
          * genereates labyrynth
@@ -308,7 +352,7 @@
                     if (path.length < curPath.push({ x: pos.x, y: pos.y })) {
                         path = JSON.parse(JSON.stringify(curPath));
                     }
-                    let val = +(window.crypto.getRandomValues(new Uint32Array(1))[0].toString()[0]) % 4;
+                    let val = +(window.crypto.getRandomValues(new Uint32Array(1))[0].toString()[0]) % cap;
                     let dir = Object.keys(routes).filter(key => routes[key])[val];
                     field[pos.y][pos.x].links.push(dir);
                     switch (dir) {
@@ -322,7 +366,48 @@
                     pos = curPath.pop();
                 }
             }
+            return field;
+        };
+        /**
+         * draws labyrinth
+         * @param field
+         */
+        let drawLabyrinth = function (field) {
             console.log(field);
+            let rows = field.length;
+            let cols = field[0].length;
+            setDisplay('level');
+            let vmin = Math.floor(Math.min(screen.width, screen.height) / 100);
+            let width = 80 * vmin;
+            let height = 80 * vmin;
+            let tsize = width / cols;
+            let tl = {
+                x: screen.width / 2 - width / 2,
+                y: screen.height / 2 - height / 2
+            };
+            let xmlns = 'http://www.w3.org/2000/svg';
+            let svg = document.querySelector('svg');
+            svg.setAttribute('viewbox', `0 0 ${screen.width} ${screen.height}`);
+            field.forEach(function (row, rdx) {
+                row.forEach(function (col, cdx) {
+                    let tx = tsize * cdx;
+                    let ty = tsize * rdx;
+                    console.log({ links: col.links, tx, ty });
+                    // bg
+                    let rect = document.createElementNS(xmlns, 'rect');
+                    rect.style.fill = 'rgba(245, 245, 245, 0.1)';
+                    rect.style.stroke = 'transparent';
+                    rect.setAttribute('x', tl.x + cdx * tsize);
+                    rect.setAttribute('y', tl.y + rdx * tsize);
+                    rect.setAttribute('width', tsize);
+                    rect.setAttribute('height', tsize);
+                    svg.appendChild(rect);
+                    // borders
+                    if (col.links.includes('t')) {
+                        let line = document.createElementNS(xmlns, 'line');
+                    }
+                });
+            });
         };
     </script>
 </body>
