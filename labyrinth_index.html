@@ -292,8 +292,9 @@
             }, false);
         });
         document.body.querySelector('main > section:nth-of-type(1) > .wrap-run > #run').addEventListener('click', function () {
-            let field = generateLabyrinth();
-            drawLabyrinth(field);
+            //let field = generateLabyrinth();
+            //drawLabyrinth(field);
+            drawLabyrinth(generateLabyrinth());
         }, false);
         let options = {
             bgm: { min: 0, max: 100, value: 50 },
@@ -366,13 +367,14 @@
                     pos = curPath.pop();
                 }
             }
-            return field;
+            return { field, path };
         };
         /**
          * draws labyrinth
          * @param field
          */
-        let drawLabyrinth = function (field) {
+        let drawLabyrinth = function ({ field, path }) {
+            console.log(path);
             let rows = field.length;
             let cols = field[0].length;
             setDisplay('level');
@@ -388,29 +390,57 @@
             let svg = document.body.querySelector('svg');
             document.body.querySelectorAll('svg *').forEach(function (n) { n.remove(); });
             svg.setAttribute('viewbox', `0 0 ${screen.width} ${screen.height}`);
+            let border = {
+                stroke: 'rgba(50, 50, 50, 0.9)',
+                strokeWidth: Math.ceil(tsize / 100 * 10),
+                linecap: 'square'
+            };
             field.forEach(function (row, rdx) {
                 row.forEach(function (col, cdx) {
                     let tx = tsize * cdx;
                     let ty = tsize * rdx;
                     // bg
                     let rect = document.createElementNS(xmlns, 'rect');
-                    rect.style.fill = 'rgba(245, 245, 245, 0.1)';
-                    rect.style.stroke = 'transparent';
+                    rect.setAttribute('fill', 'rgba(245, 245, 245, 0.1)');
+                    rect.setAttribute('stroke', 'transparent');
                     rect.setAttribute('x', tl.x + tx);
                     rect.setAttribute('y', tl.y + ty);
                     rect.setAttribute('width', tsize);
                     rect.setAttribute('height', tsize);
                     svg.appendChild(rect);
+                    // corners
+                    let tlc = document.createElementNS(xmlns, 'rect');
+                    tlc.setAttribute('fill', border.stroke);
+                    tlc.setAttribute('x', tl.x + tx);
+                    tlc.setAttribute('y', tl.y + ty);
+                    tlc.setAttribute('width', border.strokeWidth);
+                    tlc.setAttribute('height', border.strokeWidth);
+                    svg.appendChild(tlc);
+                    let trc = document.createElementNS(xmlns, 'rect');
+                    trc.setAttribute('fill', border.stroke);
+                    trc.setAttribute('x', tl.x + tx + tsize - border.strokeWidth);
+                    trc.setAttribute('y', tl.y + ty);
+                    trc.setAttribute('width', border.strokeWidth);
+                    trc.setAttribute('height', border.strokeWidth);
+                    svg.appendChild(trc);
+                    let brc = document.createElementNS(xmlns, 'rect');
+                    brc.setAttribute('fill', border.stroke);
+                    brc.setAttribute('x', tl.x + tx + tsize - border.strokeWidth);
+                    brc.setAttribute('y', tl.y + ty + tsize - border.strokeWidth);
+                    brc.setAttribute('width', border.strokeWidth);
+                    brc.setAttribute('height', border.strokeWidth);
+                    svg.appendChild(brc);
+                    let blc = document.createElementNS(xmlns, 'rect');
+                    blc.setAttribute('fill', border.stroke);
+                    blc.setAttribute('x', tl.x + tx);
+                    blc.setAttribute('y', tl.y + ty + tsize - border.strokeWidth);
+                    blc.setAttribute('width', border.strokeWidth);
+                    blc.setAttribute('height', border.strokeWidth);
+                    svg.appendChild(blc);
                     // borders
-                    let border = {
-                        stroke: 'rgba(50, 50, 50, 0.9)',
-                        strokeWidth: Math.ceil(tsize / 100 * 10),
-                        linecap: 'square'
-                    };
                     if (col.links.includes('t') === false) {
                         let line = document.createElementNS(xmlns, 'line');
-                        line.style.stroke = border.stroke;
-                        //line.style.strokeWidth = border.strokeWidth;
+                        line.setAttribute('stroke', border.stroke);
                         line.setAttribute('stroke-width', border.strokeWidth);
                         line.setAttribute('x1', tl.x + tx);
                         line.setAttribute('y1', tl.y + ty);
@@ -421,8 +451,7 @@
                     }
                     if (col.links.includes('r') === false) {
                         let line = document.createElementNS(xmlns, 'line');
-                        line.style.stroke = border.stroke;
-                        //line.style.strokeWidth = border.strokeWidth;
+                        line.setAttribute('stroke', border.stroke);
                         line.setAttribute('stroke-width', border.strokeWidth);
                         line.setAttribute('x1', tl.x + tx + tsize);
                         line.setAttribute('y1', tl.y + ty);
@@ -433,8 +462,7 @@
                     }
                     if (col.links.includes('b') === false) {
                         let line = document.createElementNS(xmlns, 'line');
-                        line.style.stroke = border.stroke;
-                        //line.style.strokeWidth = border.strokeWidth;
+                        line.setAttribute('stroke', border.stroke);
                         line.setAttribute('stroke-width', border.strokeWidth);
                         line.setAttribute('x1', tl.x + tx);
                         line.setAttribute('y1', tl.y + ty + tsize);
@@ -445,8 +473,7 @@
                     }
                     if (col.links.includes('l') === false) {
                         let line = document.createElementNS(xmlns, 'line');
-                        line.style.stroke = border.stroke;
-                        //line.style.strokeWidth = border.strokeWidth;
+                        line.setAttribute('stroke', border.stroke);
                         line.setAttribute('stroke-width', border.strokeWidth);
                         line.setAttribute('x1', tl.x + tx);
                         line.setAttribute('y1', tl.y + ty);
@@ -457,6 +484,14 @@
                     }
                 });
             });
+            let track = document.createElementNS(xmlns, 'polyline');
+            track.setAttribute('points', path.map(p => {
+                return [tl.x + p.x * tsize + tsize / 2, tl.y + p.y * tsize + tsize / 2].join(',');
+            }).join(' '));
+            track.setAttribute('fill', 'none');
+            track.setAttribute('stroke', 'rgba(245, 245, 245, 0.1)');
+            track.setAttribute('stroke-width', border.strokeWidth);
+            svg.appendChild(track);
         };
     </script>
 </body>
