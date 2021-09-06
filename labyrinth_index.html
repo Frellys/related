@@ -337,6 +337,10 @@
                 x: Math.floor(Math.random() * width),
                 y: Math.floor(Math.random() * height)
             };
+            let start = {
+                x: pos.x,
+                y: pos.y
+            };
             let field = Array.from(new Array(height).fill(), () => new Array(width).fill(true));
             field[pos.y][pos.x] = {
                 links: []
@@ -367,13 +371,16 @@
                     pos = curPath.pop();
                 }
             }
-            return { field, path };
+            let fin = {
+                x: path[path.length - 1].x,
+                y: path[path.length - 1].y
+            };
+            return { field, path, start, fin };
         };
         /**
          * draws labyrinth
-         * @param field
          */
-        let drawLabyrinth = function ({ field, path }) {
+        let drawLabyrinth = function ({ field, path, start, fin }) {
             console.log(path);
             let rows = field.length;
             let cols = field[0].length;
@@ -408,6 +415,26 @@
                     rect.setAttribute('width', tsize);
                     rect.setAttribute('height', tsize);
                     svg.appendChild(rect);
+                    if (cdx === start.x && rdx === start.y) {
+                        let stile = document.createElementNS(xmlns, 'rect');
+                        stile.setAttribute('fill', 'rgba(0, 245, 0, 0.1)');
+                        stile.setAttribute('stroke', 'transparent');
+                        stile.setAttribute('x', tl.x + tx);
+                        stile.setAttribute('y', tl.y + ty);
+                        stile.setAttribute('width', tsize);
+                        stile.setAttribute('height', tsize);
+                        svg.appendChild(stile);
+                    }
+                    if (cdx === fin.x && rdx === fin.y) {
+                        let ftile = document.createElementNS(xmlns, 'rect');
+                        ftile.setAttribute('fill', 'rgba(245, 0, 0, 0.1)');
+                        ftile.setAttribute('stroke', 'transparent');
+                        ftile.setAttribute('x', tl.x + tx);
+                        ftile.setAttribute('y', tl.y + ty);
+                        ftile.setAttribute('width', tsize);
+                        ftile.setAttribute('height', tsize);
+                        svg.appendChild(ftile);
+                    }
                     // corners
                     let tlc = document.createElementNS(xmlns, 'rect');
                     tlc.setAttribute('fill', border.stroke);
