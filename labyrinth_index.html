@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>title</title>
+    <title>labyrinth_index</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -373,38 +373,87 @@
          * @param field
          */
         let drawLabyrinth = function (field) {
-            console.log(field);
             let rows = field.length;
             let cols = field[0].length;
             setDisplay('level');
             let vmin = Math.floor(Math.min(screen.width, screen.height) / 100);
-            let width = 80 * vmin;
-            let height = 80 * vmin;
-            let tsize = width / cols;
+            let width = 95 * vmin;
+            let height = 95 * vmin;
+            let tsize = Math.max(width, height) / Math.max(cols, rows);
             let tl = {
-                x: screen.width / 2 - width / 2,
-                y: screen.height / 2 - height / 2
+                x: screen.width / 2 - tsize * cols / 2,
+                y: screen.height / 2 - tsize * rows / 2
             };
             let xmlns = 'http://www.w3.org/2000/svg';
-            let svg = document.querySelector('svg');
+            let svg = document.body.querySelector('svg');
+            document.body.querySelectorAll('svg *').forEach(function (n) { n.remove(); });
             svg.setAttribute('viewbox', `0 0 ${screen.width} ${screen.height}`);
             field.forEach(function (row, rdx) {
                 row.forEach(function (col, cdx) {
                     let tx = tsize * cdx;
                     let ty = tsize * rdx;
-                    console.log({ links: col.links, tx, ty });
                     // bg
                     let rect = document.createElementNS(xmlns, 'rect');
                     rect.style.fill = 'rgba(245, 245, 245, 0.1)';
                     rect.style.stroke = 'transparent';
-                    rect.setAttribute('x', tl.x + cdx * tsize);
-                    rect.setAttribute('y', tl.y + rdx * tsize);
+                    rect.setAttribute('x', tl.x + tx);
+                    rect.setAttribute('y', tl.y + ty);
                     rect.setAttribute('width', tsize);
                     rect.setAttribute('height', tsize);
                     svg.appendChild(rect);
                     // borders
-                    if (col.links.includes('t')) {
+                    let border = {
+                        stroke: 'rgba(50, 50, 50, 0.9)',
+                        strokeWidth: Math.ceil(tsize / 100 * 10),
+                        linecap: 'square'
+                    };
+                    if (col.links.includes('t') === false) {
                         let line = document.createElementNS(xmlns, 'line');
+                        line.style.stroke = border.stroke;
+                        //line.style.strokeWidth = border.strokeWidth;
+                        line.setAttribute('stroke-width', border.strokeWidth);
+                        line.setAttribute('x1', tl.x + tx);
+                        line.setAttribute('y1', tl.y + ty);
+                        line.setAttribute('x2', tl.x + tx + tsize);
+                        line.setAttribute('y2', tl.y + ty);
+                        line.setAttribute('stroke-linecap', border.linecap);
+                        svg.appendChild(line);
+                    }
+                    if (col.links.includes('r') === false) {
+                        let line = document.createElementNS(xmlns, 'line');
+                        line.style.stroke = border.stroke;
+                        //line.style.strokeWidth = border.strokeWidth;
+                        line.setAttribute('stroke-width', border.strokeWidth);
+                        line.setAttribute('x1', tl.x + tx + tsize);
+                        line.setAttribute('y1', tl.y + ty);
+                        line.setAttribute('x2', tl.x + tx + tsize);
+                        line.setAttribute('y2', tl.y + ty + tsize);
+                        line.setAttribute('stroke-linecap', border.linecap);
+                        svg.appendChild(line);
+                    }
+                    if (col.links.includes('b') === false) {
+                        let line = document.createElementNS(xmlns, 'line');
+                        line.style.stroke = border.stroke;
+                        //line.style.strokeWidth = border.strokeWidth;
+                        line.setAttribute('stroke-width', border.strokeWidth);
+                        line.setAttribute('x1', tl.x + tx);
+                        line.setAttribute('y1', tl.y + ty + tsize);
+                        line.setAttribute('x2', tl.x + tx + tsize);
+                        line.setAttribute('y2', tl.y + ty + tsize);
+                        line.setAttribute('stroke-linecap', border.linecap);
+                        svg.appendChild(line);
+                    }
+                    if (col.links.includes('l') === false) {
+                        let line = document.createElementNS(xmlns, 'line');
+                        line.style.stroke = border.stroke;
+                        //line.style.strokeWidth = border.strokeWidth;
+                        line.setAttribute('stroke-width', border.strokeWidth);
+                        line.setAttribute('x1', tl.x + tx);
+                        line.setAttribute('y1', tl.y + ty);
+                        line.setAttribute('x2', tl.x + tx);
+                        line.setAttribute('y2', tl.y + ty + tsize);
+                        line.setAttribute('stroke-linecap', border.linecap);
+                        svg.appendChild(line);
                     }
                 });
             });
