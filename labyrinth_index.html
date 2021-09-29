@@ -93,11 +93,13 @@
                         }
 
                             main > section:nth-of-type(1) > .wrap-slider > input#width {
-                                background: linear-gradient(to right, var(--color-active) var(--value-width), var(--color-main) var(--value-width) 100%);
+                                /*background: linear-gradient(to right, var(--color-active) var(--value-width), var(--color-main) var(--value-width) 100%);*/
+                                outline: none;
                             }
 
                             main > section:nth-of-type(1) > .wrap-slider > input#height {
-                                background: linear-gradient(to right, var(--color-active) var(--value-height), var(--color-main) var(--value-height) 100%);
+                                /*background: linear-gradient(to right, var(--color-active) var(--value-height), var(--color-main) var(--value-height) 100%);*/
+                                outline: none;
                             }
 
                             main > section:nth-of-type(1) > .wrap-slider > input::-webkit-slider-thumb {
@@ -143,11 +145,13 @@
                         }
 
                             main > section:nth-of-type(2) > .wrap-slider > input#bgm {
-                                background: linear-gradient(to right, var(--color-active) var(--value-bgm), var(--color-main) var(--value-bgm) 100%);
+                                /*background: linear-gradient(to right, var(--color-active) var(--value-bgm), var(--color-main) var(--value-bgm) 100%);*/
+                                outline: none;
                             }
 
                             main > section:nth-of-type(2) > .wrap-slider > input#sfx {
-                                background: linear-gradient(to right, var(--color-active) var(--value-sfx), var(--color-main) var(--value-sfx) 100%);
+                                /*background: linear-gradient(to right, var(--color-active) var(--value-sfx), var(--color-main) var(--value-sfx) 100%);*/
+                                outline: none;
                             }
 
                             main > section:nth-of-type(2) > .wrap-slider > input::-webkit-slider-thumb {
@@ -352,11 +356,11 @@
                     b: (pos.y < height - 1 && field[pos.y + 1][pos.x] === true),
                     l: (pos.x > 0 && field[pos.y][pos.x - 1] === true)
                 };
+                if (path.length < curPath.push({ x: pos.x, y: pos.y })) {
+                    path = JSON.parse(JSON.stringify(curPath));
+                }
                 let cap = Object.keys(routes).filter(key => routes[key]).length;
                 if (cap) {
-                    if (path.length < curPath.push({ x: pos.x, y: pos.y })) {
-                        path = JSON.parse(JSON.stringify(curPath));
-                    }
                     let val = +(window.crypto.getRandomValues(new Uint32Array(1))[0].toString()[0]) % cap;
                     let dir = Object.keys(routes).filter(key => routes[key])[val];
                     field[pos.y][pos.x].links.push(dir);
@@ -368,6 +372,7 @@
                     };
                 }
                 else {
+                    curPath.pop();
                     pos = curPath.pop();
                 }
             }
@@ -381,7 +386,7 @@
          * draws labyrinth
          */
         let drawLabyrinth = function ({ field, path, start, fin }) {
-            console.log(path);
+            //console.log(path);
             let rows = field.length;
             let cols = field[0].length;
             setDisplay('level');
