@@ -329,13 +329,23 @@
                 setDisplay('main');
             }
         }, false);
+        let player = {
+            node: false,
+            isMoving: false,
+            pos: {
+                x: 0,
+                y: 0
+            }
+        };
         /**
          * genereates labyrynth
          */
+        let field;
+        let path;
         let generateLabyrinth = function () {
             let width = parseInt(document.body.querySelector('main > section:nth-of-type(1) > .wrap-slider > #width').value);
             let height = parseInt(document.body.querySelector('main > section:nth-of-type(1) > .wrap-slider > #height').value);
-            let path = [];
+            path = [];
             let curPath = [];
             let pos = {
                 x: Math.floor(Math.random() * width),
@@ -345,7 +355,7 @@
                 x: pos.x,
                 y: pos.y
             };
-            let field = Array.from(new Array(height).fill(), () => new Array(width).fill(true));
+            field = Array.from(new Array(height).fill(), () => new Array(width).fill(true));
             field[pos.y][pos.x] = {
                 links: []
             };
@@ -380,13 +390,12 @@
                 x: path[path.length - 1].x,
                 y: path[path.length - 1].y
             };
-            return { field, path, start, fin };
+            return { start, fin };
         };
         /**
          * draws labyrinth
          */
-        let drawLabyrinth = function ({ field, path, start, fin }) {
-            //console.log(path);
+        let drawLabyrinth = function ({ start, fin }) {
             let rows = field.length;
             let cols = field[0].length;
             setDisplay('level');
@@ -403,7 +412,7 @@
             document.body.querySelectorAll('svg *').forEach(function (n) { n.remove(); });
             svg.setAttribute('viewbox', `0 0 ${screen.width} ${screen.height}`);
             let border = {
-                stroke: 'rgba(50, 50, 50, 0.9)',
+                stroke: '#323232',
                 strokeWidth: Math.ceil(tsize / 100 * 10),
                 linecap: 'square'
             };
@@ -420,24 +429,26 @@
                     rect.setAttribute('width', tsize);
                     rect.setAttribute('height', tsize);
                     svg.appendChild(rect);
-                    if (cdx === start.x && rdx === start.y) {
-                        let stile = document.createElementNS(xmlns, 'rect');
-                        stile.setAttribute('fill', 'rgba(0, 245, 0, 0.1)');
-                        stile.setAttribute('stroke', 'transparent');
-                        stile.setAttribute('x', tl.x + tx);
-                        stile.setAttribute('y', tl.y + ty);
-                        stile.setAttribute('width', tsize);
-                        stile.setAttribute('height', tsize);
-                        svg.appendChild(stile);
-                    }
+                    // start
+                    //if (cdx === start.x && rdx === start.y) {
+                    //    let stile = document.createElementNS(xmlns, 'rect');
+                    //    stile.setAttribute('fill', 'rgba(0, 245, 0, 0.1)');
+                    //    stile.setAttribute('stroke', 'transparent');
+                    //    stile.setAttribute('x', tl.x + tx);
+                    //    stile.setAttribute('y', tl.y + ty);
+                    //    stile.setAttribute('width', tsize);
+                    //    stile.setAttribute('height', tsize);
+                    //    svg.appendChild(stile);
+                    //}
+                    // end
                     if (cdx === fin.x && rdx === fin.y) {
                         let ftile = document.createElementNS(xmlns, 'rect');
-                        ftile.setAttribute('fill', 'rgba(245, 0, 0, 0.1)');
+                        ftile.setAttribute('fill', 'rgba(245, 222, 179, 0.15)');
                         ftile.setAttribute('stroke', 'transparent');
-                        ftile.setAttribute('x', tl.x + tx);
-                        ftile.setAttribute('y', tl.y + ty);
-                        ftile.setAttribute('width', tsize);
-                        ftile.setAttribute('height', tsize);
+                        ftile.setAttribute('x', tl.x + tx + border.strokeWidth);
+                        ftile.setAttribute('y', tl.y + ty + border.strokeWidth);
+                        ftile.setAttribute('width', tsize - border.strokeWidth * 2);
+                        ftile.setAttribute('height', tsize - border.strokeWidth * 2);
                         svg.appendChild(ftile);
                     }
                     // corners
@@ -471,51 +482,54 @@
                     svg.appendChild(blc);
                     // borders
                     if (col.links.includes('t') === false) {
-                        let line = document.createElementNS(xmlns, 'line');
-                        line.setAttribute('stroke', border.stroke);
-                        line.setAttribute('stroke-width', border.strokeWidth);
-                        line.setAttribute('x1', tl.x + tx);
-                        line.setAttribute('y1', tl.y + ty);
-                        line.setAttribute('x2', tl.x + tx + tsize);
-                        line.setAttribute('y2', tl.y + ty);
-                        line.setAttribute('stroke-linecap', border.linecap);
-                        svg.appendChild(line);
+                        let b = document.createElementNS(xmlns, 'rect');
+                        b.setAttribute('fill', border.stroke);
+                        b.setAttribute('x', tl.x + tx + border.strokeWidth);
+                        b.setAttribute('y', tl.y + ty);
+                        b.setAttribute('width', tsize - border.strokeWidth * 2);
+                        b.setAttribute('height', border.strokeWidth);
+                        svg.appendChild(b);
                     }
                     if (col.links.includes('r') === false) {
-                        let line = document.createElementNS(xmlns, 'line');
-                        line.setAttribute('stroke', border.stroke);
-                        line.setAttribute('stroke-width', border.strokeWidth);
-                        line.setAttribute('x1', tl.x + tx + tsize);
-                        line.setAttribute('y1', tl.y + ty);
-                        line.setAttribute('x2', tl.x + tx + tsize);
-                        line.setAttribute('y2', tl.y + ty + tsize);
-                        line.setAttribute('stroke-linecap', border.linecap);
-                        svg.appendChild(line);
+                        let b = document.createElementNS(xmlns, 'rect');
+                        b.setAttribute('fill', border.stroke);
+                        b.setAttribute('x', tl.x + tx + tsize - border.strokeWidth);
+                        b.setAttribute('y', tl.y + ty + border.strokeWidth);
+                        b.setAttribute('width', border.strokeWidth);
+                        b.setAttribute('height', tsize - border.strokeWidth * 2);
+                        svg.appendChild(b);
                     }
                     if (col.links.includes('b') === false) {
-                        let line = document.createElementNS(xmlns, 'line');
-                        line.setAttribute('stroke', border.stroke);
-                        line.setAttribute('stroke-width', border.strokeWidth);
-                        line.setAttribute('x1', tl.x + tx);
-                        line.setAttribute('y1', tl.y + ty + tsize);
-                        line.setAttribute('x2', tl.x + tx + tsize);
-                        line.setAttribute('y2', tl.y + ty + tsize);
-                        line.setAttribute('stroke-linecap', border.linecap);
-                        svg.appendChild(line);
+                        let b = document.createElementNS(xmlns, 'rect');
+                        b.setAttribute('fill', border.stroke);
+                        b.setAttribute('x', tl.x + tx + border.strokeWidth);
+                        b.setAttribute('y', tl.y + ty + tsize - border.strokeWidth);
+                        b.setAttribute('width', tsize - border.strokeWidth * 2);
+                        b.setAttribute('height', border.strokeWidth);
+                        svg.appendChild(b);
                     }
                     if (col.links.includes('l') === false) {
-                        let line = document.createElementNS(xmlns, 'line');
-                        line.setAttribute('stroke', border.stroke);
-                        line.setAttribute('stroke-width', border.strokeWidth);
-                        line.setAttribute('x1', tl.x + tx);
-                        line.setAttribute('y1', tl.y + ty);
-                        line.setAttribute('x2', tl.x + tx);
-                        line.setAttribute('y2', tl.y + ty + tsize);
-                        line.setAttribute('stroke-linecap', border.linecap);
-                        svg.appendChild(line);
+                        let b = document.createElementNS(xmlns, 'rect');
+                        b.setAttribute('fill', border.stroke);
+                        b.setAttribute('x', tl.x + tx);
+                        b.setAttribute('y', tl.y + ty + border.strokeWidth);
+                        b.setAttribute('width', border.strokeWidth);
+                        b.setAttribute('height', tsize - border.strokeWidth * 2);
+                        svg.appendChild(b);
                     }
                 });
             });
+            // player
+            player.pos.x = start.x;
+            player.pos.y = start.y;
+            player.node = document.createElementNS(xmlns, 'rect');
+            player.node.setAttribute('fill', 'wheat');
+            player.node.setAttribute('x', tl.x + player.pos.x * tsize + border.strokeWidth);
+            player.node.setAttribute('y', tl.y + player.pos.y * tsize + border.strokeWidth);
+            player.node.setAttribute('width', tsize - border.strokeWidth * 2);
+            player.node.setAttribute('height', tsize - border.strokeWidth * 2);
+            svg.appendChild(player.node);
+            // track
             let track = document.createElementNS(xmlns, 'polyline');
             track.setAttribute('points', path.map(p => {
                 return [tl.x + p.x * tsize + tsize / 2, tl.y + p.y * tsize + tsize / 2].join(',');
