@@ -92,13 +92,8 @@
                             border-radius: 1.5ch;
                         }
 
-                            main > section:nth-of-type(1) > .wrap-slider > input#width {
-                                /*background: linear-gradient(to right, var(--color-active) var(--value-width), var(--color-main) var(--value-width) 100%);*/
-                                outline: none;
-                            }
-
+                            main > section:nth-of-type(1) > .wrap-slider > input#width,
                             main > section:nth-of-type(1) > .wrap-slider > input#height {
-                                /*background: linear-gradient(to right, var(--color-active) var(--value-height), var(--color-main) var(--value-height) 100%);*/
                                 outline: none;
                             }
 
@@ -144,13 +139,8 @@
                             border-radius: 1.5ch;
                         }
 
-                            main > section:nth-of-type(2) > .wrap-slider > input#bgm {
-                                /*background: linear-gradient(to right, var(--color-active) var(--value-bgm), var(--color-main) var(--value-bgm) 100%);*/
-                                outline: none;
-                            }
-
+                            main > section:nth-of-type(2) > .wrap-slider > input#bgm,
                             main > section:nth-of-type(2) > .wrap-slider > input#sfx {
-                                /*background: linear-gradient(to right, var(--color-active) var(--value-sfx), var(--color-main) var(--value-sfx) 100%);*/
                                 outline: none;
                             }
 
@@ -262,6 +252,49 @@
     <svg></svg>
     <div id="esc">esc</div>
     <script>
+        let level = {};
+        let player = {
+            node: false,
+            isMoving: false,
+            pos: {
+                x: 0,
+                y: 0
+            },
+            dpos: {
+                x: 0,
+                y: 0
+            }
+        };
+        let borders = {
+            ArrowUp: 't',
+            ArrowRight: 'r',
+            ArrowDown: 'b',
+            ArrowLeft: 'l'
+        };
+        let arrows = {
+            ArrowUp: function () { player.pos.y--; },
+            ArrowRight: function () { player.pos.x++; },
+            ArrowDown: function () { player.pos.y++; },
+            ArrowLeft: function () { player.pos.x--; }
+        };
+        let curPressed = false;
+        window.addEventListener('keydown', function (e) {
+            console.log(!player.isMoving);
+            console.log(app.scene === 'level');
+            console.log(e.code in arrows);
+            console.log(!curPressed);
+            if (!player.isMoving && app.scene === 'level' && (e.code in arrows) && !curPressed) {
+                curPressed = player.isMoving = e.code;
+                if (field[player.pos.y][player.pos.x].links.includes(borders[e.code])) {
+                    arrows[e.code]();
+                }
+            }
+        }, false);
+        window.addEventListener('keyup', function (e) {
+            if (curPressed === e.code) {
+                curPressed = false;
+            }
+        }, false);
         let app = {
             scene: 'main'
         };
@@ -296,30 +329,22 @@
             }, false);
         });
         document.body.querySelector('main > section:nth-of-type(1) > .wrap-run > #run').addEventListener('click', function () {
-            //let field = generateLabyrinth();
-            //drawLabyrinth(field);
             drawLabyrinth(generateLabyrinth());
         }, false);
-        let options = {
-            bgm: { min: 0, max: 100, value: 50 },
-            sfx: { min: 0, max: 100, value: 50 }
-        };
-        ['bgm', 'sfx'].forEach(function (el) {
-            document.body.querySelector(`main > section:nth-of-type(2) > .wrap-slider > div > label[for="${el}"]`).innerHTML = options[el].value;
-            document.documentElement.style.setProperty(`--value-${el}`, (options[el].max + options[el].min) / 100 * options[el].value - options[el].min + '%');
-        });
-        document.querySelectorAll('main > section:nth-of-type(2) > .wrap-slider > input').forEach(function (input) {
-            input.addEventListener('input', function () {
-                document.body.querySelector(`main > section:nth-of-type(2) > .wrap-slider > div > label[for="${this.id}"]`).innerHTML = this.value;
-                document.documentElement.style.setProperty(`--value-${this.id}`, (options[this.id].max + options[this.id].min) / 100 * this.value - options[this.id].min + '%');
-            }, false);
-        });
-        document.body.querySelector('main > section:nth-of-type(3) > .wrap > #y').addEventListener('click', function () {
-            window.close();
-        }, false);
-        document.body.querySelector('main > section:nth-of-type(3) > .wrap > #n').addEventListener('click', function () {
-            selectors[0].click();
-        }, false);
+        //let options = {
+        //    bgm: { min: 0, max: 100, value: 50 },
+        //    sfx: { min: 0, max: 100, value: 50 }
+        //};
+        //['bgm', 'sfx'].forEach(function (el) {
+        //    document.body.querySelector(`main > section:nth-of-type(2) > .wrap-slider > div > label[for="${el}"]`).innerHTML = options[el].value;
+        //    document.documentElement.style.setProperty(`--value-${el}`, (options[el].max + options[el].min) / 100 * options[el].value - options[el].min + '%');
+        //});
+        //document.querySelectorAll('main > section:nth-of-type(2) > .wrap-slider > input').forEach(function (input) {
+        //    input.addEventListener('input', function () {
+        //        document.body.querySelector(`main > section:nth-of-type(2) > .wrap-slider > div > label[for="${this.id}"]`).innerHTML = this.value;
+        //        document.documentElement.style.setProperty(`--value-${this.id}`, (options[this.id].max + options[this.id].min) / 100 * this.value - options[this.id].min + '%');
+        //    }, false);
+        //});
         setDisplay('main');
         document.body.querySelector('#esc').addEventListener('click', function () {
             setDisplay('main');
@@ -329,14 +354,6 @@
                 setDisplay('main');
             }
         }, false);
-        let player = {
-            node: false,
-            isMoving: false,
-            pos: {
-                x: 0,
-                y: 0
-            }
-        };
         /**
          * genereates labyrynth
          */
@@ -357,7 +374,11 @@
             };
             field = Array.from(new Array(height).fill(), () => new Array(width).fill(true));
             field[pos.y][pos.x] = {
-                links: []
+                links: [],
+                tlcp: {
+                    x: 0,
+                    y: 0
+                }
             };
             while (field.some(row => row.some(el => el === true))) {
                 let routes = {
@@ -375,10 +396,10 @@
                     let dir = Object.keys(routes).filter(key => routes[key])[val];
                     field[pos.y][pos.x].links.push(dir);
                     switch (dir) {
-                        case 't': { pos.y -= 1; field[pos.y][pos.x] = { links: ['b'] }; break; }
-                        case 'r': { pos.x += 1; field[pos.y][pos.x] = { links: ['l'] }; break; }
-                        case 'b': { pos.y += 1; field[pos.y][pos.x] = { links: ['t'] }; break; }
-                        case 'l': { pos.x -= 1; field[pos.y][pos.x] = { links: ['r'] }; break; }
+                        case 't': { pos.y -= 1; field[pos.y][pos.x] = { links: ['b'], tlcp: { x: 0, y: 0 } }; break; }
+                        case 'r': { pos.x += 1; field[pos.y][pos.x] = { links: ['l'], tlcp: { x: 0, y: 0 } }; break; }
+                        case 'b': { pos.y += 1; field[pos.y][pos.x] = { links: ['t'], tlcp: { x: 0, y: 0 } }; break; }
+                        case 'l': { pos.x -= 1; field[pos.y][pos.x] = { links: ['r'], tlcp: { x: 0, y: 0 } }; break; }
                     };
                 }
                 else {
@@ -395,6 +416,9 @@
         /**
          * draws labyrinth
          */
+        let tl;
+        let tsize;
+        let border;
         let drawLabyrinth = function ({ start, fin }) {
             let rows = field.length;
             let cols = field[0].length;
@@ -402,8 +426,8 @@
             let vmin = Math.floor(Math.min(screen.width, screen.height) / 100);
             let width = 95 * vmin;
             let height = 95 * vmin;
-            let tsize = Math.max(width, height) / Math.max(cols, rows);
-            let tl = {
+            tsize = Math.max(width, height) / Math.max(cols, rows);
+            tl = {
                 x: screen.width / 2 - tsize * cols / 2,
                 y: screen.height / 2 - tsize * rows / 2
             };
@@ -411,7 +435,7 @@
             let svg = document.body.querySelector('svg');
             document.body.querySelectorAll('svg *').forEach(function (n) { n.remove(); });
             svg.setAttribute('viewbox', `0 0 ${screen.width} ${screen.height}`);
-            let border = {
+            border = {
                 stroke: '#323232',
                 strokeWidth: Math.ceil(tsize / 100 * 10),
                 linecap: 'square'
@@ -420,6 +444,8 @@
                 row.forEach(function (col, cdx) {
                     let tx = tsize * cdx;
                     let ty = tsize * rdx;
+                    col.tlcp.x = tl.x + tx + border.strokeWidth;
+                    col.tlcp.y = tl.y + ty + border.strokeWidth;
                     // bg
                     let rect = document.createElementNS(xmlns, 'rect');
                     rect.setAttribute('fill', 'rgba(245, 245, 245, 0.1)');
@@ -445,8 +471,8 @@
                         let ftile = document.createElementNS(xmlns, 'rect');
                         ftile.setAttribute('fill', 'rgba(245, 222, 179, 0.15)');
                         ftile.setAttribute('stroke', 'transparent');
-                        ftile.setAttribute('x', tl.x + tx + border.strokeWidth);
-                        ftile.setAttribute('y', tl.y + ty + border.strokeWidth);
+                        ftile.setAttribute('x', col.tlcp.x);
+                        ftile.setAttribute('y', col.tlcp.y);
                         ftile.setAttribute('width', tsize - border.strokeWidth * 2);
                         ftile.setAttribute('height', tsize - border.strokeWidth * 2);
                         svg.appendChild(ftile);
@@ -522,10 +548,12 @@
             // player
             player.pos.x = start.x;
             player.pos.y = start.y;
+            player.dpos.x = tl.x + player.pos.x * tsize + border.strokeWidth;
+            player.dpos.y = tl.y + player.pos.y * tsize + border.strokeWidth;
             player.node = document.createElementNS(xmlns, 'rect');
             player.node.setAttribute('fill', 'wheat');
-            player.node.setAttribute('x', tl.x + player.pos.x * tsize + border.strokeWidth);
-            player.node.setAttribute('y', tl.y + player.pos.y * tsize + border.strokeWidth);
+            player.node.setAttribute('x', player.dpos.x);
+            player.node.setAttribute('y', player.dpos.y);
             player.node.setAttribute('width', tsize - border.strokeWidth * 2);
             player.node.setAttribute('height', tsize - border.strokeWidth * 2);
             svg.appendChild(player.node);
@@ -539,6 +567,54 @@
             track.setAttribute('stroke-width', border.strokeWidth);
             svg.appendChild(track);
         };
+        let pts;
+        let step = 0.25 * 1000;
+        window.requestAnimationFrame(function render(ts) {
+            if (app.scene === 'level' && player.isMoving) {
+                let delta = ts - pts;
+                let shift = tsize * delta / step;
+                switch (player.isMoving) {
+                    case 'ArrowUp': {
+                        player.dpos.y -= shift;
+                        if (player.dpos.y <= field[player.pos.y][player.pos.x].tlcp.y) {
+                            player.dpos.y = field[player.pos.y][player.pos.x].tlcp.y;
+                            player.isMoving = false;
+                        }
+                        player.node.setAttribute('y', player.dpos.y);
+                        break;
+                    }
+                    case 'ArrowRight': {
+                        player.dpos.x += shift;
+                        if (player.dpos.x >= field[player.pos.y][player.pos.x].tlcp.x) {
+                            player.dpos.x = field[player.pos.y][player.pos.x].tlcp.x;
+                            player.isMoving = false;
+                        }
+                        player.node.setAttribute('x', player.dpos.x);
+                        break;
+                    }
+                    case 'ArrowDown': {
+                        player.dpos.y += shift;
+                        if (player.dpos.y >= field[player.pos.y][player.pos.x].tlcp.y) {
+                            player.dpos.y = field[player.pos.y][player.pos.x].tlcp.y;
+                            player.isMoving = false;
+                        }
+                        player.node.setAttribute('y', player.dpos.y);
+                        break;
+                    }
+                    case 'ArrowLeft': {
+                        player.dpos.x -= shift;
+                        if (player.dpos.x <= field[player.pos.y][player.pos.x].tlcp.x) {
+                            player.dpos.x = field[player.pos.y][player.pos.x].tlcp.x;
+                            player.isMoving = false;
+                        }
+                        player.node.setAttribute('x', player.dpos.x);
+                        break;
+                    }
+                }
+            }
+            pts = ts;
+            window.requestAnimationFrame(render);
+        });
     </script>
 </body>
 </html>
