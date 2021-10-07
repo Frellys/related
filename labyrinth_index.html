@@ -95,6 +95,7 @@
                             main > section:nth-of-type(1) > .wrap-slider > input#width,
                             main > section:nth-of-type(1) > .wrap-slider > input#height {
                                 outline: none;
+                                margin-top: 0.5rem;
                             }
 
                             main > section:nth-of-type(1) > .wrap-slider > input::-webkit-slider-thumb {
@@ -142,6 +143,7 @@
                             main > section:nth-of-type(2) > .wrap-slider > input#bgm,
                             main > section:nth-of-type(2) > .wrap-slider > input#sfx {
                                 outline: none;
+                                margin-top: 0.5rem;
                             }
 
                             main > section:nth-of-type(2) > .wrap-slider > input::-webkit-slider-thumb {
@@ -256,6 +258,12 @@
         let player = {
             node: false,
             isMoving: false,
+            isFinish: false,
+            CheckPos: function () {
+                if (this.pos.x == fin.x && this.pos.y == fin.y) {
+                    this.isFinish = true;
+                }
+            },
             pos: {
                 x: 0,
                 y: 0
@@ -283,7 +291,7 @@
             console.log(app.scene === 'level');
             console.log(e.code in arrows);
             console.log(!curPressed);
-            if (!player.isMoving && app.scene === 'level' && (e.code in arrows) && !curPressed) {
+            if (!player.isFinish && !player.isMoving && app.scene === 'level' && (e.code in arrows) && !curPressed) {
                 curPressed = player.isMoving = e.code;
                 if (field[player.pos.y][player.pos.x].links.includes(borders[e.code])) {
                     arrows[e.code]();
@@ -359,6 +367,7 @@
          */
         let field;
         let path;
+        let fin;
         let generateLabyrinth = function () {
             let width = parseInt(document.body.querySelector('main > section:nth-of-type(1) > .wrap-slider > #width').value);
             let height = parseInt(document.body.querySelector('main > section:nth-of-type(1) > .wrap-slider > #height').value);
@@ -407,11 +416,11 @@
                     pos = curPath.pop();
                 }
             }
-            let fin = {
+            fin = {
                 x: path[path.length - 1].x,
                 y: path[path.length - 1].y
             };
-            return { start, fin };
+            return { start };
         };
         /**
          * draws labyrinth
@@ -419,7 +428,7 @@
         let tl;
         let tsize;
         let border;
-        let drawLabyrinth = function ({ start, fin }) {
+        let drawLabyrinth = function ({ start }) {
             let rows = field.length;
             let cols = field[0].length;
             setDisplay('level');
@@ -455,17 +464,6 @@
                     rect.setAttribute('width', tsize);
                     rect.setAttribute('height', tsize);
                     svg.appendChild(rect);
-                    // start
-                    //if (cdx === start.x && rdx === start.y) {
-                    //    let stile = document.createElementNS(xmlns, 'rect');
-                    //    stile.setAttribute('fill', 'rgba(0, 245, 0, 0.1)');
-                    //    stile.setAttribute('stroke', 'transparent');
-                    //    stile.setAttribute('x', tl.x + tx);
-                    //    stile.setAttribute('y', tl.y + ty);
-                    //    stile.setAttribute('width', tsize);
-                    //    stile.setAttribute('height', tsize);
-                    //    svg.appendChild(stile);
-                    //}
                     // end
                     if (cdx === fin.x && rdx === fin.y) {
                         let ftile = document.createElementNS(xmlns, 'rect');
@@ -550,6 +548,7 @@
             player.pos.y = start.y;
             player.dpos.x = tl.x + player.pos.x * tsize + border.strokeWidth;
             player.dpos.y = tl.y + player.pos.y * tsize + border.strokeWidth;
+            player.isFinish = false;
             player.node = document.createElementNS(xmlns, 'rect');
             player.node.setAttribute('fill', 'wheat');
             player.node.setAttribute('x', player.dpos.x);
@@ -579,6 +578,7 @@
                         if (player.dpos.y <= field[player.pos.y][player.pos.x].tlcp.y) {
                             player.dpos.y = field[player.pos.y][player.pos.x].tlcp.y;
                             player.isMoving = false;
+                            player.CheckPos();
                         }
                         player.node.setAttribute('y', player.dpos.y);
                         break;
@@ -588,6 +588,7 @@
                         if (player.dpos.x >= field[player.pos.y][player.pos.x].tlcp.x) {
                             player.dpos.x = field[player.pos.y][player.pos.x].tlcp.x;
                             player.isMoving = false;
+                            player.CheckPos();
                         }
                         player.node.setAttribute('x', player.dpos.x);
                         break;
@@ -597,6 +598,7 @@
                         if (player.dpos.y >= field[player.pos.y][player.pos.x].tlcp.y) {
                             player.dpos.y = field[player.pos.y][player.pos.x].tlcp.y;
                             player.isMoving = false;
+                            player.CheckPos();
                         }
                         player.node.setAttribute('y', player.dpos.y);
                         break;
@@ -606,6 +608,7 @@
                         if (player.dpos.x <= field[player.pos.y][player.pos.x].tlcp.x) {
                             player.dpos.x = field[player.pos.y][player.pos.x].tlcp.x;
                             player.isMoving = false;
+                            player.CheckPos();
                         }
                         player.node.setAttribute('x', player.dpos.x);
                         break;
