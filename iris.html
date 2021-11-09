@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>iris</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #edeef0;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // vars
+        let c = { x: screen.width / 2, y: screen.height / 2 };
+        let vmin = Math.ceil(Math.min(screen.width, screen.height) / 100);
+        // mouse
+        let mouse = new function () {
+            this.x = c.x;
+            this.y = c.y;
+            window.addEventListener('mousemove', function (e) {
+                mouse.x = e.x;
+                mouse.y = e.y;
+            }, false);
+        };
+        // load
+        window.addEventListener('load', function () {
+            let xmlns = 'http://www.w3.org/2000/svg';
+            // svg
+            let svg = document.createElementNS(xmlns, 'svg');
+            svg.setAttribute('viewbox', `0 0 ${screen.width} ${screen.height}`);
+            svg.setAttribute('shape-rendering', 'geometricprecision');
+            svg.style.width = svg.style.height = '100%';
+            document.body.appendChild(svg);
+            // outer
+            let outer = document.createElementNS(xmlns, 'polygon');
+            let outerSize = Math.min(screen.width, screen.height) / 4;
+            outer.setAttribute('points', [
+                [c.x + outerSize / 2, c.y - Math.sqrt(3) * outerSize / 2],
+                [c.x + outerSize, c.y],
+                [c.x + outerSize / 2, c.y + Math.sqrt(3) * outerSize / 2],
+                [c.x - outerSize / 2, c.y + Math.sqrt(3) * outerSize / 2],
+                [c.x - outerSize, c.y],
+                [c.x - outerSize / 2, c.y - Math.sqrt(3) * outerSize / 2]
+            ].map(p => p.join(',')).join(' '));
+            outer.setAttribute('fill', 'powderblue');
+            outer.setAttribute('stroke', '#323232');
+            outer.setAttribute('stroke-linejoin', 'round');
+            outer.setAttribute('stroke-width', vmin * 2);
+            svg.appendChild(outer);
+            // coords
+            let coordsPad = Math.max(screen.width, screen.height).toString().length;
+            let textX = document.createElementNS(xmlns, 'text');
+            textX.setAttribute('x', vmin + c.x + outerSize / 2);
+            textX.setAttribute('y', vmin * 2 + c.y + Math.sqrt(3) * outerSize / 2);
+            svg.appendChild(textX);
+            let textY = document.createElementNS(xmlns, 'text');
+            textY.setAttribute('x', vmin + c.x + outerSize / 2);
+            textY.setAttribute('y', vmin * 3 + c.y + Math.sqrt(3) * outerSize / 2);
+            svg.appendChild(textY);
+            function drawCoords() {
+                textX.innerHTML = `x: ${mouse.x.toString().padStart(coordsPad, '0')}`;
+                textY.innerHTML = `y: ${mouse.y.toString().padStart(coordsPad, '0')}`;
+            };
+            textX.style.fontFamily = textY.style.fontFamily = 'monospace';
+            textX.style.fill = textY.style.fill = 'rgba(50, 50, 50, 0.5)';
+            // inner
+            let inner = document.createElementNS(xmlns, 'polygon');
+            inner.data = new function () {
+                this.x = c.x;
+                this.y = c.y;
+                this.size = Math.min(screen.width, screen.height) / 6;
+                this.delta = (outerSize - this.size) / 2 + vmin;
+            };
+            inner.setPos = function () {
+                let delta = this.data.delta;
+                let p = new function () {
+                    let diffX = Math.abs(screen.width / 2 - mouse.x);
+                    let diffY = Math.abs(screen.height / 2 - mouse.y);
+                    this.x = (mouse.x < screen.width / 2) ? c.x - delta * diffX / (screen.width / 2) : c.x + delta * diffX / (screen.width / 2);
+                    this.y = (mouse.y < screen.height / 2) ? c.y - delta * diffY / (screen.height / 2) : c.y + delta * diffY / (screen.height / 2);
+                };
+                this.setAttribute('points', [
+                    [p.x + this.data.size / 2, p.y - Math.sqrt(3) * this.data.size / 2],
+                    [p.x + this.data.size, p.y],
+                    [p.x + this.data.size / 2, p.y + Math.sqrt(3) * this.data.size / 2],
+                    [p.x - this.data.size / 2, p.y + Math.sqrt(3) * this.data.size / 2],
+                    [p.x - this.data.size, p.y],
+                    [p.x - this.data.size / 2, p.y - Math.sqrt(3) * this.data.size / 2]
+                ].map(p => p.join(',')).join(' '));
+                this.data.x = p.x;
+                this.data.y = p.y;
+            };
+            inner.setAttribute('fill', 'mintcream');
+            inner.setAttribute('stroke', 'hotpink');
+            inner.setAttribute('stroke-linejoin', 'round');
+            inner.setAttribute('stroke-width', vmin);
+            svg.appendChild(inner);
+            // iris
+            let iris = document.createElementNS(xmlns, 'polygon');
+            iris.data = new function () {
+                this.x = c.x;
+                this.y = c.y;
+                this.size = Math.min(screen.width, screen.height) / 10;
+                this.delta = vmin / 2 * 3;
+            };
+            iris.setPos = function () {
+                let delta = this.data.delta;
+                let p = new function () {
+                    let diffX = Math.abs(screen.width / 2 - mouse.x);
+                    let diffY = Math.abs(screen.height / 2 - mouse.y);
+                    this.x = (mouse.x < screen.width / 2) ? inner.data.x - delta * diffX / (screen.width / 2) : inner.data.x + delta * diffX / (screen.width / 2);
+                    this.y = (mouse.y < screen.height / 2) ? inner.data.y - delta * diffY / (screen.height / 2) : inner.data.y + delta * diffY / (screen.height / 2);
+                };
+                this.setAttribute('points', [
+                    [p.x + this.data.size / 2, p.y - Math.sqrt(3) * this.data.size / 2],
+                    [p.x + this.data.size, p.y],
+                    [p.x + this.data.size / 2, p.y + Math.sqrt(3) * this.data.size / 2],
+                    [p.x - this.data.size / 2, p.y + Math.sqrt(3) * this.data.size / 2],
+                    [p.x - this.data.size, p.y],
+                    [p.x - this.data.size / 2, p.y - Math.sqrt(3) * this.data.size / 2]
+                ].map(p => p.join(',')).join(' '));
+            };
+            iris.setAttribute('fill', 'mintcream');
+            iris.setAttribute('stroke', 'pink');
+            iris.setAttribute('stroke-linejoin', 'round');
+            iris.setAttribute('stroke-width', vmin / 3);
+            svg.appendChild(iris);
+            // pupil
+            let pupil = document.createElementNS(xmlns, 'polygon');
+            pupil.data = new function () {
+                this.x = c.x;
+                this.y = c.y;
+                this.size = Math.min(screen.width, screen.height) / 17.5;
+                this.delta = (inner.data.size - this.size) + vmin;
+            };
+            pupil.setPos = function () {
+                let delta = this.data.delta;
+                let p = new function () {
+                    let diffX = Math.abs(screen.width / 2 - mouse.x);
+                    let diffY = Math.abs(screen.height / 2 - mouse.y);
+                    this.x = (mouse.x < screen.width / 2) ? c.x - delta * diffX / (screen.width / 2) : c.x + delta * diffX / (screen.width / 2);
+                    this.y = (mouse.y < screen.height / 2) ? c.y - delta * diffY / (screen.height / 2) : c.y + delta * diffY / (screen.height / 2);
+                };
+                this.setAttribute('points', [
+                    [p.x + this.data.size / 2, p.y - Math.sqrt(3) * this.data.size / 2],
+                    [p.x + this.data.size, p.y],
+                    [p.x + this.data.size / 2, p.y + Math.sqrt(3) * this.data.size / 2],
+                    [p.x - this.data.size / 2, p.y + Math.sqrt(3) * this.data.size / 2],
+                    [p.x - this.data.size, p.y],
+                    [p.x - this.data.size / 2, p.y - Math.sqrt(3) * this.data.size / 2]
+                ].map(p => p.join(',')).join(' '));
+            };
+            pupil.setAttribute('fill', 'cyan');
+            pupil.setAttribute('stroke', '#323232');
+            pupil.setAttribute('stroke-linejoin', 'round');
+            pupil.setAttribute('stroke-width', vmin / 2);
+            svg.appendChild(pupil);
+            // render
+            window.requestAnimationFrame(function render(ts) {
+                drawCoords();
+                inner.setPos();
+                iris.setPos();
+                pupil.setPos();
+                window.requestAnimationFrame(render);
+            });
+        }, { once: true });
+    </script>
+</body>
+</html>
