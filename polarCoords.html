@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>polarCoords</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #edeef0;
+            height: 100vh;
+            width: 100vw;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let c = new function () {
+            this.x = screen.width / 2;
+            this.y = screen.height / 2;
+        };
+        let vmin = Math.min(screen.width, screen.height) / 100;
+        let vmax = Math.max(screen.width, screen.height) / 100;
+        let r = vmin * 20;
+        let xmlns = 'http://www.w3.org/2000/svg';
+        // svg
+        let svg = document.createElementNS(xmlns, 'svg');
+        svg.setAttribute('viewbox', `0 0 ${screen.width} ${screen.height}`);
+        svg.setAttribute('shape-rendering', 'geometricprecision');
+        svg.style.width = svg.style.height = '100%';
+        document.body.appendChild(svg);
+        // center
+        let center = document.createElementNS(xmlns, 'circle');
+        center.setAttribute('cx', c.x);
+        center.setAttribute('cy', c.y);
+        center.setAttribute('r', vmin);
+        center.setAttribute('fill', '#323232');
+        svg.appendChild(center);
+        // axisX
+        let axisX = document.createElementNS(xmlns, 'polyline');
+        axisX.setAttribute('points', [
+            [c.x, c.y],
+            [c.x + vmin * 30, c.y]
+        ].map(p => p.join(',')).join(' '));
+        axisX.setAttribute('stroke', '#323232');
+        axisX.setAttribute('stroke-width', vmin / 5);
+        svg.appendChild(axisX);
+        // axisY
+        let axisY = document.createElementNS(xmlns, 'polyline');
+        axisY.setAttribute('points', [
+            [c.x, c.y],
+            [c.x, c.y + vmin * 30]
+        ].map(p => p.join(',')).join(' '));
+        axisY.setAttribute('stroke', '#323232');
+        axisY.setAttribute('stroke-width', vmin / 5);
+        svg.appendChild(axisY);
+        // outer
+        let outer = document.createElementNS(xmlns, 'circle');
+        outer.setAttribute('cx', c.x);
+        outer.setAttribute('cy', c.y);
+        outer.setAttribute('r', r);
+        outer.setAttribute('fill', 'transparent');
+        outer.setAttribute('stroke', '#323232');
+        outer.setAttribute('stroke-width', vmin / 5);
+        svg.appendChild(outer);
+        // point
+        let point = document.createElementNS(xmlns, 'circle');
+        point.setAttribute('cx', c.x + r);
+        point.setAttribute('cy', c.y);
+        point.setAttribute('r', vmin);
+        point.data = new function () {
+            this.x = 0;
+            this.y = 0;
+            this.deg = 0;
+        };
+        point.setCoords = function (deg) {
+            this.data.deg = this.data.deg % 360;
+            this.data.x = c.x + r * Math.cos(deg * Math.PI / 180);
+            this.data.y = c.y + r * Math.sin(deg * Math.PI / 180);
+            this.setAttribute('cx', this.data.x);
+            this.setAttribute('cy', this.data.y);
+        };
+        point.setAttribute('fill', '#ffc120');
+        point.setAttribute('stroke', '#323232');
+        point.setAttribute('stroke-width', vmin / 5);
+        svg.appendChild(point);
+        // degrees
+        let degrees = document.createElementNS(xmlns, 'text');
+        degrees.style.fontFamily = 'monospace';
+        degrees.style.fontSize = '1.5vmin';
+        degrees.setAttribute('fill', '#323232');
+        degrees.draw = function () {
+            this.setAttribute('x', point.data.x + vmax);
+            this.setAttribute('y', point.data.y + vmax);
+            this.innerHTML = parseInt(point.data.deg);
+        };
+        svg.appendChild(degrees);
+        // render
+        window.requestAnimationFrame(function render(ts) {
+            point.setCoords(point.data.deg += 0.25);
+            degrees.draw();
+            window.requestAnimationFrame(render);
+        });
+    </script>
+</body>
+</html>
