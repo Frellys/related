@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>bauhaus</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            user-select: none;
+            overflow: hidden;
+            font-family: monospace;
+            /*color: #ffc120;*/
+            color: #323232;
+            /*accent-color: #ffc120;*/
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: whitesmoke;
+            display: table-cell;
+            height: 100vh;
+            width: 100vw;
+            vertical-align: middle;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        main {
+            margin: 0 auto;
+            padding: 2ch 2ch 4ch 2ch;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: min(25ch, 66vw);
+            border: 1px solid rgba(50, 50, 50, 0.25);
+            border-radius: 1ch;
+            background-color: rgba(245, 245, 245, 0.75);
+            backdrop-filter: blur(1px) grayscale(0.9);
+            box-shadow: 0 0 2ch rgba(50, 50, 50, 0.75);
+            box-sizing: border-box;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+            main > .slider {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <main>
+        <section class="slider">
+            <label>dims:</label>
+            <input type="range" min="0" step="1">
+        </section>
+    </main>
+    <script>
+        let cnv = document.body.querySelector('canvas');
+        cnv.width = screen.width;
+        cnv.height = screen.height;
+        let ctx = cnv.getContext('2d');
+        //let dims = new Array(Math.floor(Math.sqrt(Math.min(cnv.width, cnv.height)))).fill(false).map((el, i) => i).filter(function (n) {
+        //    return (n > Math.min(cnv.width, cnv.height) / 100) && (cnv.width % n == 0 && cnv.height % n == 0);
+        //});
+        //let dims = [];
+        //if (!dims.length) {
+        //    dims = new Array(9).fill(false).map((el, i) => (i + 1) * Math.min(screen.width, screen.height) / 100 * 4);
+        //}
+        let dims = new Array(9).fill(false).map((el, i) => (i + 1) * Math.min(screen.width, screen.height) / 100 * 4);
+        let cur = 4;
+        let input = document.querySelector('main > .slider > input');
+        input.setAttribute('max', dims.length - 1);
+        input.setAttribute('value', cur);
+        let shape = [
+            // square
+            function (cx, cy, color) {
+                ctx.fillStyle = color;
+                ctx.fillRect(cx, cy, dims[cur], dims[cur]);
+            },
+            // triangle bl
+            function (cx, cy, color) {
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(cx + dims[cur], cy + dims[cur]);
+                ctx.lineTo(cx, cy + dims[cur]);
+                ctx.closePath();
+                ctx.fill();
+            },
+            // circle
+            function (cx, cy, color) {
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(cx + dims[cur] / 2, cy + dims[cur] / 2, dims[cur] / 2, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        ];
+        let colors = [
+            '#2d58b5',
+            '#f43914',
+            '#f9c50e',
+            'forestgreen'
+        ];
+        let redraw = function () {
+            cur = parseInt(input.value);
+            ctx.fillStyle = '#323232';
+            ctx.clearRect(0, 0, cnv.width, cnv.height);
+            ctx.fillRect(0, 0, cnv.width, cnv.height);
+            let rows = screen.height / dims[cur];
+            let cols = screen.width / dims[cur];
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    let cx = dims[cur] * c;
+                    let cy = dims[cur] * r;
+                    let color = colors[Math.floor(Math.random() * colors.length)];
+                    shape[Math.floor(Math.random() * shape.length)](cx, cy, color);
+                }
+            }
+        };
+        input.oninput = redraw;
+        redraw();
+    </script>
+</body>
+</html>
