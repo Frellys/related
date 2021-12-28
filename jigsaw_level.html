@@ -20,12 +20,22 @@
             vertical-align: middle;
         }
 
+        .mouse {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            color: #323232;
+            font-family: monospace;
+            padding: 2ch;
+        }
+
         .container {
             margin: 0 auto;
             width: 80vmin;
             height: calc(80vmin / 16 * 9);
             background-color: #323232;
         }
+
             .container > .layer {
                 width: 80vmin;
                 height: calc(80vmin / 16 * 9);
@@ -35,7 +45,32 @@
     </style>
 </head>
 <body>
+    <div class="mouse">
+        <div class="x">x:</div>
+        <div class="y">y:</div>
+    </div>
     <script>
+        const Mouse = new function () {
+            this.pos = {
+                x: 0,
+                y: 0
+            };
+            this.display = document.querySelector('.mouse');
+            Object.keys(this.pos).forEach(key => {
+                this.display[key] = this.display.querySelector(`.${key}`);
+            });
+            this.display.update = function () {
+                const pad = Math.max(screen.width, screen.height).toString().length;
+                Object.entries(Mouse.pos).forEach(([key, val]) => {
+                    this[key].innerHTML = `${key}: ${val.toString().padStart(pad, '0')}`;
+                });
+            };
+            window.addEventListener('mousemove', function (e) {
+                Mouse.pos.x = e.x;
+                Mouse.pos.y = e.y;
+                Mouse.display.update();
+            }, false);
+        };
         let tile = false;
         let rows = 9;
         let cols = 16;
@@ -47,24 +82,17 @@
         document.body.appendChild(container);
         let layer = document.createElement('img');
         layer.classList.add('layer');
-        layer.src = 'https://i3.ytimg.com/vi/IMnlSqOVyi0/maxresdefault.jpg';
-        //layer.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
+        layer.src = 'https://i3.ytimg.com/vi/MG_yFJt3PsM/maxresdefault.jpg';
         container.appendChild(layer);
         let orig = new Image();
         orig.addEventListener('load', function () {
-            orig.style.width = orig.width + 'px';
-            orig.style.height = orig.height + 'px';
             field.forEach(function (row, rdx) {
                 row.forEach(function (col, cdx) {
                     field[rdx][cdx] = new Tile(rdx, cdx);
+                    document.body.appendChild(field[rdx][cdx].cnv);
                 });
             });
-            field.forEach(function (row) {
-                row.forEach(function (tile) {
-                    document.body.appendChild(tile.cnv);
-                });
-            });
-        });
+        }, { once: true });
         orig.src = layer.src;
         function Tile(row, col) {
             this.row = row;
@@ -130,10 +158,6 @@
                     }
                 }
             };
-            //this.pos = {
-            //    x: col * (this.size.actual - this.size.delta),
-            //    y: row * (this.size.actual - this.size.delta)
-            //};
             this.pos = {
                 x: (screen.width - fwidth) / 2 - this.size.delta + col * this.size.visible,
                 y: (screen.height - fheight) / 2 - this.size.delta + row * this.size.visible
@@ -146,8 +170,6 @@
             this.cnv.width = this.size.actual;
             this.cnv.height = this.size.actual;
             this.cnv.style.position = 'absolute';
-            //this.cnv.style.top = this.pos.y + 'px';
-            //this.cnv.style.left = this.pos.x + 'px';
             this.cnv.style.top = this.target.y + 'px';
             this.cnv.style.left = this.target.x + 'px';
             this.ctx = this.cnv.getContext('2d');
@@ -239,18 +261,14 @@
             }
             this.path.lineTo(this.pt.tl.x, this.pt.tl.y);
             this.path.closePath();
-            //this.path.lineWidth = 2;
-            //this.path.strokeStyle = '#323232';
-            //this.ctx.stroke(this.path);
-            //this.ctx.clip(this.path);
             this.ctx.clip(this.path);
             // draw actual
             this.ctx.drawImage(
                 orig,
                 col * (orig.naturalWidth / cols) - (orig.naturalWidth / cols) / 2,
                 row * (orig.naturalHeight / rows) - (orig.naturalHeight / rows) / 2,
-                (orig.naturalWidth / cols) + (orig.naturalWidth / cols),
-                (orig.naturalHeight / rows) + (orig.naturalHeight / rows),
+                (orig.naturalWidth / cols) * 2,
+                (orig.naturalHeight / rows) * 2,
                 0,
                 0,
                 this.size.actual,
@@ -272,19 +290,17 @@
                         let y = e.y - tile.pos.y;
                         if (tile.ctx.isPointInPath(tile.path, x, y)) {
                             window.tile = tile;
-                            window.tile.cnv.style.top = e.y - (window.tile.size.actual / 2) + 'px';
-                            window.tile.cnv.style.left = e.x - (window.tile.size.actual / 2) + 'px';
+                            window.tile.cnv.style.top = `${e.y - (window.tile.size.actual / 2)}px`;
+                            window.tile.cnv.style.left = `${e.x - (window.tile.size.actual / 2)}px`;
                         }
                     });
                 });
             }
-            //console.log(e.x);
-            //console.log(e.y);
         }, false);
         window.addEventListener('mousemove', function (e) {
             if (window.tile) {
-                window.tile.cnv.style.top = e.y - (window.tile.size.actual / 2) + 'px';
-                window.tile.cnv.style.left = e.x - (window.tile.size.actual / 2) + 'px';
+                window.tile.cnv.style.top = `${e.y - (window.tile.size.actual / 2)}px`;
+                window.tile.cnv.style.left = `${e.x - (window.tile.size.actual / 2)}px`;
             }
         }, false);
     </script>
